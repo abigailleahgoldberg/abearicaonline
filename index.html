@@ -73,7 +73,7 @@
   #phase-cd {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: radial-gradient(ellipse at center, #001a4d 0%, #000 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -81,66 +81,126 @@
     z-index: 1000;
     cursor: pointer;
   }
+  /* AOL-style disc: deep cobalt blue with white text, free hours dominant */
   .cd-disc {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #3355aa, #0022aa 50%, #001188 100%);
+    animation: spin 4s linear infinite;
+    box-shadow: 0 0 60px rgba(30,80,255,0.5), 0 0 20px rgba(255,255,255,0.2);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Holographic shine ring */
+  .cd-disc::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
     border-radius: 50%;
     background: conic-gradient(
-      #ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #8b00ff,
-      #c0c0c0, #ffffff, #c0c0c0, #888, #c0c0c0, #ffffff,
-      #ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #ff0000
+      rgba(255,255,255,0.05) 0deg,
+      rgba(255,215,0,0.15) 60deg,
+      rgba(255,255,255,0.05) 120deg,
+      rgba(100,200,255,0.1) 180deg,
+      rgba(255,255,255,0.05) 240deg,
+      rgba(255,215,0,0.1) 300deg,
+      rgba(255,255,255,0.05) 360deg
     );
-    animation: spin 3s linear infinite;
-    box-shadow: 0 0 40px rgba(255,255,255,0.4), inset 0 0 30px rgba(0,0,0,0.3);
-    position: relative;
+    border-radius: 50%;
   }
+  /* Center hole */
   .cd-disc::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
+    width: 36px; height: 36px;
     border-radius: 50%;
-    background: #000;
-    border: 3px solid #888;
+    background: radial-gradient(circle, #222, #000);
+    border: 2px solid #444;
+    z-index: 3;
   }
-  .cd-disc::before {
-    content: 'Abearica\AOnline';
-    white-space: pre;
+  .cd-inner {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 8px;
+    inset: 0;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0 20px;
+  }
+  .cd-logo-text {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: -20px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+  .cd-logo-online {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 22px;
     font-weight: bold;
     color: #fff;
-    text-align: center;
-    z-index: 1;
-    text-shadow: 1px 1px 2px #000;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    margin-top: -4px;
+    letter-spacing: 1px;
+  }
+  .cd-hours {
+    font-family: Arial Black, Impact, sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255,215,0,0.5);
+    margin-top: 6px;
+    line-height: 1;
+  }
+  .cd-hours-sub {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .cd-version {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 6px;
   }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   .cd-title {
     color: #FFD700;
-    font-size: 36px;
+    font-size: 14px;
     font-weight: bold;
-    font-family: Arial Black, sans-serif;
-    margin-top: 24px;
-    text-shadow: 2px 2px 4px #000;
+    font-family: Arial, sans-serif;
+    margin-top: 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
   }
   .cd-sub {
-    color: #ffffff;
-    font-size: 16px;
-    margin-top: 8px;
+    color: rgba(255,255,255,0.8);
+    font-size: 12px;
+    margin-top: 6px;
     font-family: Arial, sans-serif;
+    letter-spacing: 1px;
   }
   .cd-click {
     color: #FFD700;
-    font-size: 14px;
-    margin-top: 32px;
+    font-size: 13px;
+    margin-top: 24px;
     animation: blink 1s step-end infinite;
     font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
   }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
@@ -506,23 +566,40 @@
     text-align: center;
   }
   .popup-cd {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    background: conic-gradient(#ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #8b00ff, #c0c0c0, #fff, #c0c0c0, #ff0000);
+    background: radial-gradient(circle at 40% 35%, #3355aa, #0022aa 50%, #001188 100%);
     animation: spin 2s linear infinite;
     margin: 0 auto 12px;
     position: relative;
+    box-shadow: 0 0 20px rgba(30,80,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .popup-cd::after {
     content: '';
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 16px; height: 16px;
+    width: 14px; height: 14px;
     border-radius: 50%;
-    background: #c0c0c0;
-    border: 2px solid #888;
+    background: #000;
+    border: 1px solid #444;
+    z-index: 2;
+  }
+  .popup-cd::before {
+    content: 'Abearica Online';
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 7px;
+    font-weight: bold;
+    color: #FFD700;
+    z-index: 1;
+    text-shadow: 1px 1px 2px #000;
+    letter-spacing: 0.5px;
   }
   .popup-title { font-size: 18px; font-weight: 900; color: #000080; margin-bottom: 4px; font-family: Arial Black; }
   .popup-sub { font-size: 13px; font-weight: bold; color: #cc0000; margin-bottom: 12px; }
@@ -573,30 +650,60 @@
 
 <!-- PHASE 1: CD DISC -->
 <div id="phase-cd" onclick="startConnect()">
-  <div class="cd-disc"></div>
-  <div class="cd-title">FREE 1,000 HOURS!</div>
+  <div class="cd-disc">
+    <div class="cd-inner">
+      <div class="cd-logo-text">Abearica</div>
+      <div class="cd-logo-online">Online</div>
+      <div class="cd-hours">1000</div>
+      <div class="cd-hours-sub">HOURS FREE!</div>
+      <div class="cd-version">Version 9.0 · For 45 Days</div>
+    </div>
+  </div>
+  <div class="cd-title">▸ FREE 1,000 HOURS ◂</div>
   <div class="cd-sub">AbearicaOnline — Click disc to install</div>
   <div class="cd-click">▶ CLICK TO CONNECT ◀</div>
 </div>
 
 <!-- PHASE 2: CONNECTING -->
 <div id="phase-connect">
-  <div class="connect-box">
-    <div style="color:#00ff00; font-family:'Courier New',monospace; font-size:16px; font-weight:bold; margin-bottom:16px;">
-      AbearicaOnline v9.0
+  <!-- Abearica Online connecting dialog — styled exactly like the AOL connection window -->
+  <div style="background:#c0c0c0; border-top:3px solid #fff; border-left:3px solid #fff; border-right:3px solid #404040; border-bottom:3px solid #404040; min-width:380px; max-width:90vw;">
+    <!-- Title bar -->
+    <div style="background:linear-gradient(to right,#000080,#1084d0); color:#fff; padding:3px 6px; font-size:12px; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+      <span>Connecting To Abearica Online...</span>
+      <div style="background:#c0c0c0; color:#000; font-size:9px; width:14px; height:12px; display:flex; align-items:center; justify-content:center; border:1px solid #808080;">✕</div>
     </div>
-    <div class="connect-line" id="cl0">Initializing modem...</div>
-    <div class="connect-line" id="cl1">Dialing 1-800-AOL-ONLINE...</div>
-    <div class="connect-line" id="cl2">ATDT18004265677</div>
-    <div class="connect-line" id="cl3">CONNECT 28800</div>
-    <div class="connect-line" id="cl4">Verifying username: Abearica...</div>
-    <div class="connect-line" id="cl5">Password accepted.</div>
-    <div class="connect-line" id="cl6">Welcome to AbearicaOnline!</div>
-    <div class="connect-line" id="cl7" style="color:#FFD700; font-weight:bold;">You have 1 new project waiting. 🐻</div>
-    <div class="progress-bar-wrap" style="margin-top:20px;">
-      <div class="progress-bar-fill" id="progress-fill"></div>
+    <!-- Banner image -->
+    <div style="background:#e8e8e8; padding:12px; text-align:center; border-bottom:1px solid #808080;">
+      <img src="https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/banner.png"
+           style="max-width:320px; width:100%; display:block; margin:0 auto;"
+           alt="Abearica Online" onerror="this.style.display='none'">
     </div>
-    <div style="color:#00ff00; font-family:'Courier New',monospace; font-size:11px; margin-top:8px;" id="progress-text">Connecting... 0%</div>
+    <!-- Connection panels -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; background:#c0c0c0; border-bottom:1px solid #808080;">
+      <div id="panel1" style="background:#0044aa; padding:12px 8px; text-align:center; opacity:0.4; transition:opacity 0.3s; border-right:1px solid #808080;">
+        <div style="font-size:28px;">🐻</div>
+        <div style="color:#fff; font-size:9px; margin-top:4px; font-family:Arial;">Connecting...</div>
+      </div>
+      <div id="panel2" style="background:#0044aa; padding:12px 8px; text-align:center; opacity:0.4; transition:opacity 0.3s; border-right:1px solid #808080;">
+        <div style="font-size:28px;">🐻💻</div>
+        <div style="color:#fff; font-size:9px; margin-top:4px; font-family:Arial;">Verifying...</div>
+      </div>
+      <div id="panel3" style="background:#0044aa; padding:12px 8px; text-align:center; opacity:0.4; transition:opacity 0.3s;">
+        <div style="font-size:28px;">🐻🐻🐻</div>
+        <div style="color:#fff; font-size:9px; margin-top:4px; font-family:Arial;">Welcome!</div>
+      </div>
+    </div>
+    <!-- Status text -->
+    <div style="padding:8px 12px; font-size:12px; font-family:Arial; color:#000;" id="connect-status">Connecting using TCP/IP ...</div>
+    <!-- Progress bar -->
+    <div style="margin:0 12px 4px; background:#fff; border:1px inset #808080; height:14px;">
+      <div id="progress-fill" style="background:#000080; height:100%; width:0%; transition:width 0.4s;"></div>
+    </div>
+    <!-- Cancel button -->
+    <div style="text-align:center; padding:8px;">
+      <button class="win-btn" style="background:#0044aa; color:#fff; padding:4px 32px; font-size:12px; border-color:#0066cc;">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -894,15 +1001,25 @@ function startConnect() {
   document.getElementById('phase-connect').classList.add('active');
   playModemSound();
 
-  const lines = ['cl0','cl1','cl2','cl3','cl4','cl5','cl6','cl7'];
-  const delays = [300, 800, 1400, 2000, 2600, 3200, 3800, 4400];
-  lines.forEach((id, i) => {
+  const steps = [
+    { delay: 400,  pct: 15, status: 'Dialing 1-800-AOL-ONLINE...', panel: 1 },
+    { delay: 900,  pct: 30, status: 'ATDT18004265677', panel: 1 },
+    { delay: 1500, pct: 45, status: 'CONNECT 28800', panel: 1 },
+    { delay: 2200, pct: 60, status: 'Verifying username: Abearica...', panel: 2 },
+    { delay: 3000, pct: 75, status: 'Password accepted.', panel: 2 },
+    { delay: 3800, pct: 90, status: 'Welcome to Abearica Online!', panel: 3 },
+    { delay: 4400, pct: 100, status: 'You\'ve got projects! 🐻', panel: 3 },
+  ];
+
+  steps.forEach(s => {
     setTimeout(() => {
-      document.getElementById(id).classList.add('visible');
-      const pct = Math.round((i+1) / lines.length * 100);
-      document.getElementById('progress-fill').style.width = pct + '%';
-      document.getElementById('progress-text').textContent = 'Connecting... ' + pct + '%';
-    }, delays[i]);
+      document.getElementById('connect-status').textContent = s.status;
+      document.getElementById('progress-fill').style.width = s.pct + '%';
+      // Light up the current panel
+      ['panel1','panel2','panel3'].forEach((p, i) => {
+        document.getElementById(p).style.opacity = (i + 1 <= s.panel) ? '1' : '0.4';
+      });
+    }, s.delay);
   });
 
   setTimeout(() => {

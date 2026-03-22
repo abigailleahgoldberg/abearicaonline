@@ -1305,17 +1305,19 @@ function startConnect() {
   modem.play().catch(() => playModemSynth()); // fallback if autoplay blocked
 
   const steps = [
-    {delay:400,   pct:8,  txt:'Initializing modem...', panel:1},
-    {delay:1200,  pct:16, txt:'Dialing 1-800-AOL-ONLINE...', panel:1},
-    {delay:2400,  pct:24, txt:'ATDT18004265677', panel:1},
-    {delay:3800,  pct:35, txt:'CONNECT 28800', panel:1},
-    {delay:5200,  pct:48, txt:'Negotiating connection...', panel:1},
-    {delay:6800,  pct:58, txt:'Verifying username: Abearica...', panel:2},
-    {delay:8200,  pct:70, txt:'Password: ••••••••••••', panel:2},
-    {delay:9400,  pct:80, txt:'Checking access...', panel:2},
-    {delay:10800, pct:90, txt:'Welcome to Abearica Online!', panel:3},
-    {delay:12000, pct:97, txt:"Loading your stuff... 🐻", panel:3},
-    {delay:13200, pct:100, txt:"You've got projects!", panel:3},
+    {delay:400,   pct:6,  txt:'Initializing modem...', panel:1},
+    {delay:1400,  pct:12, txt:'Dialing 1-800-AOL-ONLINE...', panel:1},
+    {delay:2800,  pct:20, txt:'ATDT18004265677', panel:1},
+    {delay:4400,  pct:28, txt:'CONNECT 28800', panel:1},
+    {delay:6200,  pct:38, txt:'Negotiating connection...', panel:1},
+    {delay:8000,  pct:48, txt:'Establishing secure link...', panel:1},
+    {delay:9600,  pct:58, txt:'Verifying username: Abearica...', panel:2},
+    {delay:11200, pct:68, txt:'Password: ••••••••••••', panel:2},
+    {delay:12600, pct:77, txt:'Checking account access...', panel:2},
+    {delay:14000, pct:85, txt:'Welcome to Abearica Online!', panel:3},
+    {delay:15600, pct:92, txt:'Loading your experience... 🐻', panel:3},
+    {delay:17200, pct:97, txt:'Almost there...', panel:3},
+    {delay:18400, pct:100, txt:"You've got projects!", panel:3},
   ];
 
   steps.forEach(s => {
@@ -1332,7 +1334,7 @@ function startConnect() {
     document.getElementById('phase-connect').classList.remove('active');
     document.getElementById('phase-portal').classList.add('active');
     initPortal();
-  }, 14500);
+  }, 19000);
 }
 
 function initPortal() {

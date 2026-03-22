@@ -1378,10 +1378,14 @@ function initGame() {
   const canvas = document.getElementById('game-canvas');
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
+
   paddle = {x: W/2-45, y:H-20, w:90, h:10, spd:7};
-  ball = {x:W/2, y:H-50, vx:3.5, vy:-4.5, r:7};
+  // Ball starts stationary — countdown before it moves
+  ball = {x:W/2, y:H-50, vx:0, vy:0, r:7, moving:false};
   score = 0; gameRunning = true; tiltFired = false;
-  let startTime = Date.now();
+  let startTime = null;
+  let countdown = 3; // 3 second countdown
+  let lastCountdown = Date.now();
 
   const cols=8, rows=4;
   const colors=['#cc0000','#cc6600','#0000cc','#006600'];
@@ -1389,87 +1393,169 @@ function initGame() {
   for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) {
     bricks.push({
       x: 8 + c*(W-16)/cols,
-      y: 38 + r*22,
-      w: (W-16)/cols-4, h:16,
+      y: 42 + r*24,
+      w: (W-16)/cols-4, h:18,
       color:colors[r], alive:true
     });
   }
 
   const keys = {};
-  document.onkeydown = e => { keys[e.key]=true; if(['ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault(); };
+  document.onkeydown = e => {
+    keys[e.key]=true;
+    if(['ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+    // Space or any key launches ball during countdown
+    if(!ball.moving && countdown <= 0) launchBall();
+  };
   document.onkeyup = e => keys[e.key]=false;
 
+  function launchBall() {
+    if(ball.moving) return;
+    ball.moving = true;
+    ball.vx = (Math.random() > 0.5 ? 1 : -1) * 3.5;
+    ball.vy = -4.5;
+    startTime = Date.now();
+  }
+
   let touchX = null;
-  canvas.ontouchstart = e => { touchX = e.touches[0].clientX; e.preventDefault(); };
+  canvas.ontouchstart = e => {
+    touchX = e.touches[0].clientX;
+    if(!ball.moving && countdown <= 0) launchBall();
+    e.preventDefault();
+  };
   canvas.ontouchmove = e => {
     if(touchX===null) return;
-    const dx = e.touches[0].clientX - touchX;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const dx = (e.touches[0].clientX - touchX) * scaleX;
     paddle.x = Math.max(0, Math.min(W-paddle.w, paddle.x+dx));
     touchX = e.touches[0].clientX;
     e.preventDefault();
   };
+
+  const stars = Array.from({length:15},()=>({x:Math.random()*W, y:Math.random()*H*0.7}));
 
   function loop() {
     if(!gameRunning) return;
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle='#000080'; ctx.fillRect(0,0,W,H);
 
-    // Stars bg
-    ctx.fillStyle='rgba(255,255,255,0.3)';
-    [[30,20],[80,60],[150,30],[200,80],[300,25],[350,70],[50,120],[250,110]].forEach(([x,y])=>{
-      ctx.fillRect(x,y,1,1);
-    });
+    // Stars
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    stars.forEach(s => ctx.fillRect(s.x,s.y,1,1));
 
+    // Paddle controls
     if(keys['ArrowLeft']) paddle.x = Math.max(0, paddle.x-paddle.spd);
     if(keys['ArrowRight']) paddle.x = Math.min(W-paddle.w, paddle.x+paddle.spd);
 
-    ball.x += ball.vx; ball.y += ball.vy;
-    if(ball.x<ball.r || ball.x>W-ball.r) ball.vx*=-1;
-    if(ball.y<ball.r) ball.vy=-Math.abs(ball.vy);
-    if(ball.y+ball.r>paddle.y && ball.y<paddle.y+paddle.h && ball.x>paddle.x && ball.x<paddle.x+paddle.w) {
-      ball.vy=-Math.abs(ball.vy);
-      ball.vx += (ball.x-(paddle.x+paddle.w/2))*0.08;
-      ball.vx = Math.max(-6,Math.min(6,ball.vx));
+    // Ball follows paddle until launched
+    if(!ball.moving) {
+      ball.x = paddle.x + paddle.w/2;
     }
 
+    // Move ball only when launched
+    if(ball.moving) {
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      // Side walls
+      if(ball.x - ball.r <= 0) { ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
+      if(ball.x + ball.r >= W) { ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
+
+      // Top wall — hard clamp, always bounce DOWN
+      if(ball.y - ball.r <= 0) { ball.y = ball.r + 1; ball.vy = Math.abs(ball.vy); }
+
+      // Paddle collision
+      if(ball.vy > 0 &&
+         ball.y + ball.r >= paddle.y &&
+         ball.y - ball.r <= paddle.y + paddle.h &&
+         ball.x >= paddle.x - ball.r &&
+         ball.x <= paddle.x + paddle.w + ball.r) {
+        ball.y = paddle.y - ball.r - 1;
+        ball.vy = -Math.abs(ball.vy);
+        // Add spin based on where it hits the paddle
+        const hitPos = (ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2);
+        ball.vx = hitPos * 5;
+        // Cap speed so it can't go insane
+        const speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+        const maxSpeed = 7;
+        if(speed > maxSpeed) { ball.vx = (ball.vx/speed)*maxSpeed; ball.vy = (ball.vy/speed)*maxSpeed; }
+        // Make sure it's always going up after hitting paddle
+        ball.vy = -Math.abs(ball.vy);
+        // Minimum horizontal speed so it doesn't go straight up forever
+        if(Math.abs(ball.vx) < 1) ball.vx = (ball.vx >= 0 ? 1 : -1) * 1.5;
+      }
+    }
+
+    // Bricks
     let aliveCount=0;
     bricks.forEach(b=>{
       if(!b.alive) return; aliveCount++;
-      if(ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){
+      if(ball.moving &&
+         ball.x + ball.r > b.x && ball.x - ball.r < b.x + b.w &&
+         ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h) {
         b.alive=false; ball.vy*=-1; score++;
+        // Ensure ball exits brick zone properly
+        if(ball.vy > 0) ball.y = b.y + b.h + ball.r + 1;
+        else ball.y = b.y - ball.r - 1;
       }
       ctx.fillStyle=b.color; ctx.fillRect(b.x,b.y,b.w,b.h);
-      ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.strokeRect(b.x,b.y,b.w,b.h);
+      ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=1; ctx.strokeRect(b.x,b.y,b.w,b.h);
+      // Brick highlight
+      ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fillRect(b.x+1,b.y+1,b.w-2,3);
     });
 
-    // Paddle
+    // Draw paddle
     ctx.fillStyle='#c0c0c0'; ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
-    ctx.fillStyle='#fff'; ctx.fillRect(paddle.x+2,paddle.y+2,paddle.w-4,2);
+    ctx.fillStyle='#ffffff'; ctx.fillRect(paddle.x+1,paddle.y+1,paddle.w-2,3);
+    ctx.fillStyle='#808080'; ctx.fillRect(paddle.x+1,paddle.y+7,paddle.w-2,2);
 
-    // Ball
+    // Draw ball
     ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
     ctx.fillStyle='#FFD700'; ctx.fill();
+    ctx.strokeStyle='#cc8800'; ctx.lineWidth=1; ctx.stroke();
 
     // Score
     ctx.fillStyle='#FFD700'; ctx.font='bold 12px Courier New';
     ctx.fillText('SCORE: '+score, 8, 22);
-    ctx.fillStyle='#aaaaff'; ctx.font='10px Arial';
-    ctx.fillText('Break all bricks!', W-95, 22);
 
-    if(ball.y > H+20) {
-      ctx.fillStyle='rgba(0,0,0,0.7)'; ctx.fillRect(0,0,W,H);
-      ctx.fillStyle='#ff4444'; ctx.font='bold 26px Arial Black';
-      ctx.textAlign='center'; ctx.fillText('GAME OVER',W/2,H/2-10);
-      ctx.fillStyle='#FFD700'; ctx.font='14px Arial';
+    // Countdown overlay
+    if(countdown > 0) {
+      const now = Date.now();
+      if(now - lastCountdown >= 1000) { countdown--; lastCountdown = now; }
+      ctx.fillStyle='rgba(0,0,0,0.5)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#FFD700'; ctx.font='bold 64px Arial Black';
+      ctx.textAlign='center';
+      ctx.fillText(countdown > 0 ? countdown : 'GO!', W/2, H/2+20);
+      ctx.fillStyle='#fff'; ctx.font='14px Arial';
+      ctx.fillText('Get ready...', W/2, H/2-30);
+      ctx.textAlign='left';
+    } else if(!ball.moving) {
+      ctx.fillStyle='rgba(255,215,0,0.9)'; ctx.font='bold 13px Arial';
+      ctx.textAlign='center';
+      ctx.fillText('Press arrow key or tap to launch!', W/2, H-35);
+      ctx.textAlign='left';
+    }
+
+    // Game over
+    if(ball.moving && ball.y > H + 20) {
+      ctx.fillStyle='rgba(0,0,0,0.75)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#ff4444'; ctx.font='bold 28px Arial Black';
+      ctx.textAlign='center'; ctx.fillText('GAME OVER',W/2,H/2-15);
+      ctx.fillStyle='#FFD700'; ctx.font='16px Arial';
       ctx.fillText('Score: '+score,W/2,H/2+20);
+      ctx.fillStyle='#fff'; ctx.font='12px Arial';
+      ctx.fillText('Nice try! Closing soon...',W/2,H/2+50);
       ctx.textAlign='left';
       gameRunning=false;
-      if(!tiltFired){tiltFired=true; setTimeout(triggerTilt,1500);}
+      if(!tiltFired){tiltFired=true; setTimeout(triggerTilt,2000);}
       return;
     }
-    if(aliveCount===0 || (!tiltFired && Date.now()-startTime>35000)){
+
+    // Win / time limit
+    if(aliveCount===0 || (startTime && !tiltFired && Date.now()-startTime > 45000)){
       tiltFired=true; gameRunning=false; triggerTilt(); return;
     }
+
     animFrame=requestAnimationFrame(loop);
   }
   cancelAnimationFrame(animFrame);

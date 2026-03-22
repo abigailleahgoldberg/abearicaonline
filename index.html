@@ -1230,7 +1230,10 @@ function playModemSynth() {
 function startConnect() {
   document.getElementById('phase-cd').style.display = 'none';
   document.getElementById('phase-connect').classList.add('active');
-  playModemSound();
+  // Play the real AOL modem sound
+  const modem = new Audio('https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/modem.mp3');
+  modem.volume = 0.85;
+  modem.play().catch(() => playModemSynth()); // fallback if autoplay blocked
 
   const steps = [
     {delay:300,  pct:15, txt:'Dialing 1-800-AOL-ONLINE...', panel:1},

@@ -1170,8 +1170,19 @@ body {
           <div class="buddy-foot-btn">Chat</div>
         </div>
 
-        <!-- Top News box -->
+        <!-- Leaderboard box -->
         <div class="news-box" style="margin-top:6px;">
+          <div class="news-box-title">🏆 Breakout Top 5</div>
+          <div id="leaderboard-body" style="min-height:40px;">
+            <div style="padding:6px;font-size:10px;color:#555;text-align:center;">Loading...</div>
+          </div>
+          <div style="padding:3px 6px;border-top:1px solid #d0d0d0;">
+            <button class="win-btn" style="width:100%;font-size:9px;" onclick="launchGame()">Play Now</button>
+          </div>
+        </div>
+
+        <!-- Top News box -->
+        <div class="news-box" style="margin-top:4px;">
           <div class="news-box-title">📰 Top News</div>
           <div class="news-box-body">
             <div class="news-link">AI Agents Replace Agency Teams</div>
@@ -1251,6 +1262,53 @@ body {
 </div>
 
 <script>
+/* ============ SUPABASE LEADERBOARD ============ */
+const SB_URL = 'https://ipvhaomxpgwtqmlbigdv.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwdmhhb214cGd3dHFtbGJpZ2R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzc3MDcsImV4cCI6MjA4OTcxMzcwN30.XO4ZegjViPbFw5py9apcyHq2vWmiaGkv08f9hITnL9w';
+
+async function fetchLeaderboard() {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/breakout_scores?select=initials,score,created_at&order=score.desc&limit=5`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const data = await res.json();
+    renderLeaderboard(data);
+  } catch(e) {
+    document.getElementById('leaderboard-body').innerHTML = '<div style="padding:4px 6px;font-size:10px;color:#888;">No scores yet. Play first!</div>';
+  }
+}
+
+function renderLeaderboard(scores) {
+  const el = document.getElementById('leaderboard-body');
+  if(!scores || scores.length === 0) {
+    el.innerHTML = '<div style="padding:6px;font-size:10px;color:#555;text-align:center;">No scores yet!<br>Be the first. 🎮</div>';
+    return;
+  }
+  const medals = ['🥇','🥈','🥉','4.','5.'];
+  el.innerHTML = scores.map((s,i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;font-size:11px;${i===0?'background:#fffbe6;font-weight:bold;':''}border-bottom:1px solid #d0d0d0;">
+      <span>${medals[i]} <span style="font-family:Courier New;letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>
+      <span style="color:#000080;font-weight:bold;">${s.score.toLocaleString()}</span>
+    </div>
+  `).join('');
+}
+
+async function submitScore(initials, score) {
+  try {
+    await fetch(`${SB_URL}/rest/v1/breakout_scores`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ initials: initials.substring(0,3).toUpperCase(), score })
+    });
+    fetchLeaderboard(); // refresh after submit
+  } catch(e) {}
+}
+
 /* ============ MODEM SOUND ============ */
 function playModemSound(audioFiles) {
   // Try real audio files first, fall back to synthesized
@@ -1354,6 +1412,9 @@ function initPortal() {
 
   // Fake weather
   document.getElementById('weather-temp').textContent = '🌤 Cool & Partly Cloudy';
+
+  // Load leaderboard
+  fetchLeaderboard();
 }
 
 /* ============ BREAKOUT GAME ============ */
@@ -1561,11 +1622,13 @@ function initGame() {
       ctx.textAlign='center'; ctx.fillText('GAME OVER',W/2,H/2-15);
       ctx.fillStyle='#FFD700'; ctx.font='16px Arial';
       ctx.fillText('Score: '+score,W/2,H/2+20);
-      ctx.fillStyle='#fff'; ctx.font='12px Arial';
-      ctx.fillText('Nice try! Closing soon...',W/2,H/2+50);
       ctx.textAlign='left';
       gameRunning=false;
-      if(!tiltFired){tiltFired=true; setTimeout(triggerTilt,2000);}
+      if(!tiltFired){
+        tiltFired=true;
+        // Ask for initials before tilt
+        setTimeout(() => promptInitials(score), 500);
+      }
       return;
     }
 
@@ -1578,6 +1641,56 @@ function initGame() {
   }
   cancelAnimationFrame(animFrame);
   animFrame=requestAnimationFrame(loop);
+}
+
+function promptInitials(finalScore) {
+  // Show a Windows-style initials dialog over the game
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,128,0.85);z-index:600;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = `
+    <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;min-width:260px;">
+      <div style="background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-size:11px;font-weight:bold;padding:3px 6px;display:flex;justify-content:space-between;">
+        <span>🏆 New High Score!</span>
+      </div>
+      <div style="padding:16px;text-align:center;">
+        <div style="font-size:22px;font-weight:900;color:#000080;margin-bottom:4px;">SCORE: ${finalScore}</div>
+        <div style="font-size:12px;margin-bottom:12px;">Enter your initials (3 letters):</div>
+        <input id="initials-input" maxlength="3"
+          style="width:80px;text-align:center;font-size:24px;font-weight:bold;font-family:Courier New;letter-spacing:8px;text-transform:uppercase;
+          border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;
+          padding:4px;background:#fff;outline:none;"
+          placeholder="AAA">
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+          <button onclick="saveInitials(${finalScore})"
+            style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:4px 16px;font-size:12px;font-weight:bold;cursor:pointer;">
+            [ SUBMIT ]
+          </button>
+          <button onclick="this.closest('div[style]').remove();triggerTilt();"
+            style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:4px 12px;font-size:12px;cursor:pointer;">
+            Skip
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => document.getElementById('initials-input')?.focus(), 100);
+
+  // Enter key submits
+  document.getElementById('initials-input')?.addEventListener('keydown', e => {
+    if(e.key === 'Enter') saveInitials(finalScore);
+  });
+}
+
+function saveInitials(finalScore) {
+  const input = document.getElementById('initials-input');
+  const initials = (input?.value || 'AAA').trim().substring(0,3) || 'AAA';
+  // Remove the overlay
+  input?.closest('div[style*="position:fixed"]')?.remove();
+  // Submit to Supabase
+  if(initials.length > 0) submitScore(initials, finalScore);
+  // Then trigger tilt
+  setTimeout(triggerTilt, 800);
 }
 
 function triggerTilt() {

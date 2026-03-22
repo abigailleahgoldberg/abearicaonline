@@ -1624,17 +1624,18 @@ function initGame() {
       ctx.fillText('Score: '+score,W/2,H/2+20);
       ctx.textAlign='left';
       gameRunning=false;
-      if(!tiltFired){
+      if(!tiltFired && !initialsOverlay){
         tiltFired=true;
-        // Ask for initials before tilt
-        setTimeout(() => promptInitials(score), 500);
+        setTimeout(() => promptInitials(score), 600);
       }
       return;
     }
 
     // Win / time limit
     if(aliveCount===0 || (startTime && !tiltFired && Date.now()-startTime > 45000)){
-      tiltFired=true; gameRunning=false; triggerTilt(); return;
+      tiltFired=true; gameRunning=false;
+      setTimeout(() => promptInitials(score), 600);
+      return;
     }
 
     animFrame=requestAnimationFrame(loop);
@@ -1643,29 +1644,34 @@ function initGame() {
   animFrame=requestAnimationFrame(loop);
 }
 
+let initialsOverlay = null; // track the overlay globally so we never double-show it
+
 function promptInitials(finalScore) {
-  // Show a Windows-style initials dialog over the game
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,128,0.85);z-index:600;display:flex;align-items:center;justify-content:center;';
-  overlay.innerHTML = `
+  // If overlay already exists, don't create another
+  if(initialsOverlay) return;
+
+  initialsOverlay = document.createElement('div');
+  initialsOverlay.id = 'initials-overlay';
+  initialsOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,128,0.85);z-index:600;display:flex;align-items:center;justify-content:center;';
+  initialsOverlay.innerHTML = `
     <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;min-width:260px;">
-      <div style="background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-size:11px;font-weight:bold;padding:3px 6px;display:flex;justify-content:space-between;">
-        <span>🏆 New High Score!</span>
+      <div style="background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-size:11px;font-weight:bold;padding:3px 6px;">
+        <span>🏆 Game Over — Enter Your Initials</span>
       </div>
       <div style="padding:16px;text-align:center;">
         <div style="font-size:22px;font-weight:900;color:#000080;margin-bottom:4px;">SCORE: ${finalScore}</div>
-        <div style="font-size:12px;margin-bottom:12px;">Enter your initials (3 letters):</div>
+        <div style="font-size:12px;margin-bottom:12px;">3 letters for the leaderboard:</div>
         <input id="initials-input" maxlength="3"
           style="width:80px;text-align:center;font-size:24px;font-weight:bold;font-family:Courier New;letter-spacing:8px;text-transform:uppercase;
           border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;
           padding:4px;background:#fff;outline:none;"
           placeholder="AAA">
         <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
-          <button onclick="saveInitials(${finalScore})"
+          <button id="submit-initials-btn"
             style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:4px 16px;font-size:12px;font-weight:bold;cursor:pointer;">
             [ SUBMIT ]
           </button>
-          <button onclick="this.closest('div[style]').remove();triggerTilt();"
+          <button id="skip-initials-btn"
             style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:4px 12px;font-size:12px;cursor:pointer;">
             Skip
           </button>
@@ -1673,24 +1679,35 @@ function promptInitials(finalScore) {
       </div>
     </div>
   `;
-  document.body.appendChild(overlay);
+  document.body.appendChild(initialsOverlay);
+
+  // Focus input
   setTimeout(() => document.getElementById('initials-input')?.focus(), 100);
 
-  // Enter key submits
-  document.getElementById('initials-input')?.addEventListener('keydown', e => {
+  // Wire up buttons — use one-time event listeners, no inline onclick
+  document.getElementById('submit-initials-btn').addEventListener('click', () => saveInitials(finalScore));
+  document.getElementById('skip-initials-btn').addEventListener('click', () => dismissInitials(null, 0));
+  document.getElementById('initials-input').addEventListener('keydown', e => {
     if(e.key === 'Enter') saveInitials(finalScore);
   });
 }
 
+function dismissInitials(initials, finalScore) {
+  // Remove overlay completely
+  if(initialsOverlay) {
+    initialsOverlay.remove();
+    initialsOverlay = null;
+  }
+  // Submit if we have initials
+  if(initials && initials.length > 0) submitScore(initials, finalScore);
+  // Fire tilt ONCE — with a short delay so overlay is fully gone
+  setTimeout(triggerTilt, 300);
+}
+
 function saveInitials(finalScore) {
   const input = document.getElementById('initials-input');
-  const initials = (input?.value || 'AAA').trim().substring(0,3) || 'AAA';
-  // Remove the overlay
-  input?.closest('div[style*="position:fixed"]')?.remove();
-  // Submit to Supabase
-  if(initials.length > 0) submitScore(initials, finalScore);
-  // Then trigger tilt
-  setTimeout(triggerTilt, 800);
+  const initials = (input?.value || '').trim().replace(/[^a-zA-Z]/g,'').substring(0,3).toUpperCase() || 'AAA';
+  dismissInitials(initials, finalScore);
 }
 
 function triggerTilt() {

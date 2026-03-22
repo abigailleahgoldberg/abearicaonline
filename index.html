@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#008080">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta property="og:title" content="Abearica Online — You've Got Projects">
+<meta property="og:description" content="AI-Powered. Human-Tested. 23 Years in the Making. Free 1000 Hours!">
+<meta property="og:image" content="https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/bear.png">
+<meta property="og:url" content="https://abearicaonline.vercel.app">
+<meta name="twitter:card" content="summary_large_image">
 <title>Abearica Online — You've Got Projects</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -498,9 +506,70 @@ body {
   grid-template-columns: 150px 1fr 158px;
   min-height: calc(100vh - 130px);
 }
+/* ======================================
+   MOBILE & TABLET RESPONSIVE
+====================================== */
 @media (max-width: 680px) {
+  /* CD screen */
+  .cd-wrap { width: 180px; height: 180px; }
+  .cd-disc { width: 180px; height: 180px; }
+  .cd-hours { font-size: 32px; }
+  .cd-online { font-size: 18px; }
+
+  /* Connecting window */
+  .connect-window { width: 95vw; }
+
+  /* Portal layout — stack vertically */
   .aol-body { grid-template-columns: 1fr; }
-  .aol-sidebar-left, .aol-sidebar-right { display: none; }
+
+  /* Hide sidebars on mobile but show a collapsed channel row */
+  .aol-sidebar-left { display: block; background: #000080; }
+  .aol-sidebar-left .sidebar-ch {
+    display: inline-block;
+    border: none;
+    border-right: 1px solid #0000aa;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .aol-sidebar-left > div:last-child { display: none; }
+  .aol-sidebar-right { display: none; }
+
+  /* Toolbar — hide labels, just icons */
+  .toolbar-icon-btn .lbl { display: none; }
+  .toolbar-icon-btn { padding: 4px 6px; min-width: 32px; }
+  .toolbar-icon-btn .ico { font-size: 16px; }
+  .aol-logo-mark { display: none; }
+
+  /* Welcome bar */
+  .aol-welcome-bar { flex-wrap: wrap; gap: 6px; }
+  .welcome-text-block .welcome-tagline { display: none; }
+
+  /* Services grid — single column on phone */
+  .services-grid { grid-template-columns: 1fr; }
+  .got-row { grid-template-columns: 1fr 1fr; }
+
+  /* Game canvas — scale down */
+  #game-canvas { width: 100%; height: auto; }
+  #game-win { width: 95vw; }
+
+  /* Tilt popup */
+  .tilt-win { width: 92vw; }
+
+  /* Status bar — truncate */
+  .status-seg:nth-child(3) { display: none; }
+}
+
+@media (max-width: 400px) {
+  .cd-wrap { width: 150px; height: 150px; }
+  .cd-disc { width: 150px; height: 150px; }
+  .cd-hours { font-size: 26px; }
+  .aol-keyword-bar { display: none; }
+}
+
+/* Mac / large desktop — center and cap width nicely */
+@media (min-width: 1200px) {
+  .aol-window { max-width: 1100px; }
+  .outer-window { max-width: 1100px; }
 }
 
 /* Left sidebar - dark navy channels */
@@ -1289,6 +1358,11 @@ function initPortal() {
 let gameRunning = false, animFrame, paddle, ball, bricks, score, tiltFired=false;
 
 function launchGame() {
+  // Resize canvas for screen
+  const canvas = document.getElementById('game-canvas');
+  const maxW = Math.min(400, window.innerWidth - 20);
+  canvas.width = maxW;
+  canvas.height = Math.round(maxW * 0.7);
   document.getElementById('game-overlay').classList.add('active');
   initGame();
 }

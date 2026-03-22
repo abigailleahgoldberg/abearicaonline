@@ -1415,6 +1415,21 @@ function initPortal() {
 
   // Load leaderboard
   fetchLeaderboard();
+
+  // Tilt popup fires 45 seconds after portal loads — not during game
+  setTimeout(() => {
+    if(!document.getElementById('game-overlay').classList.contains('active')) {
+      triggerTilt();
+    } else {
+      // If they're playing, wait until game closes then show it
+      const waitForGame = setInterval(() => {
+        if(!document.getElementById('game-overlay').classList.contains('active')) {
+          clearInterval(waitForGame);
+          setTimeout(triggerTilt, 3000);
+        }
+      }, 2000);
+    }
+  }, 45000);
 }
 
 /* ============ BREAKOUT GAME ============ */
@@ -1624,17 +1639,16 @@ function initGame() {
       ctx.fillText('Score: '+score,W/2,H/2+20);
       ctx.textAlign='left';
       gameRunning=false;
-      if(!tiltFired && !initialsOverlay){
-        tiltFired=true;
+      if(!initialsOverlay){
         setTimeout(() => promptInitials(score), 600);
       }
       return;
     }
 
     // Win / time limit
-    if(aliveCount===0 || (startTime && !tiltFired && Date.now()-startTime > 45000)){
-      if(!tiltFired && !initialsOverlay){
-        tiltFired=true; gameRunning=false;
+    if(aliveCount===0 || (startTime && Date.now()-startTime > 60000)){
+      if(!initialsOverlay){
+        gameRunning=false;
         cancelAnimationFrame(animFrame);
         setTimeout(() => promptInitials(score), 600);
       }
@@ -1703,8 +1717,8 @@ function dismissInitials(initials, finalScore) {
   }
   // Submit if we have initials
   if(initials && initials.length > 0) submitScore(initials, finalScore);
-  // Fire tilt ONCE — with a short delay so overlay is fully gone
-  setTimeout(triggerTilt, 300);
+  // Just close — tilt fires on its own timer, not from here
+  closeGame();
 }
 
 function saveInitials(finalScore) {

@@ -1029,7 +1029,7 @@ body {
         <a class="sidebar-ch" href="#about"><span class="ch-arrow">▸</span>Welcome</a>
         <a class="sidebar-ch" href="#services"><span class="ch-arrow">▸</span>Services</a>
         <a class="sidebar-ch" onclick="launchGame()"><span class="ch-arrow">▸</span>Games</a>
-        <a class="sidebar-ch" href="mailto:hello@abearicaonline.com"><span class="ch-arrow">▸</span>Contact</a>
+        <a class="sidebar-ch" href="#" onclick="openWriteMail();return false;"><span class="ch-arrow">▸</span>Contact</a>
         
         <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>Computing</a>
         <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>WorkPlace</a>
@@ -1140,7 +1140,7 @@ body {
           </div>
           <div class="panel-body" style="text-align:center;">
             <p style="font-size:12px;margin-bottom:10px;">Most projects quoted within 24 hours. Websites delivered in 48.</p>
-            <a href="mailto:hello@abearicaonline.com" class="big-cta">[ START A PROJECT ]</a>
+            <a href="#" onclick="openWriteMail();return false;" class="big-cta">[ START A PROJECT ]</a>
             <p style="font-size:10px;color:#555;margin-top:8px;">hello@abearicaonline.com</p>
           </div>
         </div>
@@ -1204,7 +1204,7 @@ body {
           <div class="news-box-title">📌 My Places</div>
           <div class="news-box-body">
             <div class="news-link" onclick="launchGame()">Play Breakout</div>
-            <div class="news-link" style="margin-top:2px;"><a href="mailto:hello@abearicaonline.com" style="color:#0000cc;">Hire Abearica</a></div>
+            <div class="news-link" style="margin-top:2px;"><a href="#" onclick="openWriteMail();return false;" style="color:#0000cc;">Hire Abearica</a></div>
             
             <div style="margin-top:4px;font-size:9px;color:#666;">Keyword: abearicaonline</div>
           </div>
@@ -1251,7 +1251,7 @@ body {
       <p>The same 9-agent infrastructure I run —<br>setup, configured, handed to you. 48 hours.</p>
       <p style="margin-top:8px;">Tim · 23 years IT · Oregon</p>
       <div>
-        <a href="mailto:hello@abearicaonline.com" class="tilt-cta">[ START A PROJECT ]</a>
+        <a href="#" onclick="openWriteMail();return false;" class="tilt-cta">[ START A PROJECT ]</a>
       </div>
       <div style="margin-top:10px;display:flex;justify-content:center;gap:8px;">
         <button class="win-btn" onclick="closeTilt()">Close</button>
@@ -1741,6 +1741,132 @@ function triggerTilt() {
 function closeTilt() {
   document.getElementById('tilt-popup').classList.remove('active');
 }
+
+/* ============ WRITE MAIL MODAL ============ */
+function openWriteMail() {
+  document.getElementById('writemail-overlay').style.display = 'flex';
+  document.getElementById('wm-from').focus();
+  resetWriteMail();
+}
+function closeWriteMail() {
+  document.getElementById('writemail-overlay').style.display = 'none';
+}
+function resetWriteMail() {
+  document.getElementById('wm-from').value = '';
+  document.getElementById('wm-subject').value = '';
+  document.getElementById('wm-message').value = '';
+  document.getElementById('wm-status').textContent = '';
+  document.getElementById('wm-send-btn').disabled = false;
+  document.getElementById('wm-send-btn').textContent = 'Send';
+}
+async function sendWriteMail() {
+  const from = document.getElementById('wm-from').value.trim();
+  const subject = document.getElementById('wm-subject').value;
+  const message = document.getElementById('wm-message').value.trim();
+  const status = document.getElementById('wm-status');
+  const btn = document.getElementById('wm-send-btn');
+
+  if (!from || !subject || !message) {
+    status.style.color = '#cc0000';
+    status.textContent = 'Please fill in all fields.';
+    return;
+  }
+  // Basic email check
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(from)) {
+    status.style.color = '#cc0000';
+    status.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  status.style.color = '#000080';
+  status.textContent = '';
+
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/contacts`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ from_email: from, subject, message })
+    });
+    if (res.ok || res.status === 201) {
+      status.style.color = '#006600';
+      status.textContent = '✉️ Mail Sent!';
+      btn.textContent = 'Sent ✓';
+      setTimeout(closeWriteMail, 2000);
+    } else {
+      throw new Error(`HTTP ${res.status}`);
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Send';
+    status.style.color = '#cc0000';
+    status.textContent = 'Send failed. Please try again.';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeWriteMail();
+});
 </script>
+
+<!-- WRITE MAIL MODAL -->
+<div id="writemail-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'MS Sans Serif',Arial,sans-serif;">
+  <div style="background:#c0c0c0;border:2px solid;border-color:#ffffff #808080 #808080 #ffffff;box-shadow:2px 2px 0 #000;width:480px;max-width:96vw;user-select:none;">
+    <!-- Title Bar -->
+    <div style="background:linear-gradient(90deg,#000080,#1084d0);padding:3px 6px;display:flex;align-items:center;justify-content:space-between;cursor:default;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <img src="bear.png" style="width:16px;height:16px;image-rendering:pixelated;" alt="">
+        <span style="color:#fff;font-size:12px;font-weight:bold;font-family:'MS Sans Serif',Arial,sans-serif;">Write Mail</span>
+      </div>
+      <div style="display:flex;gap:2px;">
+        <button onclick="closeWriteMail()" style="width:16px;height:14px;background:#c0c0c0;border:1px solid;border-color:#fff #808080 #808080 #fff;font-size:9px;cursor:pointer;padding:0;line-height:1;">✕</button>
+      </div>
+    </div>
+    <!-- Toolbar -->
+    <div style="background:#c0c0c0;border-bottom:1px solid #808080;padding:4px 6px;display:flex;gap:4px;">
+      <button id="wm-send-btn" onclick="sendWriteMail()" style="background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;font-family:'MS Sans Serif',Arial,sans-serif;font-size:11px;padding:2px 10px;cursor:pointer;">Send</button>
+      <button onclick="closeWriteMail()" style="background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;font-family:'MS Sans Serif',Arial,sans-serif;font-size:11px;padding:2px 10px;cursor:pointer;">Cancel</button>
+    </div>
+    <!-- Header Fields -->
+    <div style="padding:8px 10px 4px;border-bottom:1px solid #808080;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <tr>
+          <td style="width:55px;color:#000;padding:3px 4px 3px 0;vertical-align:middle;font-weight:bold;">To:</td>
+          <td><div style="background:#c0c0c0;border:2px solid;border-color:#808080 #fff #fff #808080;padding:2px 6px;color:#000;font-size:12px;">Abearica (abearicaonline.com)</div></td>
+        </tr>
+        <tr>
+          <td style="color:#000;padding:3px 4px 3px 0;vertical-align:middle;font-weight:bold;">From:</td>
+          <td><input id="wm-from" type="email" placeholder="your@email.com" style="width:100%;box-sizing:border-box;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:2px 6px;font-family:'MS Sans Serif',Arial,sans-serif;font-size:12px;outline:none;"></td>
+        </tr>
+        <tr>
+          <td style="color:#000;padding:3px 4px 3px 0;vertical-align:middle;font-weight:bold;">Subject:</td>
+          <td>
+            <select id="wm-subject" style="width:100%;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:2px 4px;font-family:'MS Sans Serif',Arial,sans-serif;font-size:12px;outline:none;">
+              <option value="">-- Select a subject --</option>
+              <option value="I want AI agents built">I want AI agents built</option>
+              <option value="Website / IT help">Website / IT help</option>
+              <option value="Just curious">Just curious</option>
+              <option value="Something else">Something else</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!-- Message Body -->
+    <div style="padding:6px 10px;">
+      <textarea id="wm-message" placeholder="Type your message here..." style="width:100%;height:140px;box-sizing:border-box;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:6px;font-family:'MS Sans Serif',Arial,sans-serif;font-size:12px;resize:vertical;outline:none;"></textarea>
+    </div>
+    <!-- Status -->
+    <div style="padding:0 10px 8px;font-size:12px;min-height:18px;">
+      <span id="wm-status"></span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

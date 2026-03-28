@@ -1541,41 +1541,18 @@ body { background: #008080; }
 <!-- ========== PHASE 2: CONNECTING ========== -->
 <div id="phase-connect">
   <div class="connect-window">
-    <div class="title-bar">
-      <span>Connecting To Abearica Online...</span>
-      <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
-    </div>
-    <!-- The actual banner image you created -->
-    <div style="background:#000; text-align:center; border-bottom:1px solid #808080;">
-      <img id="banner-img"
-           src="https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/banner.png"
-           style="max-width:100%; max-height:140px; display:block; margin:0 auto;"
-           alt="Abearica Online"
-           onerror="this.parentElement.innerHTML='<div style=\'padding:20px;color:#FFD700;font-family:Arial Black;font-size:18px;text-align:center;\'>🐻 Abearica<br><span style=\'font-style:italic;font-size:22px;color:#fff;\'>Online</span></div>'">
-    </div>
-    <!-- 3-panel connection animation -->
-    <div class="connect-panels">
-      <div class="connect-panel" id="cp1">
-        <div class="connect-panel-icon">🐻</div>
-        <div class="connect-panel-label">Connecting...</div>
-      </div>
-      <div class="connect-panel" id="cp2">
-        <div class="connect-panel-icon">🐻💻</div>
-        <div class="connect-panel-label">Verifying...</div>
-      </div>
-      <div class="connect-panel" id="cp3">
-        <div class="connect-panel-icon">🐻🐻🐻</div>
-        <div class="connect-panel-label">Welcome!</div>
-      </div>
-    </div>
+    <!-- Banner image contains its own title bar, animation panels, and Cancel button -->
+    <img id="banner-img"
+         src="https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/banner.png"
+         style="width:100%;display:block;"
+         alt="Connecting To Abearica Online..."
+         onerror="this.style.display='none'">
+    <!-- Status text and progress bar only — everything else is in the image -->
     <div class="connect-status-wrap">
       <div class="connect-status" id="connect-status">Connecting using TCP/IP ...</div>
     </div>
     <div class="connect-progress-wrap">
       <div class="connect-progress-fill" id="conn-progress"></div>
-    </div>
-    <div class="connect-footer">
-      <button class="win-btn" style="background:#000080;color:#fff;border-color:#4444cc;padding:4px 36px;font-size:12px;">Cancel</button>
     </div>
   </div>
 </div>
@@ -2592,9 +2569,7 @@ function startConnect() {
     setTimeout(() => {
       document.getElementById('connect-status').textContent = s.txt;
       document.getElementById('conn-progress').style.width = s.pct + '%';
-      for (let i=1; i<=3; i++) {
-        document.getElementById('cp'+i).classList.toggle('lit', i <= s.panel);
-      }
+      // panel lights in banner image, no DOM elements needed
     }, s.delay);
   });
 

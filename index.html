@@ -1255,7 +1255,7 @@ body {
           </div>
           <div class="pulse-grid">
             <div class="pulse-tile" id="pulse-weather">
-              <div class="tile-label">🌤 Weather</div>
+              <div class="tile-label"> Weather</div>
               <div class="tile-value">Loading...</div>
             </div>
             <div class="pulse-tile" id="pulse-news">
@@ -1418,7 +1418,7 @@ body {
 
         <!-- Weather box -->
         <div class="news-box">
-          <div class="news-box-title">🌤 My Weather</div>
+          <div class="news-box-title"> My Weather</div>
           <div class="news-box-body">
             Oregon<br>
             <span id="weather-temp">Loading...</span>
@@ -1660,18 +1660,23 @@ function initPortal() {
   }
   tick(); setInterval(tick, 1000);
 
-  // Fake weather (sidebar)
-  document.getElementById('weather-temp').textContent = '🌤 Cool & Partly Cloudy';
+  // Sidebar weather — updated by wttr.in fetch below
+  document.getElementById('weather-temp').textContent = 'Checking...';
 
   // Load leaderboard
   fetchLeaderboard();
 
-  // Daily Pulse: Weather
+  // Daily Pulse: Weather + sidebar
   fetch('https://wttr.in/Klamath+Falls,Oregon?format=3')
     .then(r=>r.text()).then(t=>{
-      document.getElementById('pulse-weather').querySelector('.tile-value').textContent = t.trim() || 'Oregon weather unavailable';
+      const w = t.trim() || 'Oregon weather unavailable';
+      document.getElementById('pulse-weather').querySelector('.tile-value').textContent = w;
+      document.getElementById('weather-temp').textContent = w;
     })
-    .catch(()=>{ document.getElementById('pulse-weather').querySelector('.tile-value').textContent = '🌤 Check weather.com'; });
+    .catch(()=>{
+      document.getElementById('pulse-weather').querySelector('.tile-value').textContent = 'Check weather.com';
+      document.getElementById('weather-temp').textContent = 'Unavailable';
+    });
 
   // Daily Pulse: Crypto
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')

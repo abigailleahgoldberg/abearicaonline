@@ -712,6 +712,7 @@ body {
   transition: background 0.15s, color 0.15s;
 }
 .sidebar-ch:hover { background: #0000cc; color: #FFD700; }
+.sidebar-ch.active-ch { background: #0000cc; color: #FFD700; font-weight: bold; border-left: 3px solid #FFD700; }
 .sidebar-ch .ch-arrow { color: #aaaaff; margin-right: 4px; }
 
 /* Center content */
@@ -1246,15 +1247,14 @@ body {
       <!-- LEFT SIDEBAR: Channels -->
       <div class="aol-sidebar-left">
         <div class="sidebar-header">AOL® Channels</div>
-        <a class="sidebar-ch" href="#about"><span class="ch-arrow">▸</span>Welcome</a>
-        <a class="sidebar-ch" href="#services"><span class="ch-arrow">▸</span>Services</a>
-        <a class="sidebar-ch" href="/games.html"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
-        <a class="sidebar-ch" href="/games.html#arcade" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
-        <a class="sidebar-ch" href="#" onclick="openWriteMail();return false;"><span class="ch-arrow">▸</span>Contact</a>
-        
-        <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>Computing</a>
-        <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>WorkPlace</a>
-        <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>Research</a>
+        <a class="sidebar-ch active-ch" href="#" data-section="welcome" onclick="loadSection('welcome');return false;"><span class="ch-arrow">▸</span>Welcome</a>
+        <a class="sidebar-ch" href="#" data-section="services" onclick="loadSection('services');return false;"><span class="ch-arrow">▸</span>Services</a>
+        <a class="sidebar-ch" href="#" data-section="games" onclick="loadSection('games');return false;"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
+        <a class="sidebar-ch" href="#" data-section="games" onclick="loadSection('games');return false;" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
+        <a class="sidebar-ch" href="#" data-section="contact" onclick="loadSection('contact');return false;"><span class="ch-arrow">▸</span>Contact</a>
+        <a class="sidebar-ch" href="#" data-section="computing" onclick="loadSection('computing');return false;"><span class="ch-arrow">▸</span>Computing</a>
+        <a class="sidebar-ch" href="#" data-section="workplace" onclick="loadSection('workplace');return false;"><span class="ch-arrow">▸</span>WorkPlace</a>
+        <a class="sidebar-ch" href="#" data-section="research" onclick="loadSection('research');return false;"><span class="ch-arrow">▸</span>Research</a>
         <div style="background:#000066;padding:6px 8px;margin-top:8px;font-size:9px;color:#88aaff;line-height:1.8;">
           ⚡ 23 yrs IT exp<br>
           🤖 9 AI agents<br>
@@ -1266,6 +1266,9 @@ body {
 
       <!-- CENTER CONTENT -->
       <div class="aol-center">
+
+        <!-- ===== SECTION: WELCOME ===== -->
+        <div data-section-content="welcome">
 
         <!-- You've Got... section -->
         <div class="aol-panel" id="about" style="margin-bottom:5px;">
@@ -1352,6 +1355,11 @@ body {
           </div>
         </div>
 
+        </div><!-- end section: welcome -->
+
+        <!-- ===== SECTION: SERVICES ===== -->
+        <div data-section-content="services" style="display:none;">
+
         <!-- Services panel -->
         <div class="aol-panel" id="services">
           <div class="title-bar" style="font-size:10px;">
@@ -1410,6 +1418,160 @@ body {
             <p style="font-size:10px;color:#555;margin-top:8px;">hello@abearicaonline.com</p>
           </div>
         </div>
+
+        </div><!-- end section: services -->
+
+        <!-- ===== SECTION: GAMES ===== -->
+        <div data-section-content="games" style="display:none;">
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>🎮 Abearica Online Arcade</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body" style="text-align:center;padding:20px;">
+              <div style="font-size:36px;margin-bottom:12px;">🎮</div>
+              <div style="font-size:16px;font-weight:bold;color:#000080;font-family:'Lora',serif;margin-bottom:8px;">Abearica Online Arcade</div>
+              <p style="font-size:12px;margin-bottom:16px;">Challenge yourself and compete for the high score!</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:320px;margin:0 auto;">
+                <div class="service-tile" onclick="loadSection('welcome');setTimeout(launchGame,100);" style="cursor:pointer;text-align:center;padding:16px 8px;">
+                  <div style="font-size:28px;">🏓</div>
+                  <div class="svc-name" style="margin-top:6px;">Breakout</div>
+                  <div class="svc-desc">Classic brick-breaker. Beat the leaderboard.</div>
+                  <div class="svc-price" style="margin-top:6px;background:#000080;">Play Now →</div>
+                </div>
+                <div class="service-tile" style="text-align:center;padding:16px 8px;opacity:0.6;">
+                  <div style="font-size:28px;">🔜</div>
+                  <div class="svc-name" style="margin-top:6px;">Coming Soon</div>
+                  <div class="svc-desc">More arcade games in development.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end section: games -->
+
+        <!-- ===== SECTION: CONTACT ===== -->
+        <div data-section-content="contact" style="display:none;">
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>📬 Contact Abearica — Write Mail</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body" style="text-align:center;padding:24px;">
+              <div style="font-size:36px;margin-bottom:12px;">📬</div>
+              <div style="font-size:16px;font-weight:bold;color:#000080;font-family:'Lora',serif;margin-bottom:8px;">You've Got Questions?</div>
+              <p style="font-size:12px;margin-bottom:6px;">Most projects quoted within 24 hours. Websites delivered in 48.</p>
+              <p style="font-size:11px;color:#555;margin-bottom:20px;">hello@abearicaonline.com · Oregon · AI-Powered</p>
+              <a href="#" onclick="openWriteMail();return false;" class="big-cta">[ WRITE MAIL ]</a>
+              <div style="margin-top:20px;padding:12px;background:#fffff0;border:1px solid #cccc99;font-family:'Courier New',monospace;font-size:10px;text-align:left;max-width:320px;margin:20px auto 0;">
+                C:\ABEARICA&gt; contact.exe<br>
+                Loading Write Mail...<br>
+                Response time: &lt;24 hours<br>
+                C:\ABEARICA&gt; <span class="blink">█</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- end section: contact -->
+
+        <!-- ===== SECTION: COMPUTING ===== -->
+        <div data-section-content="computing" style="display:none;">
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>🖥️ Computing — IT Services & Infrastructure</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body">
+              <p style="margin-bottom:10px;"><strong>23 years of enterprise IT.</strong> Not theory — real infrastructure, real scale.</p>
+              <div class="services-grid">
+                <div class="service-tile">
+                  <div class="svc-name">Active Directory</div>
+                  <div class="svc-desc">300+ user environments. Group policy, permissions, SSO, domain migrations.</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">GSuite / Google Workspace</div>
+                  <div class="svc-desc">Enterprise setup, migration, admin. Email routing, shared drives, security.</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">MDM — Cisco Meraki</div>
+                  <div class="svc-desc">500+ device fleet management. Policies, remote wipe, compliance.</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">VMware & Virtualization</div>
+                  <div class="svc-desc">vSphere, ESXi, VM provisioning, snapshots, datacenter ops.</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">Network Infrastructure</div>
+                  <div class="svc-desc">Switching, routing, VLANs, VPN, firewall config. Wired and wireless.</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">Security Hardening</div>
+                  <div class="svc-desc">Audit, patch, harden. Endpoint protection, access control, monitoring.</div>
+                </div>
+              </div>
+              <div style="text-align:center;margin-top:12px;">
+                <a href="#" onclick="openWriteMail();return false;" class="big-cta">[ GET A QUOTE ]</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- end section: computing -->
+
+        <!-- ===== SECTION: WORKPLACE ===== -->
+        <div data-section-content="workplace" style="display:none;">
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>💼 WorkPlace — AI for Business</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body">
+              <p style="margin-bottom:10px;"><strong>AI agents built for how your business actually works.</strong> Not demos — production systems.</p>
+              <div class="services-grid">
+                <div class="service-tile">
+                  <div class="svc-name">Multi-Agent Architecture</div>
+                  <div class="svc-desc">9-agent systems that handle marketing, trading, monitoring, content — 24/7.</div>
+                  <div class="svc-price">$2,500–$5,000 setup</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">AI Marketing Automation</div>
+                  <div class="svc-desc">Ads, email, SMS, social — fully automated campaigns. Set it and it runs.</div>
+                  <div class="svc-price">Custom quote</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">48-Hour Website Delivery</div>
+                  <div class="svc-desc">Professional sites designed, built, and deployed. Faster than any agency.</div>
+                  <div class="svc-price">48-hour turnaround</div>
+                </div>
+                <div class="service-tile">
+                  <div class="svc-name">Monthly AI Retainer</div>
+                  <div class="svc-desc">Ongoing agent ops, maintenance, new automations. Hands-off for you.</div>
+                  <div class="svc-price">$500–$1,500/mo</div>
+                </div>
+              </div>
+              <div style="text-align:center;margin-top:12px;">
+                <a href="#" onclick="openWriteMail();return false;" class="big-cta">[ START A PROJECT ]</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- end section: workplace -->
+
+        <!-- ===== SECTION: RESEARCH ===== -->
+        <div data-section-content="research" style="display:none;">
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>🔬 Research — Tech & AI Intel</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body">
+              <p style="margin-bottom:10px;"><strong>Staying current is part of the job.</strong> Tools, frameworks, and sources I actually use.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+                <div class="service-tile"><div class="svc-name">OpenClaw</div><div class="svc-desc">Multi-agent infrastructure. What powers the 9-agent clan.</div></div>
+                <div class="service-tile"><div class="svc-name">Anthropic / Claude</div><div class="svc-desc">Primary AI backbone. Sonnet for work, Opus for heavy reasoning.</div></div>
+                <div class="service-tile"><div class="svc-name">Vercel</div><div class="svc-desc">20+ sites deployed here. Fast, git-connected, zero ops overhead.</div></div>
+                <div class="service-tile"><div class="svc-name">Supabase</div><div class="svc-desc">Postgres backend. Leaderboards, contact forms, mailing lists.</div></div>
+                <div class="service-tile"><div class="svc-name">Fal.ai</div><div class="svc-desc">FLUX-2 image generation. Used for all brand graphics and site art.</div></div>
+                <div class="service-tile"><div class="svc-name">Cloudflare</div><div class="svc-desc">DNS, email routing, and CDN across all 20+ domains.</div></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end section: research -->
 
       </div><!-- end center -->
 
@@ -1675,6 +1837,7 @@ function startConnect() {
   setTimeout(() => {
     document.getElementById('phase-connect').classList.remove('active');
     document.getElementById('phase-portal').classList.add('active');
+    sessionStorage.setItem('aol_signed_in', '1');
     initPortal();
   }, 19000);
 }
@@ -2278,6 +2441,80 @@ document.addEventListener('keydown', function(e) {
     e.preventDefault();
     window.refreshPulse();
   }
+});
+
+/* ── SECTION ROUTER ── */
+const SECTION_TITLES = {
+  welcome:   'Abearica Online — Welcome Screen',
+  services:  'Abearica Online — Services',
+  games:     'Abearica Online — Arcade',
+  contact:   'Abearica Online — Contact',
+  computing: 'Abearica Online — Computing',
+  workplace: 'Abearica Online — WorkPlace',
+  research:  'Abearica Online — Research',
+};
+const SECTION_KEYWORDS = {
+  welcome:   'abearicaonline.com',
+  services:  'Keyword: services',
+  games:     'Keyword: games',
+  contact:   'Keyword: contact',
+  computing: 'Keyword: computing',
+  workplace: 'Keyword: workplace',
+  research:  'Keyword: research',
+};
+
+window.loadSection = function(name) {
+  // Hide all sections
+  document.querySelectorAll('[data-section-content]').forEach(el => el.style.display = 'none');
+  // Show requested section
+  const target = document.querySelector('[data-section-content="'+name+'"]');
+  if(target) target.style.display = '';
+  // Update sidebar active state
+  document.querySelectorAll('.sidebar-ch').forEach(el => {
+    el.classList.toggle('active-ch', el.dataset.section === name);
+  });
+  // Update title bar
+  const titleBar = document.querySelector('#phase-portal .title-bar span:last-child, #phase-portal .title-bar span');
+  const titleSpans = document.querySelectorAll('#phase-portal > .aol-window > .title-bar span');
+  if(titleSpans.length >= 2) titleSpans[1].textContent = SECTION_TITLES[name] || 'Abearica Online';
+  // Update keyword bar
+  const kwField = document.querySelector('.keyword-field');
+  if(kwField) kwField.value = SECTION_KEYWORDS[name] || 'abearicaonline.com';
+  // Scroll center to top
+  const center = document.querySelector('.aol-center');
+  if(center) center.scrollTop = 0;
+  // Special case: games section launches the game overlay
+  if(name === 'games') {
+    // just show the games landing — user can click Play Now
+  }
+};
+
+/* ── SESSION STORAGE SIGN-ON SKIP ── */
+// If already signed in this browser session, skip straight to portal
+(function() {
+  if(sessionStorage.getItem('aol_signed_in') === '1') {
+    document.getElementById('phase-cd').style.display = 'none';
+    document.getElementById('phase-portal').classList.add('active');
+    // Run portal init without the connection animation
+    document.addEventListener('DOMContentLoaded', function() {
+      initPortal();
+    });
+    // If DOM already ready
+    if(document.readyState !== 'loading') initPortal();
+  }
+})();
+
+// Mark as signed in when portal loads
+const _origInitPortal = window.initPortal;
+// We'll set the session flag inside startConnect's final timeout — patching here:
+const _connectObserver = new MutationObserver(function(mutations) {
+  mutations.forEach(function(m) {
+    m.addedNodes.forEach(function(n) {});
+  });
+});
+// Simpler: patch via flag set in initPortal
+document.addEventListener('aol:portal-ready', function() {
+  sessionStorage.setItem('aol_signed_in', '1');
 });
 
 </script>

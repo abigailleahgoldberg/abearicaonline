@@ -3826,12 +3826,17 @@ function niArticleHTML(item) {
 // Parse RSS XML text into array of {title, link} objects
 function parseRSS(xmlText) {
   try {
+    // Try XML parser first, fall back to text/html which is more lenient
+    let doc;
     const parser = new DOMParser();
-    const doc = parser.parseFromString(xmlText, 'application/xml');
+    doc = parser.parseFromString(xmlText, 'text/xml');
+    // Check for parse error
+    if (doc.querySelector('parsererror')) {
+      doc = parser.parseFromString(xmlText, 'text/html');
+    }
     const items = Array.from(doc.querySelectorAll('item, entry'));
     return items.map(item => {
       const title = item.querySelector('title')?.textContent?.trim() || '';
-      // Try text content of <link>, then href attribute, then <guid>
       let link = '#';
       const linkEl = item.querySelector('link');
       if (linkEl) {
@@ -3890,9 +3895,10 @@ async function loadNewsInformer() {
     renderItems('ni-reviews', reviewItems.length ? reviewItems : allItems.slice(10,15));
 
   }).catch(err => {
+    const msg = err && err.message ? err.message : 'unknown error';
     ['ni-stories','ni-esports','ni-reviews'].forEach(id => {
       const el = document.getElementById(id);
-      if(el) el.innerHTML = '<div style="color:#999;font-size:10px;font-style:italic;">Loading failed — check back soon.</div>';
+      if(el) el.innerHTML = '<div style="color:#999;font-size:10px;font-family:Courier New;">ERR: '+msg+'</div>';
     });
   });
 }

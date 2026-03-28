@@ -2111,7 +2111,7 @@ function startConnect() {
   setTimeout(() => {
     document.getElementById('phase-connect').classList.remove('active');
     document.getElementById('phase-portal').classList.add('active');
-    sessionStorage.setItem('aol_signed_in', '1');
+    window._aolSignedIn = true;
     initPortal();
   }, 19000);
 }
@@ -2763,16 +2763,13 @@ window.loadSection = function(name) {
   }
 };
 
-/* ── SESSION STORAGE SIGN-ON SKIP ── */
-// Sign in once per browser tab session. Refresh skips the 19s connection sequence.
-document.addEventListener('DOMContentLoaded', function() {
-  if(sessionStorage.getItem('aol_signed_in') === '1') {
-    document.getElementById('phase-cd').style.display = 'none';
-    document.getElementById('phase-connect').style.display = 'none';
-    document.getElementById('phase-portal').classList.add('active');
-    initPortal();
-  }
-});
+/* ── IN-PAGE SIGN-ON SKIP ── */
+// window._aolSignedIn resets on every page load/refresh (sign-on shows fresh every time)
+// but persists during section navigation (no page reload = no sign-on repeat).
+// This is the correct behavior: real AOL feel on load, smooth nav inside.
+window._aolSignedIn = false;
+// Clear any stuck sessionStorage flag from previous builds
+try { sessionStorage.removeItem('aol_signed_in'); } catch(e) {}
 
 </script>
 

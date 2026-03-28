@@ -4,598 +4,572 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Abearica Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0d0d1a;
+  --bg-card: rgba(255,255,255,0.04);
+  --accent: #00d4ff;
+  --accent-2: #7c3aed;
+  --accent-glow: rgba(0,212,255,0.3);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --border: rgba(255,255,255,0.07);
+  --border-accent: rgba(0,212,255,0.3);
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius: 16px;
+}
 
-  body {
-    background: #1a1a2e;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: #e0e0e0;
-    min-height: 100vh;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  /* ── HEADER ── */
-  .header {
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d0d1f 100%);
-    border-bottom: 2px solid #00d4ff;
-    padding: 28px 40px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 30px rgba(0, 212, 255, 0.15);
-  }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+}
 
-  .header-left { display: flex; align-items: center; gap: 16px; }
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
 
-  .back-btn {
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.4);
-    color: #00d4ff;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .back-btn:hover {
-    background: rgba(0, 212, 255, 0.25);
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
-  }
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: color 0.2s;
+}
+.back-btn:hover { color: var(--accent); }
+.back-btn svg { width: 16px; height: 16px; }
 
-  .header h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 1px;
-  }
-  .header h1 span { color: #00d4ff; }
+.header-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
 
-  .header-meta {
-    font-size: 12px;
-    color: #888;
-  }
-  .header-meta strong { color: #00d4ff; }
+.header-count {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.header-count strong { color: var(--accent); }
 
-  /* ── HERO STRIP ── */
-  .hero {
-    background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 100%);
-    padding: 40px;
-    text-align: center;
-    border-bottom: 1px solid rgba(0,212,255,0.15);
-  }
-  .hero h2 {
-    font-size: 32px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 10px;
-  }
-  .hero h2 em {
-    font-style: normal;
-    background: linear-gradient(90deg, #00d4ff, #7b5ea7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero p {
-    color: #aaa;
-    font-size: 15px;
-    max-width: 560px;
-    margin: 0 auto 24px;
-    line-height: 1.6;
-  }
-  .hero-stats {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .stat {
-    text-align: center;
-  }
-  .stat-num {
-    font-size: 28px;
-    font-weight: 800;
-    color: #00d4ff;
-  }
-  .stat-label {
-    font-size: 11px;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 96px 48px 72px;
+  text-align: center;
+  overflow: hidden;
+}
 
-  /* ── FILTER BAR ── */
-  .filter-bar {
-    padding: 20px 40px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    background: #0f0f1e;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .filter-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #aaa;
-    padding: 6px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.2s;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: rgba(0,212,255,0.15);
-    border-color: rgba(0,212,255,0.5);
-    color: #00d4ff;
-  }
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,212,255,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
 
-  /* ── GRID ── */
-  .grid-container {
-    padding: 32px 40px 60px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+.hero-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  padding: 6px 16px;
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 100px;
+  background: rgba(0,212,255,0.06);
+}
 
-  .section-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #555;
-    margin-bottom: 16px;
-    margin-top: 32px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
 
-  .sites-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-  }
+.hero h1 span {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-  /* ── SITE CARD ── */
-  .site-card {
-    background: #12121f;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-  }
-  .site-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.3);
-    border-color: rgba(0,212,255,0.3);
-  }
+.hero p {
+  font-size: 17px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+}
 
-  .card-preview {
-    position: relative;
-    height: 180px;
-    background: #1a1a2e;
-    overflow: hidden;
-  }
-  .card-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.4s;
-  }
-  .site-card:hover .card-preview img {
-    transform: scale(1.04);
-  }
-  .card-preview-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    background: linear-gradient(135deg, #1a1a3e, #0d1b2a);
-  }
-  .card-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,212,255,0.15);
-    border: 1px solid rgba(0,212,255,0.4);
-    color: #00d4ff;
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .card-badge.new {
-    background: rgba(0,255,136,0.15);
-    border-color: rgba(0,255,136,0.4);
-    color: #00ff88;
-  }
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  max-width: 640px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+}
 
-  .card-body {
-    padding: 16px;
-  }
-  .card-domain {
-    font-size: 11px;
-    color: #00d4ff;
-    margin-bottom: 4px;
-    font-family: monospace;
-  }
-  .card-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-  .card-desc {
-    font-size: 12px;
-    color: #888;
-    line-height: 1.5;
-    margin-bottom: 12px;
-  }
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .tag {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: #777;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
+.stat {
+  flex: 1;
+  min-width: 120px;
+  padding: 24px 20px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
 
-  /* ── CTA ── */
-  .cta-strip {
-    background: linear-gradient(135deg, #0d1b2a, #1a1040);
-    border-top: 1px solid rgba(0,212,255,0.15);
-    border-bottom: 1px solid rgba(0,212,255,0.15);
-    padding: 48px 40px;
-    text-align: center;
-    margin-top: 48px;
-  }
-  .cta-strip h3 {
-    font-size: 24px;
-    color: #fff;
-    margin-bottom: 10px;
-  }
-  .cta-strip p {
-    color: #888;
-    margin-bottom: 24px;
-    font-size: 14px;
-  }
-  .cta-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #00d4ff, #7b5ea7);
-    color: #fff;
-    padding: 14px 32px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 15px;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
 
-  /* ── FOOTER ── */
-  .footer {
-    text-align: center;
-    padding: 24px;
-    font-size: 11px;
-    color: #444;
-  }
+/* ── FILTER ── */
+.filter-bar {
+  padding: 0 48px 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
-  @media (max-width: 600px) {
-    .header { padding: 16px 20px; }
-    .hero { padding: 28px 20px; }
-    .filter-bar { padding: 16px 20px; }
-    .grid-container { padding: 20px 20px 40px; }
-    .sites-grid { grid-template-columns: 1fr; }
-    .hero-stats { gap: 20px; }
-  }
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.filter-btn:hover {
+  border-color: rgba(0,212,255,0.4);
+  color: var(--text-secondary);
+}
+.filter-btn.active {
+  background: rgba(0,212,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── GRID ── */
+.grid-wrap {
+  padding: 0 48px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ── CARD ── */
+.site-card {
+  display: block;
+  text-decoration: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  animation: fadeInUp 0.4s ease both;
+}
+
+.site-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.15);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-img {
+  position: relative;
+  height: 190px;
+  background: #0d0d1a;
+  overflow: hidden;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s;
+  display: block;
+}
+
+.site-card:hover .card-img img {
+  transform: scale(1.04);
+}
+
+.card-img-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+}
+
+.fallback-domain {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: -0.5px;
+}
+
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+}
+.badge-flagship {
+  background: rgba(0,212,255,0.15);
+  border: 1px solid rgba(0,212,255,0.4);
+  color: var(--accent);
+}
+.badge-here {
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-domain {
+  font-size: 11px;
+  font-family: var(--font-body);
+  color: var(--accent);
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.card-name {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* ── CTA ── */
+.cta {
+  margin: 0 48px 80px;
+  padding: 64px 48px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0,212,255,0.06) 0%, rgba(124,58,237,0.06) 100%);
+  border: 1px solid rgba(0,212,255,0.12);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(0,212,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.cta p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 32px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,212,255,0.3);
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 48px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .header { padding: 0 20px; }
+  .hero { padding: 64px 20px 48px; }
+  .filter-bar { padding: 0 20px 24px; }
+  .grid-wrap { padding: 0 20px 60px; }
+  .cta { margin: 0 20px 60px; padding: 48px 24px; }
+  .footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  .hero-stats { flex-direction: column; }
+  .stat { border-right: none; border-bottom: 1px solid var(--border); }
+  .stat:last-child { border-bottom: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <a href="/" class="back-btn">← Back</a>
-    <h1>Live <span>Portfolio</span></h1>
-  </div>
-  <div class="header-meta">
-    Built &amp; maintained by <strong>Abearica</strong> · AI-powered infrastructure
-  </div>
-</div>
+<header class="header">
+  <a href="/" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back
+  </a>
+  <div class="header-title">Live Portfolio</div>
+  <div class="header-count"><strong id="count">22</strong> active sites</div>
+</header>
 
-<div class="hero">
-  <h2>Real Sites. <em>Real Results.</em></h2>
-  <p>Every site below is live, maintained by AI agents, and built on the same infrastructure you'd get as a client. This is the work.</p>
+<section class="hero">
+  <div class="hero-label">Built by Abearica</div>
+  <h1>Real Sites.<br><span>Real Results.</span></h1>
+  <p>Every site below is live, AI-maintained, and built on the same infrastructure you'd get as a client.</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num" id="live-count">22</div><div class="stat-label">Live Sites</div></div>
-    <div class="stat"><div class="stat-num">9</div><div class="stat-label">AI Agents</div></div>
-    <div class="stat"><div class="stat-num">48hr</div><div class="stat-label">Delivery</div></div>
-    <div class="stat"><div class="stat-num">23yr</div><div class="stat-label">IT Experience</div></div>
+    <div class="stat">
+      <div class="stat-num" id="live-count">22</div>
+      <div class="stat-label">Live Sites</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">9</div>
+      <div class="stat-label">AI Agents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">48hr</div>
+      <div class="stat-label">Delivery</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">23yr</div>
+      <div class="stat-label">Experience</div>
+    </div>
   </div>
-</div>
+</section>
 
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="filterSites('all', this)">All Sites</button>
-  <button class="filter-btn" onclick="filterSites('business', this)">Business &amp; AI</button>
-  <button class="filter-btn" onclick="filterSites('culture', this)">Culture &amp; Community</button>
-  <button class="filter-btn" onclick="filterSites('sports', this)">Sports</button>
-
+  <button class="filter-btn active" onclick="filterSites('all',this)">All</button>
+  <button class="filter-btn" onclick="filterSites('business',this)">Business & AI</button>
+  <button class="filter-btn" onclick="filterSites('culture',this)">Culture & Community</button>
+  <button class="filter-btn" onclick="filterSites('sports',this)">Sports & Entertainment</button>
 </div>
 
-<div class="grid-container">
+<div class="grid-wrap">
   <div class="sites-grid" id="sites-grid"></div>
 </div>
 
-<div class="cta-strip">
-  <h3>Want one like these?</h3>
+<div class="cta">
+  <h2>Want one like these?</h2>
   <p>48-hour delivery. AI-powered. Built by someone who's been doing this for 23 years.</p>
-  <a href="mailto:hello@abearicaonline.com" class="cta-btn">Get Your Site Built →</a>
+  <a href="mailto:hello@abearicaonline.com" class="cta-btn">Get Your Site Built</a>
 </div>
 
-<div class="footer">
-  © 2025 Abearica Online · All sites built &amp; maintained by Abearica + AI infrastructure
-</div>
+<footer class="footer">
+  <span>© 2025 Abearica Online</span>
+  <span>All sites built &amp; maintained by Abearica + AI infrastructure</span>
+</footer>
 
 <script>
-const SITES = [
-  // ── BUSINESS & AI ──
-  {
-    domain: 'thevoiceofcash.com',
-    name: 'The Voice of Cash',
-    desc: 'AI marketing agency hub. Full service campaigns, consulting, and digital strategy.',
-    tags: ['Agency', 'Marketing', 'AI'],
-    category: 'business',
-    emoji: '💰',
-    badge: 'Flagship'
-  },
-  {
-    domain: 'aiskillsagents.com',
-    name: 'AI Skills & Agents',
-    desc: 'The resource hub for AI automation tools, skills, and agent infrastructure.',
-    tags: ['AI', 'Automation', 'Resources'],
-    category: 'business',
-    emoji: '🤖'
-  },
-  {
-    domain: 'aiskillsagent.com',
-    name: 'AI Skills Agent',
-    desc: 'AI agent skills and tools directory.',
-    tags: ['AI', 'Automation'],
-    category: 'business',
-    emoji: '🦾'
-  },
-  {
-    domain: 'aiskillsgenerator.com',
-    name: 'AI Skills Generator',
-    desc: 'Generate AI agent skills and workflows on demand.',
-    tags: ['AI', 'Tools'],
-    category: 'business',
-    emoji: '⚙️'
-  },
-  {
-    domain: 'anthropicaiskills.com',
-    name: 'Anthropic AI Skills',
-    desc: 'Claude-powered skills and capabilities showcase.',
-    tags: ['AI', 'Anthropic', 'Claude'],
-    category: 'business',
-    emoji: '🧠'
-  },
-  {
-    domain: 'claudeaiskills.com',
-    name: 'Claude AI Skills',
-    desc: 'Skills and tools built on Claude AI.',
-    tags: ['AI', 'Claude'],
-    category: 'business',
-    emoji: '💡'
-  },
-  {
-    domain: 'shadyscanner.com',
-    name: 'Shady Scanner',
-    desc: 'AI-powered background check and research tool.',
-    tags: ['SaaS', 'AI', 'Research'],
-    category: 'business',
-    emoji: '🔍'
-  },
-  {
-    domain: 'searchperformancemarketing.com',
-    name: 'Search Performance Marketing',
-    desc: 'SEO and paid search performance agency.',
-    tags: ['SEO', 'Marketing', 'Agency'],
-    category: 'business',
-    emoji: '📈'
-  },
-  {
-    domain: 'abearicaonline.com',
-    name: 'Abearica Online',
-    desc: 'Personal brand + portfolio. You\'re here right now.',
-    tags: ['Portfolio', 'Personal Brand'],
-    category: 'business',
-    emoji: '🌐',
-    badge: 'You Are Here'
-  },
-  // ── CULTURE & COMMUNITY ──
-  {
-    domain: 'jewsa.com',
-    name: 'JewSA',
-    desc: 'Jewish American culture, pride, and community. Bold, unapologetic, modern.',
-    tags: ['Culture', 'Community', 'Media'],
-    category: 'culture',
-    emoji: '✡️'
-  },
-  {
-    domain: 'webearish.com',
-    name: 'WeBearish',
-    desc: 'Neurodiversity community and NFT project. Real support, real people.',
-    tags: ['Neurodiversity', 'Community', 'NFTs'],
-    category: 'culture',
-    emoji: '🐻'
-  },
-  {
-    domain: 'hindusa.com',
-    name: 'HindUSA',
-    desc: 'Hindu American culture and community platform.',
-    tags: ['Culture', 'Community'],
-    category: 'culture',
-    emoji: '🕉️'
-  },
-  {
-    domain: 'autismacceptance.world',
-    name: 'Autism Acceptance World',
-    desc: 'Autism acceptance, awareness, and community.',
-    tags: ['Neurodiversity', 'Community', 'Advocacy'],
-    category: 'culture',
-    emoji: '♾️'
-  },
-  {
-    domain: 'redwhitejesus.com',
-    name: 'Red White Jesus',
-    desc: 'Faith, culture, and American identity.',
-    tags: ['Culture', 'Faith', 'Community'],
-    category: 'culture',
-    emoji: '✝️'
-  },
-  {
-    domain: 'allahican.com',
-    name: 'Allah I Can',
-    desc: 'Islamic American culture and community.',
-    tags: ['Culture', 'Faith', 'Community'],
-    category: 'culture',
-    emoji: '☪️'
-  },
-  {
-    domain: 'u-god.com',
-    name: 'U-God',
-    desc: 'Wisdom, knowledge, and resources. Curated content for the curious mind.',
-    tags: ['Knowledge', 'Resources', 'AI'],
-    category: 'culture',
-    emoji: '📖'
-  },
-  // ── SPORTS ──
-  {
-    domain: 'thelvas.com',
-    name: 'The LVAs',
-    desc: 'Las Vegas Athletics — the home team. Fan hub for the new era of Oakland baseball in Vegas.',
-    tags: ['Baseball', 'Las Vegas', 'Sports'],
-    category: 'sports',
-    emoji: '⚾'
-  },
-  {
-    domain: 'thelvathletics.com',
-    name: 'The LV Athletics',
-    desc: 'Deep coverage, stats, and news for Las Vegas Athletics fans.',
-    tags: ['Baseball', 'News', 'Stats'],
-    category: 'sports',
-    emoji: '🏟️'
-  },
-  {
-    domain: 'lvathleticsnation.com',
-    name: 'LV Athletics Nation',
-    desc: 'The fan community. Game recaps, opinion, and the pulse of the fanbase.',
-    tags: ['Baseball', 'Community', 'Fan Site'],
-    category: 'sports',
-    emoji: '📣'
-  },
-  {
-    domain: 'mmadads.com',
-    name: 'MMA Dads',
-    desc: 'Where MMA fans who are also dads find their community. Fight talk, dad life.',
-    tags: ['MMA', 'Community', 'Lifestyle'],
-    category: 'sports',
-    emoji: '🥊'
-  },
-  {
-    domain: 'mmamoms.com',
-    name: 'MMA Moms',
-    desc: 'Women in MMA — fans, fighters, and moms who love the sport.',
-    tags: ['MMA', 'Community', 'Women'],
-    category: 'sports',
-    emoji: '💪'
-  },
-  {
-    domain: 'spaghettiburritos.com',
-    name: 'Spaghetti Burritos',
-    desc: 'Chaos, sports, crypto, and culture. Degenerate tabloid energy. Barstool meets TMZ.',
-    tags: ['Entertainment', 'Sports', 'Chaotic Good'],
-    category: 'sports',
-    emoji: '🌯'
-  },
-];
-
-// Real og:image URLs fetched directly from each site
 const OG_IMAGES = {
-  'thevoiceofcash.com':          'https://thevoiceofcash.com/og-image.png',
-  'aiskillsagents.com':          'https://aiskillsagents.com/og-image.png',
-  'aiskillsgenerator.com':       'https://aiskillsgenerator.com/og-image.png',
-  'anthropicaiskills.com':       'https://anthropicaiskills.com/og-image.png',
-  'claudeaiskills.com':          'https://claudeaiskills.com/og-image.png',
-  'abearicaonline.com':          'https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/public/og-image.png',
-  'jewsa.com':                   'https://jewsa.com/og-image.png',
-  'webearish.com':               'https://webearish.com/og-webearish.png',
-  'hindusa.com':                 'https://www.hindusa.com/og-image.png',
-  'autismacceptance.world':      'https://autismacceptance.world/bears/bears-together.jpg',
-  'u-god.com':                   'https://u-god.com/og-image.png',
-  'thelvathletics.com':          'https://thelvathletics.com/og-image.png',
-  'lvathleticsnation.com':       'https://lvathleticsnation.com/og-image.png',
-  'mmamoms.com':                 'https://mmamoms.com/og-image.png',
-  'spaghettiburritos.com':       'https://spaghettiburritos.com/og-image.png',
+  'thevoiceofcash.com':        'https://thevoiceofcash.com/og-image.png',
+  'aiskillsagents.com':        'https://aiskillsagents.com/og-image.png',
+  'aiskillsgenerator.com':     'https://aiskillsgenerator.com/og-image.png',
+  'anthropicaiskills.com':     'https://anthropicaiskills.com/og-image.png',
+  'claudeaiskills.com':        'https://claudeaiskills.com/og-image.png',
+  'shadyscanner.com':          'https://shadyscanner.com/og-image.png',
+  'jewsa.com':                 'https://jewsa.com/og-image.png',
+  'webearish.com':             'https://webearish.com/og-webearish.png',
+  'hindusa.com':               'https://www.hindusa.com/og-image.png',
+  'autismacceptance.world':    'https://autismacceptance.world/bears/bears-together.jpg',
+  'u-god.com':                 'https://u-god.com/og-image.png',
+  'thelvathletics.com':        'https://thelvathletics.com/og-image.png',
+  'lvathleticsnation.com':     'https://lvathleticsnation.com/og-image.png',
+  'mmamoms.com':               'https://mmamoms.com/og-image.png',
+  'spaghettiburritos.com':     'https://spaghettiburritos.com/og-image.png',
 };
 
-function getOgImage(domain) {
-  return OG_IMAGES[domain] || null;
-}
-
-let currentFilter = 'all';
+const SITES = [
+  { domain:'thevoiceofcash.com', name:'The Voice of Cash', desc:'AI marketing agency hub. Full-service campaigns, consulting, and digital strategy.', tags:['Agency','Marketing','AI'], category:'business', badge:'flagship' },
+  { domain:'aiskillsagents.com', name:'AI Skills & Agents', desc:'The resource hub for AI automation tools, skills, and agent infrastructure.', tags:['AI','Automation','Resources'], category:'business' },
+  { domain:'aiskillsagent.com', name:'AI Skills Agent', desc:'AI agent skills directory and tools.', tags:['AI','Agents'], category:'business' },
+  { domain:'aiskillsgenerator.com', name:'AI Skills Generator', desc:'Generate AI agent skills and workflows on demand.', tags:['AI','Tools'], category:'business' },
+  { domain:'anthropicaiskills.com', name:'Anthropic AI Skills', desc:'Claude-powered skills and capabilities showcase.', tags:['AI','Claude'], category:'business' },
+  { domain:'claudeaiskills.com', name:'Claude AI Skills', desc:'Skills and tools built on Claude AI.', tags:['AI','Claude'], category:'business' },
+  { domain:'shadyscanner.com', name:'Shady Scanner', desc:'AI-powered background check and research tool.', tags:['SaaS','AI','Research'], category:'business' },
+  { domain:'searchperformancemarketing.com', name:'Search Performance Marketing', desc:'SEO and paid search performance agency.', tags:['SEO','Marketing'], category:'business' },
+  { domain:'abearicaonline.com', name:'Abearica Online', desc:"Personal brand and portfolio. You're here right now.", tags:['Portfolio','Personal Brand'], category:'business', badge:'here' },
+  { domain:'jewsa.com', name:'JewSA', desc:'Jewish American culture, pride, and community. Bold, unapologetic, modern.', tags:['Culture','Community','Media'], category:'culture' },
+  { domain:'webearish.com', name:'WeBearish', desc:'Neurodiversity community and NFT project. Real support, real people.', tags:['Neurodiversity','Community'], category:'culture' },
+  { domain:'hindusa.com', name:'HindUSA', desc:'Hindu American culture and community platform.', tags:['Culture','Community'], category:'culture' },
+  { domain:'autismacceptance.world', name:'Autism Acceptance World', desc:'Autism acceptance, awareness, and community advocacy.', tags:['Neurodiversity','Advocacy'], category:'culture' },
+  { domain:'redwhitejesus.com', name:'Red White Jesus', desc:'Faith, culture, and American identity.', tags:['Culture','Faith'], category:'culture' },
+  { domain:'allahican.com', name:'Allah I Can', desc:'Islamic American culture and community.', tags:['Culture','Faith'], category:'culture' },
+  { domain:'u-god.com', name:'U-God', desc:'Wisdom, knowledge, and resources. Curated content for the curious mind.', tags:['Knowledge','Resources'], category:'culture' },
+  { domain:'thelvas.com', name:'The LVAs', desc:'Las Vegas Athletics fan hub. The new era of Oakland baseball in Vegas.', tags:['Baseball','Las Vegas'], category:'sports' },
+  { domain:'thelvathletics.com', name:'The LV Athletics', desc:'Deep coverage, stats, and news for Las Vegas Athletics fans.', tags:['Baseball','News'], category:'sports' },
+  { domain:'lvathleticsnation.com', name:'LV Athletics Nation', desc:'The fan community. Game recaps, opinion, and the pulse of the fanbase.', tags:['Baseball','Community'], category:'sports' },
+  { domain:'mmadads.com', name:'MMA Dads', desc:'Where MMA fans who are also dads find their community.', tags:['MMA','Community'], category:'sports' },
+  { domain:'mmamoms.com', name:'MMA Moms', desc:'Women in MMA — fans, fighters, and moms who love the sport.', tags:['MMA','Community'], category:'sports' },
+  { domain:'spaghettiburritos.com', name:'Spaghetti Burritos', desc:'Chaos, sports, crypto, and culture. Barstool meets TMZ.', tags:['Entertainment','Sports'], category:'sports' },
+];
 
 function renderSites(filter) {
   const grid = document.getElementById('sites-grid');
   const filtered = filter === 'all' ? SITES : SITES.filter(s => s.category === filter);
-
   document.getElementById('live-count').textContent = SITES.length;
+  document.getElementById('count').textContent = SITES.length;
 
-  grid.innerHTML = filtered.map(site => {
-    const ogImg = getOgImage(site.domain);
+  grid.innerHTML = filtered.map((site, i) => {
+    const img = OG_IMAGES[site.domain];
+    const badgeHtml = site.badge === 'flagship'
+      ? `<div class="card-badge badge-flagship">Flagship</div>`
+      : site.badge === 'here'
+      ? `<div class="card-badge badge-here">You Are Here</div>`
+      : '';
+
+    const imgHtml = img
+      ? `<img src="${img}" alt="${site.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.card-img-fallback').style.display='flex';">`
+      : '';
+
+    const fallbackDisplay = img ? 'none' : 'flex';
+
     return `
-    <a href="https://${site.domain}" target="_blank" rel="noopener" class="site-card" data-category="${site.category}">
-      <div class="card-preview">
-        ${ogImg
-          ? `<img src="${ogImg}" alt="${site.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />`
-          : ''}
-        <div class="card-preview-fallback" style="${ogImg ? 'display:none' : ''}">${site.emoji}</div>
-        ${site.badge ? `<div class="card-badge ${site.badge === 'new' ? 'new' : ''}">${site.badge}</div>` : ''}
+    <a href="https://${site.domain}" target="_blank" rel="noopener" class="site-card" style="animation-delay:${i * 40}ms">
+      <div class="card-img">
+        ${imgHtml}
+        <div class="card-img-fallback" style="display:${fallbackDisplay}">
+          <div class="fallback-domain">${site.domain}</div>
+        </div>
+        ${badgeHtml}
       </div>
       <div class="card-body">
         <div class="card-domain">${site.domain}</div>
         <div class="card-name">${site.name}</div>
         <div class="card-desc">${site.desc}</div>
-        <div class="card-tags">
-          ${site.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-        </div>
+        <div class="card-tags">${site.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
-    </a>
-  `}).join('');
+    </a>`;
+  }).join('');
 }
 
-function filterSites(category, btn) {
-  currentFilter = category;
+function filterSites(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderSites(category);
+  renderSites(cat);
 }
 
 renderSites('all');

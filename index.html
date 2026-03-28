@@ -1268,8 +1268,8 @@ body {
               <div class="tile-label">₿ Crypto</div>
               <div class="tile-value">Loading...</div>
             </div>
-            <div class="pulse-tile" id="pulse-sports">
-              <div class="tile-label">🏆 Sports</div>
+            <div class="pulse-tile" id="pulse-sports" style="grid-row: span 2;">
+              <div class="tile-label">🏆 Sports Today</div>
               <div class="tile-value">Loading...</div>
             </div>
             <div class="pulse-tile" id="pulse-horoscope">
@@ -1750,46 +1750,55 @@ function initPortal() {
   };
   renderTrivia();
 
-  // ── SPORTS — ESPN API ──
+  // ── SPORTS — ESPN Multi-Sport ──
   const today = new Date();
   const sEl = document.getElementById('pulse-sports').querySelector('.tile-value');
-  fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
-    .then(r=>r.json()).then(d=>{
-      const events = (d.events||[]).slice(0,4);
-      if(events.length) {
-        sEl.innerHTML = events.map(e=>{
-          const comp = e.competitions&&e.competitions[0];
-          const teams = comp&&comp.competitors||[];
-          if(teams.length<2) return '';
-          const h=teams[0], a=teams[1];
-          const hn=h.team&&h.team.abbreviation||'?';
-          const an=a.team&&a.team.abbreviation||'?';
-          const hs=h.score||'', as=a.score||'';
-          const status=e.status&&e.status.type&&e.status.type.shortDetail||'';
-          const score = hs&&as ? ' <b>'+hs+'-'+as+'</b>' : '';
-          return '<div style="margin-bottom:3px;font-size:10px;">'+hn+' vs '+an+score+' <span style="color:#555;font-size:9px;">'+status+'</span></div>';
-        }).filter(Boolean).join('') || 'No NBA games today';
-      } else {
-        // Try MLB
-        fetch('https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard')
-          .then(r=>r.json()).then(d2=>{
-            const ev2=(d2.events||[]).slice(0,4);
-            if(ev2.length){
-              sEl.innerHTML = ev2.map(e=>{
-                const comp=e.competitions&&e.competitions[0];
-                const teams=comp&&comp.competitors||[];
-                if(teams.length<2) return '';
-                const h=teams[0],a=teams[1];
-                const hs=h.score||'',as=a.score||'';
-                const hn=h.team&&h.team.abbreviation||'?';
-                const an=a.team&&a.team.abbreviation||'?';
-                const score=hs&&as?' <b>'+hs+'-'+as+'</b>':'';
-                return '<div style="margin-bottom:3px;font-size:10px;">'+hn+' vs '+an+score+'</div>';
-              }).filter(Boolean).join('');
-            } else { sEl.textContent = 'No games today'; }
-          }).catch(()=>{ sEl.textContent = 'No games today'; });
-      }
-    }).catch(()=>{ sEl.textContent = 'Scores unavailable'; });
+
+  function fmtGame(e, sport) {
+    const comp = e.competitions&&e.competitions[0];
+    const teams = comp&&comp.competitors||[];
+    if(teams.length<2) return '';
+    const h=teams[0], a=teams[1];
+    const hn=h.team&&(h.team.abbreviation||h.team.shortDisplayName)||h.athlete&&h.athlete.shortName||'?';
+    const an=a.team&&(a.team.abbreviation||a.team.shortDisplayName)||a.athlete&&a.athlete.shortName||'?';
+    const hs=h.score||'', as_=a.score||'';
+    const score=(hs&&as_)?'<b>'+hs+'-'+as_+'</b>':'';
+    const status=e.status&&e.status.type&&e.status.type.shortDetail||'';
+    const label='<span style="color:#808080;font-size:8px;text-transform:uppercase;letter-spacing:.05em;">'+sport+'</span> ';
+    return '<div style="margin-bottom:4px;font-size:10px;border-bottom:1px solid #e0e0e0;padding-bottom:3px;">'+label+hn+' vs '+an+(score?' '+score:'')+' <span style="color:#555;font-size:9px;">'+status+'</span></div>';
+  }
+
+  const SPORTS = [
+    {url:'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard', label:'NBA'},
+    {url:'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard', label:'NHL'},
+    {url:'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard', label:'MLB'},
+    {url:'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard', label:'NCAA'},
+    {url:'https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard', label:'UFC'},
+  ];
+
+  Promise.all(SPORTS.map(s=>fetch(s.url).then(r=>r.json()).then(d=>({label:s.label, events:(d.events||[]).slice(0,3)})).catch(()=>({label:s.label,events:[]}))))
+    .then(results=>{
+      let html = '';
+      let totalGames = 0;
+      results.forEach(({label, events})=>{
+        if(!events.length) return;
+        // For UFC show event name not team vs team
+        if(label==='UFC') {
+          const e=events[0];
+          const name=e.name||e.shortName||'UFC Event';
+          const date=e.date?new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+          html+='<div style="margin-bottom:4px;font-size:10px;border-bottom:1px solid #e0e0e0;padding-bottom:3px;"><span style="color:#808080;font-size:8px;text-transform:uppercase;letter-spacing:.05em;">UFC</span> '+name+(date?' · '+date:'')+'</div>';
+          totalGames++;
+          return;
+        }
+        events.forEach(e=>{
+          const row=fmtGame(e,label);
+          if(row){html+=row;totalGames++;}
+        });
+      });
+      sEl.innerHTML = totalGames ? html : '<div>No games scheduled today</div>';
+    })
+    .catch(()=>{ sEl.textContent = 'Scores unavailable'; });
 
   // ── HOROSCOPE — ohmanda API ──
   const signs = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];

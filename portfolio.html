@@ -187,7 +187,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
     transition: transform 0.4s;
   }
   .site-card:hover .card-preview img {
@@ -537,14 +537,27 @@ const SITES = [
   },
 ];
 
-function getScreenshotUrl(domain) {
-  // Use a free screenshot service — shows real live preview
-  return `https://api.screenshotone.com/take?url=https://${domain}&viewport_width=1280&viewport_height=800&format=jpg&quality=75&access_key=free` ;
-}
+// Real og:image URLs fetched directly from each site
+const OG_IMAGES = {
+  'thevoiceofcash.com':          'https://thevoiceofcash.com/og-image.png',
+  'aiskillsagents.com':          'https://aiskillsagents.com/og-image.png',
+  'aiskillsgenerator.com':       'https://aiskillsgenerator.com/og-image.png',
+  'anthropicaiskills.com':       'https://anthropicaiskills.com/og-image.png',
+  'claudeaiskills.com':          'https://claudeaiskills.com/og-image.png',
+  'abearicaonline.com':          'https://raw.githubusercontent.com/abigailleahgoldberg/abearicaonline/main/public/og-image.png',
+  'jewsa.com':                   'https://jewsa.com/og-image.png',
+  'webearish.com':               'https://webearish.com/og-webearish.png',
+  'hindusa.com':                 'https://www.hindusa.com/og-image.png',
+  'autismacceptance.world':      'https://autismacceptance.world/bears/bears-together.jpg',
+  'u-god.com':                   'https://u-god.com/og-image.png',
+  'thelvathletics.com':          'https://thelvathletics.com/og-image.png',
+  'lvathleticsnation.com':       'https://lvathleticsnation.com/og-image.png',
+  'mmamoms.com':                 'https://mmamoms.com/og-image.png',
+  'spaghettiburritos.com':       'https://spaghettiburritos.com/og-image.png',
+};
 
-function getFallbackUrl(domain) {
-  // Fallback: mini.s-shot.ru is free, no key needed
-  return `https://mini.s-shot.ru/1024x768/JPEG/1024/Z100/?https://${domain}`;
+function getOgImage(domain) {
+  return OG_IMAGES[domain] || null;
 }
 
 let currentFilter = 'all';
@@ -555,16 +568,15 @@ function renderSites(filter) {
 
   document.getElementById('live-count').textContent = SITES.length;
 
-  grid.innerHTML = filtered.map(site => `
+  grid.innerHTML = filtered.map(site => {
+    const ogImg = getOgImage(site.domain);
+    return `
     <a href="https://${site.domain}" target="_blank" rel="noopener" class="site-card" data-category="${site.category}">
       <div class="card-preview">
-        <img
-          src="${getFallbackUrl(site.domain)}"
-          alt="${site.name}"
-          loading="lazy"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <div class="card-preview-fallback" style="display:none">${site.emoji}</div>
+        ${ogImg
+          ? `<img src="${ogImg}" alt="${site.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />`
+          : ''}
+        <div class="card-preview-fallback" style="${ogImg ? 'display:none' : ''}">${site.emoji}</div>
         ${site.badge ? `<div class="card-badge ${site.badge === 'new' ? 'new' : ''}">${site.badge}</div>` : ''}
       </div>
       <div class="card-body">
@@ -576,7 +588,7 @@ function renderSites(filter) {
         </div>
       </div>
     </a>
-  `).join('');
+  `}).join('');
 }
 
 function filterSites(category, btn) {

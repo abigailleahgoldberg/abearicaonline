@@ -1678,9 +1678,8 @@ function initPortal() {
   // ── REFRESH FUNCTION — F5 within portal, no reconnect needed ──
   window.refreshPulse = function() {
     const ico = document.querySelector('#refresh-btn .ico');
-    if(ico) { ico.style.transition='transform 0.6s'; ico.style.transform='rotate(360deg)'; setTimeout(()=>{ico.style.transition='';ico.style.transform='';},650); }
-    fetchLeaderboard();
-    runDailyPulse();
+    if(ico) { ico.style.transition='transform 0.6s'; ico.style.transform='rotate(360deg)'; }
+    setTimeout(() => location.reload(), 650);
   };
 
   function runDailyPulse() {

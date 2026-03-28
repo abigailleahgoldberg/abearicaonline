@@ -1672,7 +1672,7 @@ function initPortal() {
   // Daily Pulse: Weather — auto-detect by IP, user can override
   (function() {
     const savedLocation = localStorage.getItem('aol_weather_location') || '';
-    const weatherUrl = 'https://wttr.in/' + encodeURIComponent(savedLocation) + '?format=3';
+    const weatherUrl = 'https://wttr.in/' + encodeURIComponent(savedLocation) + '?format=3&u';
     fetch(weatherUrl)
       .then(r=>r.text()).then(t=>{
         const w = t.trim() || 'Weather unavailable';
@@ -1704,7 +1704,7 @@ function initPortal() {
     }).catch(()=>{ document.getElementById('pulse-crypto').querySelector('.tile-value').textContent = 'Price data unavailable'; });
 
   // Daily Pulse: News
-  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml&count=1')
+  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml')
     .then(r=>r.json()).then(d=>{
       const item = d.items?.[0];
       if(item) {
@@ -1796,7 +1796,7 @@ function initPortal() {
   const signEmojis = ['\u2648','\u2649','\u264A','\u264B','\u264C','\u264D','\u264E','\u264F','\u2650','\u2651','\u2652','\u2653'];
   const todaySign = signs[today.getDate() % 12];
   const todaySignEmoji = signEmojis[today.getDate() % 12];
-  fetch('https://ohmanda.com/api/horoscope/'+todaySign+'/')
+  fetch('/api/horoscope?sign='+todaySign)
     .then(r=>r.json()).then(d=>{
       const hEl = document.getElementById('pulse-horoscope').querySelector('.tile-value');
       document.getElementById('pulse-horoscope').querySelector('.tile-label').textContent = todaySignEmoji+' '+todaySign.charAt(0).toUpperCase()+todaySign.slice(1);

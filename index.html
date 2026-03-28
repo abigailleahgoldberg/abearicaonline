@@ -1645,6 +1645,35 @@ body {
             </div>
           </div>
 
+          <!-- THE NEWS INFORMER -->
+          <div class="aol-panel" id="news-informer">
+            <div class="title-bar" style="font-size:10px;">
+              <span>📰 The News Informer — Gaming &amp; Esports</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div style="background:#000066;padding:10px 14px;border-bottom:3px solid #FFD700;text-align:center;">
+                <div style="font-family:'Lora',serif;font-size:22px;font-weight:700;color:#FFD700;letter-spacing:3px;text-transform:uppercase;">The News Informer</div>
+                <div style="font-family:'Courier New',monospace;font-size:9px;color:#aaaaff;letter-spacing:2px;margin-top:2px;">GAMING · ESPORTS · CULTURE · REVIEWS</div>
+                <div id="ni-dateline" style="font-size:9px;color:#6666aa;margin-top:3px;font-family:'Courier New',monospace;"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;min-height:200px;">
+                <div style="padding:10px;border-right:1px solid #e8e0d0;">
+                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #000066;padding-bottom:4px;margin-bottom:8px;">📰 Top Stories</div>
+                  <div id="ni-stories" style="font-size:11px;line-height:1.6;"><div style="color:#aaa;font-size:10px;">Loading...</div></div>
+                </div>
+                <div style="padding:10px;border-right:1px solid #e8e0d0;">
+                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #cc0000;padding-bottom:4px;margin-bottom:8px;">🏆 Esports</div>
+                  <div id="ni-esports" style="font-size:11px;line-height:1.6;"><div style="color:#aaa;font-size:10px;">Loading...</div></div>
+                </div>
+                <div style="padding:10px;">
+                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #006600;padding-bottom:4px;margin-bottom:8px;">🎮 Reviews &amp; Releases</div>
+                  <div id="ni-reviews" style="font-size:11px;line-height:1.6;"><div style="color:#aaa;font-size:10px;">Loading...</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Coming soon + community row -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
 
@@ -1677,54 +1706,7 @@ body {
 
 
           </div>
-          <!-- THE NEWS INFORMER -->
-          <div class="aol-panel" id="news-informer">
-            <div class="title-bar" style="font-size:10px;">
-              <span>📰 The News Informer — Gaming &amp; Esports</span>
-              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
-            </div>
-            <div class="panel-body" style="padding:0;">
 
-              <!-- Masthead -->
-              <div style="background:#000066;padding:10px 14px;border-bottom:3px solid #FFD700;text-align:center;">
-                <div style="font-family:'Lora',serif;font-size:22px;font-weight:700;color:#FFD700;letter-spacing:3px;text-transform:uppercase;">The News Informer</div>
-                <div style="font-family:'Courier New',monospace;font-size:9px;color:#aaaaff;letter-spacing:2px;margin-top:2px;">GAMING · ESPORTS · CULTURE · REVIEWS</div>
-                <div id="ni-dateline" style="font-size:9px;color:#6666aa;margin-top:3px;font-family:'Courier New',monospace;"></div>
-              </div>
-
-              <!-- 3-column layout -->
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;min-height:200px;">
-
-                <!-- Column 1: Top Stories -->
-                <div style="padding:10px;border-right:1px solid #e8e0d0;">
-                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #000066;padding-bottom:4px;margin-bottom:8px;">📰 Top Stories</div>
-                  <div id="ni-stories" style="font-size:11px;line-height:1.6;">
-                    <div style="color:#aaa;font-size:10px;">Loading...</div>
-                  </div>
-                </div>
-
-                <!-- Column 2: Esports -->
-                <div style="padding:10px;border-right:1px solid #e8e0d0;">
-                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #cc0000;padding-bottom:4px;margin-bottom:8px;">🏆 Esports</div>
-                  <div id="ni-esports" style="font-size:11px;line-height:1.6;">
-                    <div style="color:#aaa;font-size:10px;">Loading...</div>
-                  </div>
-                </div>
-
-                <!-- Column 3: Reviews & Releases -->
-                <div style="padding:10px;">
-                  <div style="font-family:'Lora',serif;font-size:11px;font-weight:700;color:#000080;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #006600;padding-bottom:4px;margin-bottom:8px;">🎮 Reviews &amp; Releases</div>
-                  <div id="ni-reviews" style="font-size:11px;line-height:1.6;">
-                    <div style="color:#aaa;font-size:10px;">Loading...</div>
-                  </div>
-                </div>
-
-              </div>
-
-
-
-            </div>
-          </div>
 
         </div><!-- end section: games -->
 
@@ -3822,8 +3804,8 @@ window.loadSection = function(name) {
 
 /* ── THE NEWS INFORMER ── */
 const NI_FEEDS = {
-  stories: 'https://www.polygon.com/rss/index.xml',
-  esports:  'https://www.ign.com/rss/articles-esports.xml',
+  stories: 'https://www.eurogamer.net/feed',
+  esports:  'https://www.eurogamer.net/feed',
   reviews:  'https://www.eurogamer.net/feed'
 };
 const NI_ESPORTS_KEYWORDS = ['esport','tournament','championship','league','competitive','team','match','finals','qualifier','roster','lcs','lck','worlds','major','blast','esl'];
@@ -3856,12 +3838,11 @@ function parseRSS(xmlText) {
   } catch(e) { return []; }
 }
 
-// Fetch RSS via allorigins CORS proxy
+// Fetch RSS via our own Vercel API proxy (no CORS issues)
 async function fetchRSS(url) {
-  const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
-  const res = await fetch(proxy);
-  const json = await res.json();
-  return parseRSS(json.contents || '');
+  const res = await fetch('/api/rss?url=' + encodeURIComponent(url));
+  const xml = await res.text();
+  return parseRSS(xml);
 }
 
 async function loadNewsInformer() {

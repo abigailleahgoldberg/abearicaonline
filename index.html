@@ -1109,268 +1109,189 @@ body {
 /* ======================================
    AOL 2026 — VISUAL REDESIGN LAYER
    "America Online meets 2026"
-   Dark glass · Neon blue + gold · Modern depth
-   Structure stays. Skin is new.
+   Warm cream · Navy + gold · Modern depth
+   Structure stays. Skin is refined.
 ====================================== */
 :root {
-  --deep:        #05091a;
-  --win-bg:      #080d20;
-  --toolbar-bg:  #0a1230;
-  --sidebar-bg:  #070b1a;
-  --panel-bg:    rgba(255,255,255,0.04);
-  --aol-blue:    #1a6ef0;
-  --aol-blue-lt: #4d94ff;
-  --aol-glow:    rgba(26,110,240,0.35);
-  --aol-gold:    #ffd700;
-  --aol-gold-glow: rgba(255,215,0,0.3);
-  --aol-red:     #ff3344;
-  --aol-teal:    #00c8ff;
-  --glass:       rgba(100,150,255,0.10);
-  --glass-hover: rgba(100,150,255,0.30);
-  --txt:         #e8f0ff;
-  --txt-2:       #8099cc;
-  --txt-3:       #4a5a88;
+  --cream:     #F5F0E8;
+  --cream-2:   #EDE8DF;
+  --navy:      #000066;
+  --navy-2:    #000099;
+  --navy-lt:   #1a6ecf;
+  --gold:      #FFD700;
+  --gold-dk:   #CC9900;
+  --red:       #CC0000;
+  --tan:       #C8B898;
+  --tan-2:     #B8A888;
+  --blue-link: #0000CC;
+  --txt:       #000000;
+  --txt-2:     #333333;
+  --txt-3:     #555555;
 }
 
 /* ── BODY & BACKGROUND ── */
-body {
-  background: radial-gradient(ellipse at 50% 0%, #0d1533 0%, var(--deep) 65%) fixed;
-}
+body { background: #008080; }
 
-/* ── OUTER WINDOW ── */
-#phase-portal .aol-window {
-  background: var(--win-bg);
-  border: 1px solid var(--glass);
-  border-top: none;
-  box-shadow: 0 0 80px rgba(10,20,60,0.8), 0 0 0 1px rgba(100,150,255,0.04);
-}
-
-/* ── TITLE BARS ── */
+/* ── TITLE BARS — sharper, modern gradient keeping AOL navy ── */
 .title-bar {
-  background: linear-gradient(135deg, #0b1a55 0%, #1640a8 50%, #0d2870 100%);
-  box-shadow: 0 2px 14px var(--aol-glow), inset 0 1px 0 rgba(255,255,255,0.10);
-  border-bottom: 1px solid rgba(26,110,240,0.4);
+  background: linear-gradient(to right, #000055, #1a6ecf 60%, #0044aa);
+  box-shadow: 0 2px 8px rgba(0,0,150,0.4);
 }
 .title-bar-btn {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 3px;
-  color: rgba(255,255,255,0.85);
-  transition: background 0.15s;
+  background: #d0d0d0;
+  border-radius: 2px;
+  transition: background 0.12s;
 }
-.title-bar-btn:hover { background: rgba(220,50,50,0.65); border-color: rgba(255,80,80,0.4); }
+.title-bar-btn:hover { background: #e85555; color: #fff; border-color: #cc3333; }
 
 /* ── MENU BAR ── */
-.aol-menubar {
-  background: rgba(6,10,28,0.97);
-  border-bottom: 1px solid var(--glass);
-}
-.aol-menu-item { color: var(--txt-2); transition: background 0.12s, color 0.12s; }
-.aol-menu-item:hover { background: rgba(26,110,240,0.18); color: var(--txt); }
+.aol-menubar { background: #e8e8e8; border-bottom: 1px solid #aaa; }
+.aol-menu-item { color: #000; padding: 2px 10px; border-radius: 2px; transition: background 0.1s; }
+.aol-menu-item:hover { background: #000080; color: #fff; }
 
 /* ── TOOLBAR ── */
 .aol-toolbar {
-  background: linear-gradient(180deg, #0b1430 0%, var(--toolbar-bg) 100%);
-  border-bottom: 1px solid var(--glass);
-  padding: 4px 6px;
+  background: linear-gradient(to bottom, #6688aa, #4a6a8a);
+  border-bottom: 2px solid #335577;
 }
-.aol-logo-mark { border-right-color: var(--glass); }
-.aol-logo-triangle { border-bottom-color: var(--aol-blue); }
-.aol-logo-label { color: var(--aol-gold); font-size: 7px; }
 .toolbar-icon-btn {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass);
-  border-radius: 6px;
-  padding: 3px 8px;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  background: #c8d8e8;
+  border: 1px solid #7799bb;
+  border-radius: 5px;
+  transition: background 0.12s, box-shadow 0.12s, transform 0.1s;
 }
 .toolbar-icon-btn:hover {
-  background: rgba(26,110,240,0.14);
-  border-color: var(--glass-hover);
-  box-shadow: 0 0 14px var(--aol-glow);
+  background: #ddeeff;
+  border-color: #4477aa;
+  box-shadow: 0 2px 8px rgba(0,0,150,0.25);
+  transform: translateY(-1px);
 }
-.toolbar-icon-btn:active {
-  background: rgba(26,110,240,0.25);
-  border-top: 1px solid rgba(26,110,240,0.5);
-  border-left: 1px solid rgba(26,110,240,0.5);
-  border-right: 1px solid rgba(26,110,240,0.5);
-  border-bottom: 1px solid rgba(26,110,240,0.5);
-}
-.toolbar-icon-btn .lbl { color: var(--txt-2); }
-.toolbar-icon-btn:hover .lbl { color: var(--txt); }
+.toolbar-icon-btn:active { transform: translateY(0); box-shadow: none; background: #b8c8d8; }
+.toolbar-icon-btn .lbl { color: #222; }
 
 /* ── KEYWORD BAR ── */
-.aol-keyword-bar {
-  background: rgba(5,9,26,0.95);
-  border-bottom: 1px solid var(--glass);
-}
-.aol-keyword-bar span { color: var(--txt-3); }
+.aol-keyword-bar { background: #dde4ee; border-bottom: 1px solid #aabbcc; }
 .keyword-field {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--glass);
-  border-radius: 4px;
-  color: var(--txt);
-  font-family: 'Inter', sans-serif;
+  background: #fff;
+  border: 1px solid #9999bb;
+  border-radius: 3px;
+  color: #000;
+  font-family: 'Inter', Arial, sans-serif;
 }
-.keyword-field:focus { border-color: var(--aol-blue); box-shadow: 0 0 8px var(--aol-glow); outline: none; }
-.aol-keyword-bar .win-btn {
-  background: rgba(26,110,240,0.12);
-  border: 1px solid var(--glass);
-  border-radius: 4px;
-  color: var(--txt);
-}
-.aol-keyword-bar .win-btn:hover { background: rgba(26,110,240,0.28); border-color: var(--aol-blue); }
+.keyword-field:focus { border-color: #0000cc; box-shadow: 0 0 4px rgba(0,0,200,0.2); outline: none; }
+.aol-keyword-bar .win-btn { background: #ccd4e4; border: 1px solid #99aacc; border-radius: 3px; color: #000; }
+.aol-keyword-bar .win-btn:hover { background: #bbccdd; border-color: #6688aa; }
 
-/* ── WELCOME BAR ── */
-.aol-welcome-bar {
-  border: 1px solid rgba(255,215,0,0.25);
-  border-radius: 6px;
-  box-shadow: 0 0 24px rgba(255,215,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15);
-}
-.welcome-triangle { border-bottom-color: var(--aol-blue); }
-.welcome-america { color: #001a60; }
-.welcome-online  { color: #001a60; }
+/* ── WELCOME BAR — keep gold shimmer ── */
+.aol-welcome-bar { border-radius: 4px; }
 
-/* ── MAIN BODY BG ── */
-.aol-body { background: var(--deep); }
+/* ── MAIN BODY ── */
+.aol-body { background: var(--cream); }
 
 /* ── LEFT SIDEBAR ── */
-.aol-sidebar-left {
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--glass);
-}
+.aol-sidebar-left { background: var(--navy); border-right: 2px solid #000044; }
 .sidebar-header {
-  background: linear-gradient(135deg, #0b1a55, #1640a8);
-  color: var(--aol-gold);
-  border-bottom: 1px solid var(--glass);
-  font-size: 10px;
+  background: linear-gradient(to bottom, #0000cc, #000080);
   letter-spacing: 2px;
-  box-shadow: 0 2px 10px var(--aol-glow);
+  font-size: 10px;
 }
 .sidebar-ch {
-  color: var(--txt-2);
-  font-family: 'Inter', sans-serif;
+  color: #ddddff;
+  font-family: 'Inter', Arial, sans-serif;
   font-size: 11px;
-  border-bottom: 1px solid rgba(100,150,255,0.04);
-  transition: background 0.15s, color 0.12s, padding-left 0.12s;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.12s, color 0.1s, padding-left 0.12s;
 }
-.sidebar-ch:hover { background: rgba(26,110,240,0.10); color: var(--aol-gold); padding-left: 15px; }
-.sidebar-ch .ch-arrow { color: var(--aol-blue-lt); }
+.sidebar-ch:hover { background: #0000cc; color: var(--gold); padding-left: 15px; }
+.sidebar-ch .ch-arrow { color: #8888ff; }
 .sidebar-ch.active-ch {
-  background: rgba(26,110,240,0.16);
-  color: var(--aol-gold);
-  border-left: 3px solid var(--aol-gold);
-  box-shadow: inset 0 0 16px rgba(255,215,0,0.07);
+  background: #0000aa;
+  color: var(--gold);
+  border-left: 3px solid var(--gold);
+  font-weight: 600;
 }
-
-/* Sidebar credentials block */
-.aol-sidebar-left > div[style] { color: var(--txt-3) !important; }
 
 /* ── CENTER ── */
 .aol-center {
-  background: var(--deep);
-  padding: 6px;
+  background: var(--cream);
+  padding: 5px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(100,150,255,0.2) transparent;
+  scrollbar-color: #aabbcc #e8e4dc;
 }
-.aol-center::-webkit-scrollbar { width: 5px; }
-.aol-center::-webkit-scrollbar-track { background: transparent; }
-.aol-center::-webkit-scrollbar-thumb { background: rgba(100,150,255,0.2); border-radius: 3px; }
-.aol-center::-webkit-scrollbar-thumb:hover { background: rgba(100,150,255,0.4); }
 
-/* ── CONTENT PANELS ── */
+/* ── CONTENT PANELS — keep cream but add subtle drop shadow ── */
 .aol-panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--glass);
-  border-radius: 10px;
-  box-shadow: 0 4px 28px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  margin-bottom: 8px;
+  background: #fff;
+  border: 1px solid #c8c0b0;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  margin-bottom: 6px;
   overflow: hidden;
 }
 .aol-panel > .title-bar {
-  background: linear-gradient(135deg, #0b1a55, #1535a0);
+  background: linear-gradient(to right, #000055, #1a6ecf);
   font-size: 11px;
-  border-radius: 0;
-  border-bottom: 1px solid rgba(26,110,240,0.2);
   box-shadow: none;
 }
-.panel-body {
-  background: transparent;
-  color: var(--txt-2);
-}
+.panel-body { background: #fff; color: var(--txt-2); }
 .panel-body p { color: var(--txt-2); }
 .panel-body p strong { color: var(--txt); }
-.panel-body h2, .panel-body h3 { color: var(--aol-gold); }
-.panel-body a { color: var(--aol-teal); text-decoration: none; }
-.panel-body a:hover { color: var(--aol-gold); }
-
-/* Terminal block */
-.panel-body div[style*="Courier New"] {
-  background: rgba(0,0,0,0.45) !important;
-  border-color: var(--glass) !important;
-  color: #00ff88 !important;
-}
+.panel-body h2, .panel-body h3 { color: var(--navy); }
+.panel-body a { color: var(--blue-link); }
+.panel-body a:hover { color: var(--red); }
 
 /* ── DAILY PULSE TILES ── */
-.pulse-grid { gap: 6px; padding: 8px; }
+.pulse-grid { gap: 5px; padding: 6px; }
 .pulse-tile {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass);
-  border-radius: 7px;
-  color: var(--txt);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafaf5;
+  border: 1px solid #d0c8b8;
+  border-radius: 4px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.pulse-tile:hover { border-color: var(--glass-hover); box-shadow: 0 0 14px var(--aol-glow); }
-.pulse-tile .tile-label { color: var(--aol-gold); font-weight: 600; }
+.pulse-tile:hover { border-color: #0000cc; box-shadow: 0 2px 10px rgba(0,0,150,0.12); }
+.pulse-tile .tile-label { color: #000080; font-weight: 700; }
 .pulse-tile .tile-value { color: var(--txt); }
-.pulse-tile a { color: var(--aol-teal) !important; }
+.pulse-tile a { color: var(--blue-link) !important; }
+.pulse-tile a:hover { color: var(--red) !important; }
 
 /* ── YOU'VE GOT BUTTONS ── */
 .got-btn {
-  background: linear-gradient(135deg, #780000, #bb1010, #980000);
-  border: 1px solid rgba(255,80,80,0.25);
-  border-radius: 8px;
-  box-shadow: 0 4px 18px rgba(180,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
-  transition: box-shadow 0.2s, transform 0.1s;
+  background: linear-gradient(to bottom, #cc0000, #aa0000);
+  border: 1px solid #880000;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px rgba(150,0,0,0.3);
+  transition: box-shadow 0.15s, transform 0.1s;
 }
 .got-btn:hover {
-  background: linear-gradient(135deg, #991010, #dd2020, #bb0000);
-  box-shadow: 0 0 28px rgba(255,60,60,0.5), 0 4px 20px rgba(200,0,0,0.4);
-  transform: translateY(-2px);
+  background: linear-gradient(to bottom, #ee1111, #cc0000);
+  box-shadow: 0 4px 16px rgba(200,0,0,0.45);
+  transform: translateY(-1px);
   animation: none;
 }
-.got-btn .got-count { color: rgba(255,180,180,0.75); }
 
 /* ── SERVICE TILES ── */
 .service-tile {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass);
-  border-radius: 8px;
-  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.15s;
+  background: #f4f0e8;
+  border: 1px solid #d0c8b8;
+  border-radius: 5px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.12s;
 }
 .service-tile:hover {
-  background: rgba(26,110,240,0.08);
-  border-color: var(--glass-hover);
-  box-shadow: 0 0 18px var(--aol-glow);
+  background: #e8eeff;
+  border-color: #6688bb;
+  box-shadow: 0 3px 12px rgba(0,0,150,0.15);
   transform: translateY(-2px);
 }
-.svc-name { color: var(--txt); font-family: 'Inter', sans-serif; font-weight: 600; }
-.svc-desc { color: var(--txt-2); }
-.svc-price {
-  background: rgba(0,200,255,0.1);
-  color: var(--aol-teal);
-  border: 1px solid rgba(0,200,255,0.2);
-  border-radius: 3px;
-}
+.svc-name { color: #000080; font-family: 'Lora', serif; font-weight: 700; }
+.svc-desc { color: var(--txt-3); }
+.svc-price { background: #006600; color: #fff; border-radius: 3px; }
 
 /* ── CTA BUTTON ── */
 .big-cta {
-  background: linear-gradient(135deg, #1535a0, #1a6ef0, #0d3acc);
-  border: 1px solid rgba(100,150,255,0.3);
+  background: linear-gradient(135deg, #0000aa, #1a6ef0, #0033cc);
+  border: none;
   border-radius: 50px;
-  box-shadow: 0 0 26px var(--aol-glow), 0 4px 20px rgba(26,110,240,0.25);
+  box-shadow: 0 4px 18px rgba(0,0,180,0.35);
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   letter-spacing: 2px;
@@ -1378,129 +1299,81 @@ body {
   animation: none;
 }
 .big-cta:hover {
-  box-shadow: 0 0 44px rgba(26,110,240,0.7), 0 4px 24px rgba(26,110,240,0.4);
+  box-shadow: 0 6px 28px rgba(0,0,220,0.5);
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #1a45b8, #2278ff, #1248e0);
+  background: linear-gradient(135deg, #0011cc, #2288ff, #0044dd);
 }
 
 /* ── RIGHT SIDEBAR ── */
 .aol-sidebar-right {
-  background: var(--sidebar-bg);
-  border: none;
-  border-left: 1px solid var(--glass);
-  margin: 0;
+  background: var(--tan);
+  border-left: 2px solid #a09070;
   border-radius: 0;
+  margin: 0;
 }
 .buddy-title-bar {
-  background: linear-gradient(135deg, #0b1a55, #1535a0);
-  color: var(--txt);
+  background: linear-gradient(to right, #5a3a1a, #8b7355);
   font-family: 'Inter', sans-serif;
-  border-bottom: 1px solid var(--glass);
-  box-shadow: 0 2px 10px var(--aol-glow);
 }
 .buddy-section {
-  background: rgba(26,110,240,0.07);
-  color: var(--aol-gold);
+  background: var(--tan-2);
+  color: #3a2000;
   font-family: 'Inter', sans-serif;
-  border-top: 1px solid var(--glass);
-  border-bottom: 1px solid var(--glass);
+  font-weight: 700;
+  border-color: #a09070;
 }
-.buddy-item {
-  color: var(--txt-2);
-  font-size: 11px;
-  border-bottom: 1px solid rgba(100,150,255,0.04);
-  transition: background 0.1s, color 0.1s;
-}
-.buddy-item:hover { background: rgba(26,110,240,0.10); color: var(--aol-gold); }
-.buddy-divider { background: var(--glass); border: none; height: 1px; margin: 4px 0; }
-.buddy-footer { border-top: 1px solid var(--glass); }
+.buddy-item { color: #1a0a00; border-bottom: 1px solid rgba(0,0,0,0.06); transition: background 0.1s; }
+.buddy-item:hover { background: #000080; color: #fff; }
+.buddy-divider { background: #a09070; height: 1px; border: none; }
+.buddy-footer { border-top: 1px solid #a09070; }
 .buddy-foot-btn {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--glass);
-  border-radius: 4px;
-  color: var(--txt-2);
-  transition: background 0.14s, color 0.14s, border-color 0.14s;
+  background: #C0B090;
+  border: 1px solid #a09070;
+  border-radius: 3px;
+  color: #000;
+  transition: background 0.12s;
 }
-.buddy-foot-btn:hover { background: rgba(26,110,240,0.14); color: var(--txt); border-color: var(--aol-blue); }
+.buddy-foot-btn:hover { background: #000080; color: #fff; border-color: #0000cc; }
 
 /* ── NEWS / SIDEBAR BOXES ── */
-.news-box {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass);
-  border-radius: 6px;
-  margin: 4px 6px;
-}
-.news-box-title {
-  background: linear-gradient(135deg, #0b1a55, #1535a0);
-  color: var(--txt);
-  font-family: 'Inter', sans-serif;
-  border-radius: 5px 5px 0 0;
-  font-size: 10px;
-  letter-spacing: 0.5px;
-}
-.news-box-body { background: transparent; color: var(--txt-2); }
-.news-link { color: var(--aol-teal); cursor: pointer; text-decoration: none; }
-.news-link:hover { color: var(--aol-gold); }
-.news-box-body a { color: var(--aol-teal); }
-.news-box-body a:hover { color: var(--aol-gold); }
+.news-box { background: #faf6ee; border: 1px solid #c8b898; border-radius: 4px; margin: 4px 5px; }
+.news-box-title { background: linear-gradient(to right, #000055, #336699); border-radius: 3px 3px 0 0; }
+.news-box-body { background: #faf6ee; color: #000; }
+.news-link { color: #0000cc; }
+.news-link:hover { color: #cc0000; }
+.news-box-body a { color: #0000cc; }
+.news-box-body a:hover { color: #cc0000; }
 
 /* ── STATUS BAR ── */
-.aol-statusbar {
-  background: rgba(4,8,24,0.97);
-  border-top: 1px solid var(--glass);
-  color: var(--txt-3);
-}
+.aol-statusbar { background: #d8d0c0; border-top: 1px solid #b0a890; color: #444; }
 
 /* ── WIN BUTTONS ── */
 .win-btn {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--glass);
-  border-radius: 4px;
-  color: var(--txt);
-  transition: background 0.14s, border-color 0.14s;
+  background: #dde4ee;
+  border: 1px solid #99aacc;
+  border-radius: 3px;
+  color: #000;
+  transition: background 0.12s;
 }
-.win-btn:hover { background: rgba(26,110,240,0.14); border-color: var(--aol-blue); }
-.win-btn:active {
-  background: rgba(26,110,240,0.24);
-  border-top: 1px solid rgba(26,110,240,0.5);
-  border-left: 1px solid rgba(26,110,240,0.5);
-  border-right: 1px solid rgba(26,110,240,0.5);
-  border-bottom: 1px solid rgba(26,110,240,0.5);
-  padding: 3px 12px;
-}
+.win-btn:hover { background: #c8d8ee; border-color: #5577aa; }
+.win-btn:active { background: #b8c8de; padding: 3px 12px; }
 
 /* ── TRIVIA ── */
-.trivia-option {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--glass);
-  border-radius: 4px;
-  color: var(--txt);
-  transition: background 0.14s, border-color 0.14s;
-}
-.trivia-option:hover { background: rgba(26,110,240,0.12); border-color: var(--aol-blue); color: var(--txt); }
-.trivia-option.correct { background: rgba(0,180,80,0.14); border-color: #00b850; color: #00e870; }
-.trivia-option.wrong   { background: rgba(255,50,50,0.12); border-color: #ff3333; color: #ff7070; }
-.trivia-score { color: var(--aol-teal); }
+.trivia-option { background: #f0ede8; border: 1px solid #c8c0b0; border-radius: 3px; color: #000; transition: background 0.12s; }
+.trivia-option:hover { background: #dde8ff; border-color: #0000cc; color: #000; }
+.trivia-option.correct { background: #ccffcc; border-color: #006600; color: #006600; }
+.trivia-option.wrong   { background: #ffcccc; border-color: #cc0000; color: #cc0000; }
+.trivia-score { color: #000080; }
 
 /* ── TILT POPUP ── */
-.tilt-win {
-  background: var(--win-bg);
-  border: 1px solid var(--glass);
-  box-shadow: 0 0 60px var(--aol-glow);
-}
-.tilt-title { color: var(--aol-gold); }
-.tilt-sub   { color: var(--aol-red); }
-.tilt-body p { color: var(--txt-2); }
-.tilt-cta {
-  background: var(--aol-blue);
-  color: #fff;
-  border: 1px solid var(--aol-blue-lt);
-  border-radius: 4px;
-  box-shadow: 0 0 16px var(--aol-glow);
-}
-.tilt-cta:hover { background: var(--aol-blue-lt); box-shadow: 0 0 28px var(--aol-glow); }
+.tilt-win { background: #c0c0c0; border: 2px solid #fff; box-shadow: 4px 4px 0 #000, 0 0 30px rgba(0,0,150,0.2); }
+.tilt-title { color: #000080; }
+.tilt-sub   { color: #cc0000; }
+.tilt-body p { color: #333; }
+.tilt-cta { background: #000080; color: var(--gold); border: 2px solid #4444cc; border-radius: 3px; }
+.tilt-cta:hover { background: #0000aa; }
 
-/* ── SECTION CONTENT TEXT ── */
+/* ── SECTION TEXT ── */
 [data-section-content] p { color: var(--txt-2); }
 [data-section-content] p strong { color: var(--txt); }
 [data-section-content] li { color: var(--txt-2); }
@@ -2891,31 +2764,14 @@ window.loadSection = function(name) {
 };
 
 /* ── SESSION STORAGE SIGN-ON SKIP ── */
-// If already signed in this browser session, skip straight to portal
-(function() {
+// Sign in once per browser tab session. Refresh skips the 19s connection sequence.
+document.addEventListener('DOMContentLoaded', function() {
   if(sessionStorage.getItem('aol_signed_in') === '1') {
     document.getElementById('phase-cd').style.display = 'none';
+    document.getElementById('phase-connect').style.display = 'none';
     document.getElementById('phase-portal').classList.add('active');
-    // Run portal init without the connection animation
-    document.addEventListener('DOMContentLoaded', function() {
-      initPortal();
-    });
-    // If DOM already ready
-    if(document.readyState !== 'loading') initPortal();
+    initPortal();
   }
-})();
-
-// Mark as signed in when portal loads
-const _origInitPortal = window.initPortal;
-// We'll set the session flag inside startConnect's final timeout — patching here:
-const _connectObserver = new MutationObserver(function(mutations) {
-  mutations.forEach(function(m) {
-    m.addedNodes.forEach(function(n) {});
-  });
-});
-// Simpler: patch via flag set in initPortal
-document.addEventListener('aol:portal-ready', function() {
-  sessionStorage.setItem('aol_signed_in', '1');
 });
 
 </script>

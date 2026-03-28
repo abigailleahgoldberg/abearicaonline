@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: { name: 'Abearica Online Contact Form', email: 'abigailleahgoldberg@gmail.com' },
+        sender: { name: 'Abearica Online', email: 'hello@abearicaonline.com' },
         to: [{ email: 'abigailleahgoldberg@gmail.com', name: 'Abearica' }],
         replyTo: { email: email },
         subject: `[AbearicaOnline] ${subject}`,

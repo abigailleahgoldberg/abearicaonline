@@ -436,7 +436,7 @@ body {
   margin: 6px auto;
   width: calc(100% - 12px);
   max-width: 1100px;
-  background: #c0c0c0;
+  background: #F5F0E8;
   border-top: 3px solid #fff;
   border-left: 3px solid #fff;
   border-right: 3px solid #404040;
@@ -461,7 +461,7 @@ body {
 
 /* Exact AOL toolbar */
 .aol-toolbar {
-  background: #c0c0c0;
+  background: linear-gradient(to bottom, #5A7A9A, #4A6A8A);
   padding: 3px 4px;
   display: flex;
   align-items: center;
@@ -589,12 +589,13 @@ body {
 }
 .welcome-text-block { flex: 1; }
 .welcome-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   color: #000080;
+  font-family: 'Lora', serif;
 }
 .welcome-date { font-size: 10px; color: #664400; }
-.welcome-tagline { font-size: 10px; color: #000080; font-style: italic; }
+.welcome-tagline { font-size: 10px; color: #000080; font-style: italic; font-family: 'Lora', serif; }
 
 /* Main layout */
 .aol-body {
@@ -681,7 +682,7 @@ body {
 
 /* Left sidebar - dark navy channels */
 .aol-sidebar-left {
-  background: #000080;
+  background: #000066;
   border-right: 2px solid #404040;
 }
 .sidebar-header {
@@ -698,7 +699,7 @@ body {
 .sidebar-ch {
   display: block;
   color: #ffffff;
-  font-size: 11px;
+  font-size: 12px;
   padding: 6px 8px 6px 12px;
   text-decoration: none;
   border-bottom: 1px solid #000066;
@@ -713,12 +714,12 @@ body {
 .aol-center {
   padding: 4px;
   overflow-y: auto;
-  background: #c0c0c0;
+  background: #F5F0E8;
 }
 
-/* Content panels */
+/* Content panels — AOL warm white with classic bevel */
 .aol-panel {
-  background: #c8c8c8;
+  background: #FFFFFF;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
   border-right: 2px solid #404040;
@@ -726,11 +727,12 @@ body {
   margin-bottom: 5px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
 }
-.panel-body { 
+.panel-body {
   padding: 8px 10px;
   line-height: 1.6;
   font-size: 12px;
   font-family: 'Inter', Arial, sans-serif;
+  background: #ffffff;
 }
 .panel-body h2, .panel-body h3 {
   font-family: 'Lora', serif;
@@ -774,7 +776,7 @@ body {
   padding: 4px;
 }
 .service-tile {
-  background: #c8c8c8;
+  background: #F0EDE8;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
   border-right: 2px solid #404040;
@@ -785,13 +787,13 @@ body {
   transition: background 0.15s;
 }
 .service-tile:hover {
-  background: #e8e8ff;
+  background: #E8E4D8;
   border-top-color: #4444cc;
   border-left-color: #4444cc;
 }
-.svc-ico { font-size: 18px; }
-.svc-name { 
-  font-size: 12px;
+.svc-ico { display: none; }
+.svc-name {
+  font-size: 13px;
   font-weight: bold;
   color: #000080;
   margin: 4px 0 3px;
@@ -810,36 +812,31 @@ body {
 }
 
 .big-cta {
-  display: block;
+  display: inline-block;
   margin: 10px auto;
-  background: #000080;
-  border-top: 3px solid #4444cc;
-  border-left: 3px solid #4444cc;
-  border-right: 3px solid #000033;
-  border-bottom: 3px solid #000033;
-  padding: 9px 28px;
+  background: linear-gradient(to bottom, #2255AA, #1a6ecf);
+  border: none;
+  border-radius: 50px;
+  padding: 8px 28px;
   font-size: 13px;
   font-weight: bold;
   font-family: Arial, sans-serif;
   cursor: pointer;
   text-decoration: none;
-  color: #FFD700;
+  color: #fff;
   text-align: center;
   width: fit-content;
   letter-spacing: 1px;
   animation: ctaGlow 2s ease-in-out infinite;
 }
-.big-cta:hover { background: #0000aa; }
+.big-cta:hover { background: linear-gradient(to bottom, #2a66bb, #2278dd); }
 .big-cta:active {
-  border-top: 3px solid #000033;
-  border-left: 3px solid #000033;
-  border-right: 3px solid #4444cc;
-  border-bottom: 3px solid #4444cc;
+  background: linear-gradient(to bottom, #1a4488, #1558aa);
 }
 
-/* Right sidebar - buddy list */
+/* Right sidebar - buddy list — AOL warm tan */
 .aol-sidebar-right {
-  background: #c0c0c0;
+  background: #C8B898;
   border-left: 2px solid #fff;
   border-top: 2px solid #fff;
   border-right: 2px solid #404040;
@@ -847,71 +844,79 @@ body {
   margin: 3px 3px 3px 0;
 }
 .buddy-title-bar {
-  background: linear-gradient(to right, #00006a, #1a6ecf);
+  background: linear-gradient(to right, #7B5A3A, #9B7A5A);
   color: #fff;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
-  padding: 3px 5px;
+  font-family: 'Lora', serif;
+  padding: 4px 6px;
   display: flex;
   justify-content: space-between;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  align-items: center;
 }
 .buddy-section {
-  background: #c0c0c0;
+  background: #B8A888;
   font-size: 10px;
   font-weight: bold;
+  font-family: 'Lora', serif;
+  color: #4A2A0A;
   padding: 3px 6px;
-  border-bottom: 1px solid #808080;
-  border-top: 1px solid #fff;
+  border-bottom: 1px solid #A09070;
+  border-top: 1px solid #D8C8A8;
 }
 .buddy-item {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 6px;
+  padding: 3px 6px;
   font-size: 11px;
+  font-family: 'Courier New', monospace;
+  color: #1A0A00;
   cursor: pointer;
 }
 .buddy-item:hover { background: #000080; color: #fff; }
-.buddy-dot { color: #00cc00; font-size: 8px; display: inline-block; animation: buddyPulse 2s ease-in-out infinite; }
-.buddy-divider { height: 1px; background: #808080; margin: 4px 0; border-top: 1px solid #fff; }
+.buddy-dot { color: #00aa00; font-size: 8px; display: inline-block; animation: buddyPulse 2s ease-in-out infinite; }
+.buddy-divider { height: 1px; background: #A09070; margin: 4px 0; border-top: 1px solid #D8C8A8; }
 .buddy-footer {
   display: flex;
   justify-content: space-around;
   padding: 4px;
-  border-top: 1px solid #808080;
+  border-top: 1px solid #A09070;
   gap: 2px;
 }
 .buddy-foot-btn {
-  background: #c0c0c0;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
-  border-right: 2px solid #404040;
-  border-bottom: 2px solid #404040;
+  background: #C0B090;
+  border-top: 2px solid #E0D0B0;
+  border-left: 2px solid #E0D0B0;
+  border-right: 2px solid #806040;
+  border-bottom: 2px solid #806040;
   padding: 2px 4px;
   font-size: 9px;
   cursor: pointer;
   text-align: center;
   flex: 1;
+  font-family: Arial, sans-serif;
+  color: #000;
 }
 
-/* Top news / weather boxes (right sidebar) */
+/* News/weather boxes — AOL blue header on warm white body */
 .news-box {
   margin: 4px;
-  background: #c0c0c0;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
-  border-right: 2px solid #404040;
-  border-bottom: 2px solid #404040;
+  background: #FAF6EE;
+  border-top: 2px solid #E0D0B0;
+  border-left: 2px solid #E0D0B0;
+  border-right: 2px solid #806040;
+  border-bottom: 2px solid #806040;
 }
 .news-box-title {
-  background: #000080;
+  background: linear-gradient(to right, #336699, #4477BB);
   color: #fff;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
-  padding: 2px 5px;
+  font-family: 'Lora', serif;
+  padding: 3px 6px;
 }
-.news-box-body { padding: 4px 6px; font-size: 10px; line-height: 1.5; color: #000; }
+.news-box-body { padding: 5px 7px; font-size: 10px; line-height: 1.6; color: #000; background: #FAF6EE; }
 .news-link { color: #0000cc; text-decoration: underline; cursor: pointer; }
 
 /* Status bar */

@@ -2547,20 +2547,7 @@ function initPortal() {
 
   runDailyPulse();
 
-  // Tilt popup fires 45 seconds after portal loads — not during game
-  setTimeout(() => {
-    if(!document.getElementById('game-overlay').classList.contains('active')) {
-      triggerTilt();
-    } else {
-      // If they're playing, wait until game closes then show it
-      const waitForGame = setInterval(() => {
-        if(!document.getElementById('game-overlay').classList.contains('active')) {
-          clearInterval(waitForGame);
-          setTimeout(triggerTilt, 3000);
-        }
-      }, 2000);
-    }
-  }, 45000);
+  // Tilt popup disabled
 }
 
 /* ============ BREAKOUT GAME ============ */

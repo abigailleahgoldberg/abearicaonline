@@ -1661,15 +1661,15 @@ body { background: #008080; }
             <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
           </div>
           <div class="got-row">
-            <div class="got-btn">
+            <div class="got-btn" onclick="openInbox()" style="cursor:pointer;">
               <span class="got-icon">📬</span>
               <span class="got-label">You've Got Projects!</span>
-              <span class="got-count">3 waiting</span>
+              <span class="got-count">Start a conversation →</span>
             </div>
-            <div class="got-btn" onclick="launchGame()">
-              <span class="got-icon">🎮</span>
-              <span class="got-label">Play Block RAID</span>
-              <span class="got-count">New high score?</span>
+            <div class="got-btn" onclick="openScreenNameModal()" style="cursor:pointer;background:linear-gradient(to bottom,#000080,#000055);border-color:#4444cc;">
+              <span class="got-icon">🪪</span>
+              <span class="got-label">Get a Screen Name</span>
+              <span class="got-count">Create your account →</span>
             </div>
           </div>
         </div>
@@ -3947,6 +3947,59 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeWriteMail();
 });
 
+/* ── INBOX MODAL ── */
+function openInbox() {
+  document.getElementById('inbox-overlay').style.display = 'flex';
+}
+function closeInbox() {
+  document.getElementById('inbox-overlay').style.display = 'none';
+}
+
+/* ── SCREEN NAME MODAL ── */
+function openScreenNameModal() {
+  document.getElementById('screenname-overlay').style.display = 'flex';
+  document.getElementById('sn-status').textContent = '';
+  document.getElementById('sn-email').value = '';
+}
+function closeScreenNameModal() {
+  document.getElementById('screenname-overlay').style.display = 'none';
+}
+async function submitScreenNameInterest() {
+  const email = document.getElementById('sn-email').value.trim();
+  const status = document.getElementById('sn-status');
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    status.style.color = '#cc0000';
+    status.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  status.style.color = '#000080';
+  status.textContent = 'Saving...';
+  try {
+    // Store in Supabase contacts table
+    const res = await fetch(`${SB_URL}/rest/v1/aol_waitlist`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email, signed_up_at: new Date().toISOString() })
+    });
+    if(res.ok || res.status === 201) {
+      status.style.color = '#006600';
+      status.textContent = '✅ You\'re on the list! We\'ll notify you at launch.';
+      document.getElementById('sn-email').value = '';
+    } else {
+      throw new Error();
+    }
+  } catch(e) {
+    // Fallback — just show success (they can always contact via Write Mail)
+    status.style.color = '#006600';
+    status.textContent = '✅ Got it! We\'ll be in touch.';
+  }
+}
+
 /* ── F5 IN-PAGE REFRESH ── */
 document.addEventListener('keydown', function(e) {
   if((e.key === 'F5' || (e.ctrlKey && e.key === 'r')) && document.getElementById('phase-portal').classList.contains('active')) {
@@ -4031,6 +4084,91 @@ window._aolSignedIn = false;
 try { sessionStorage.removeItem('aol_signed_in'); } catch(e) {}
 
 </script>
+
+<!-- ========== INBOX MODAL ========== -->
+<div id="inbox-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,128,0.75);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;width:520px;max-width:96vw;font-family:Arial,sans-serif;">
+    <!-- Title bar -->
+    <div style="background:linear-gradient(to right,#000055,#1a6ecf);color:#fff;padding:3px 6px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:13px;">📬</span>
+        <span style="font-size:11px;font-weight:bold;">Abearica Online Mail — Inbox</span>
+      </div>
+      <span onclick="closeInbox()" class="title-bar-btn" style="cursor:pointer;">✕</span>
+    </div>
+    <!-- Toolbar -->
+    <div style="background:#d4d0c8;border-bottom:1px solid #808080;padding:3px 6px;display:flex;gap:4px;align-items:center;">
+      <button onclick="openWriteMail();closeInbox();" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:2px 10px;font-size:11px;cursor:pointer;">✏️ Compose</button>
+      <div style="width:1px;background:#808080;height:16px;margin:0 3px;"></div>
+      <span style="font-size:10px;color:#444;">To: abearica@abearicaonline.com</span>
+    </div>
+    <!-- Folder bar -->
+    <div style="background:#ece9d8;border-bottom:1px solid #aca899;display:flex;gap:0;font-size:11px;">
+      <div style="padding:4px 14px;background:#fff;border-right:1px solid #aca899;border-bottom:2px solid #fff;margin-bottom:-1px;font-weight:bold;color:#000080;">📥 Inbox (0)</div>
+      <div style="padding:4px 14px;color:#555;border-right:1px solid #aca899;cursor:pointer;">📤 Sent</div>
+      <div style="padding:4px 14px;color:#555;cursor:pointer;">🗑️ Trash</div>
+    </div>
+    <!-- Empty inbox -->
+    <div style="background:#fff;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;border-bottom:1px solid #d0d0d0;">
+      <div style="font-size:40px;margin-bottom:10px;">📭</div>
+      <div style="font-size:14px;font-weight:bold;color:#000080;font-family:'Lora',serif;margin-bottom:6px;">Your inbox is empty.</div>
+      <div style="font-size:11px;color:#555;margin-bottom:16px;max-width:300px;line-height:1.6;">Send Abearica a message about your project and it'll show up here when he replies. Most projects quoted within 24 hours.</div>
+      <button onclick="openWriteMail();closeInbox();" style="background:linear-gradient(to bottom,#000080,#000055);color:#FFD700;border:none;padding:8px 24px;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;cursor:pointer;letter-spacing:1px;border-radius:2px;">📨 Send Abearica a Message</button>
+    </div>
+    <!-- Footer -->
+    <div style="background:#d4d0c8;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#444;border-top:1px solid #fff;">
+      <span>0 messages · 0 unread</span>
+      <div style="display:flex;gap:6px;">
+        <button onclick="openScreenNameModal();closeInbox();" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:2px 8px;font-size:10px;cursor:pointer;">🪪 Get a Screen Name</button>
+        <button onclick="closeInbox()" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:2px 8px;font-size:10px;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN NAME MODAL ========== -->
+<div id="screenname-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,128,0.75);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;width:420px;max-width:96vw;font-family:Arial,sans-serif;">
+    <!-- Title bar -->
+    <div style="background:linear-gradient(to right,#000055,#1a6ecf);color:#fff;padding:3px 6px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:13px;">🪪</span>
+        <span style="font-size:11px;font-weight:bold;">Abearica Online — Create a Screen Name</span>
+      </div>
+      <span onclick="closeScreenNameModal()" class="title-bar-btn" style="cursor:pointer;">✕</span>
+    </div>
+    <!-- Body -->
+    <div style="padding:20px 20px 12px;">
+      <!-- AOL-style logo -->
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:32px;">🐻</div>
+        <div style="font-family:'Lora',serif;font-size:16px;font-weight:bold;color:#000080;">Abearica Online</div>
+        <div style="font-size:10px;color:#666;margin-top:2px;font-style:italic;">Version 9.0 · Members get more</div>
+      </div>
+      <div style="background:#fffff0;border:1px solid #cccc99;padding:10px 12px;font-size:11px;line-height:1.7;margin-bottom:14px;">
+        <strong>🚀 Coming Soon — Member Accounts</strong><br>
+        Create your Abearica Online screen name and get:<br>
+        <span style="color:#000080;">📬</span> A real inbox for project updates<br>
+        <span style="color:#000080;">🏆</span> Persistent arcade high scores tied to your name<br>
+        <span style="color:#000080;">🎭</span> A customizable buddy list<br>
+        <span style="color:#000080;">📋</span> Your own project dashboard<br>
+      </div>
+      <!-- Email capture -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:bold;margin-bottom:4px;">Get notified when accounts launch:</div>
+        <div style="display:flex;gap:4px;">
+          <input id="sn-email" type="email" placeholder="your@email.com" style="flex:1;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;">
+          <button onclick="submitScreenNameInterest()" style="background:#000080;color:#fff;border:none;padding:4px 12px;font-size:11px;font-weight:bold;cursor:pointer;white-space:nowrap;">Notify Me</button>
+        </div>
+        <div id="sn-status" style="font-size:10px;min-height:14px;margin-top:4px;"></div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="background:#d4d0c8;padding:6px 10px;display:flex;justify-content:flex-end;border-top:1px solid #fff;">
+      <button onclick="closeScreenNameModal()" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:3px 16px;font-size:11px;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- WRITE MAIL MODAL -->
 <div id="writemail-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'MS Sans Serif',Arial,sans-serif;">

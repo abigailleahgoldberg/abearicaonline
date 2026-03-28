@@ -1288,20 +1288,28 @@ body { background: #008080; }
 
 /* ── CTA BUTTON ── */
 .big-cta {
-  background: linear-gradient(135deg, #0000aa, #1a6ef0, #0033cc);
-  border: none;
-  border-radius: 50px;
-  box-shadow: 0 4px 18px rgba(0,0,180,0.35);
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
+  background: #000080;
+  color: #FFD700;
+  border-top: 2px solid #4444cc;
+  border-left: 2px solid #4444cc;
+  border-right: 2px solid #000033;
+  border-bottom: 2px solid #000033;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 12px;
   letter-spacing: 2px;
-  transition: box-shadow 0.2s, transform 0.15s;
+  padding: 8px 28px;
+  transition: background 0.12s, color 0.12s;
   animation: none;
+  text-decoration: none;
+  display: inline-block;
 }
 .big-cta:hover {
-  box-shadow: 0 6px 28px rgba(0,0,220,0.5);
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #0011cc, #2288ff, #0044dd);
+  background: #0000aa;
+  color: #fff;
+  transform: none;
+  box-shadow: none;
 }
 
 /* ── RIGHT SIDEBAR ── */

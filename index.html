@@ -1650,20 +1650,21 @@ function initPortal() {
 
   // Date
   const now = new Date();
-  document.getElementById('portal-date').textContent =
+  const pdEl = document.getElementById('portal-date');
+  if(pdEl) pdEl.textContent =
     now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) +
     ' — Today on Abearica Online';
 
   // Clock
   function tick() {
-    const d = new Date();
-    document.getElementById('clock-seg').textContent =
-      d.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+    const el = document.getElementById('clock-seg');
+    if(el) el.textContent = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
   }
   tick(); setInterval(tick, 1000);
 
   // Sidebar weather — updated by wttr.in fetch below
-  document.getElementById('weather-temp').textContent = 'Checking...';
+  const wtEl = document.getElementById('weather-temp');
+  if(wtEl) wtEl.textContent = 'Checking...';
 
   // Load leaderboard
   fetchLeaderboard();

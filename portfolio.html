@@ -3,485 +3,366 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Abearica Online</title>
+<title>Our Websites — Abearica Online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #0d0d1a;
-  --bg-card: rgba(255,255,255,0.04);
-  --accent: #00d4ff;
-  --accent-2: #7c3aed;
-  --accent-glow: rgba(0,212,255,0.3);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --border: rgba(255,255,255,0.07);
-  --border-accent: rgba(0,212,255,0.3);
-  --font-heading: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --radius: 16px;
-}
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  line-height: 1.6;
+  background: #008080;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
   min-height: 100vh;
+  padding: 20px;
 }
 
-/* ── HEADER ── */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+/* ── WIN95 WINDOW SHELL ── */
+.outer-window {
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title-bar {
+  background: linear-gradient(to right, #00006a, #1a6ecf);
+  color: #fff;
+  padding: 3px 6px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 48px;
-  height: 64px;
-  background: rgba(10,10,15,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  user-select: none;
 }
 
-.back-btn {
+.title-bar-left { display: flex; align-items: center; gap: 6px; }
+.title-bar-icon { font-size: 14px; }
+
+.title-bar-btns { display: flex; gap: 2px; }
+.title-bar-btn {
+  background: #c0c0c0;
+  color: #000;
+  font-size: 10px;
+  width: 16px;
+  height: 14px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-family: var(--font-body);
-  transition: color 0.2s;
-}
-.back-btn:hover { color: var(--accent); }
-.back-btn svg { width: 16px; height: 16px; }
-
-.header-title {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
-}
-
-.header-count {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.header-count strong { color: var(--accent); }
-
-/* ── HERO ── */
-.hero {
-  position: relative;
-  padding: 96px 48px 72px;
-  text-align: center;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,212,255,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.08) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.hero-label {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 20px;
-  padding: 6px 16px;
-  border: 1px solid rgba(0,212,255,0.25);
-  border-radius: 100px;
-  background: rgba(0,212,255,0.06);
-}
-
-.hero h1 {
-  font-family: var(--font-heading);
-  font-size: clamp(40px, 6vw, 72px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -2px;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-}
-
-.hero h1 span {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero p {
-  font-size: 17px;
-  color: var(--text-secondary);
-  max-width: 520px;
-  margin: 0 auto 48px;
-  line-height: 1.7;
-}
-
-.hero-stats {
-  display: flex;
   justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
-  max-width: 640px;
-  margin: 0 auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-}
-
-.stat {
-  flex: 1;
-  min-width: 120px;
-  padding: 24px 20px;
-  border-right: 1px solid var(--border);
-  text-align: center;
-}
-.stat:last-child { border-right: none; }
-
-.stat-num {
-  font-family: var(--font-heading);
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.stat-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-/* ── FILTER ── */
-.filter-bar {
-  padding: 0 48px 32px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 8px 20px;
-  border-radius: 100px;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
   cursor: pointer;
-  font-size: 13px;
-  font-family: var(--font-body);
-  font-weight: 500;
-  transition: all 0.2s;
-}
-.filter-btn:hover {
-  border-color: rgba(0,212,255,0.4);
-  color: var(--text-secondary);
-}
-.filter-btn.active {
-  background: rgba(0,212,255,0.1);
-  border-color: var(--accent);
-  color: var(--accent);
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
 }
 
-/* ── GRID ── */
-.grid-wrap {
-  padding: 0 48px 80px;
-  max-width: 1400px;
-  margin: 0 auto;
+/* ── MENU BAR ── */
+.menu-bar {
+  background: #c0c0c0;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-bottom: 1px solid #808080;
 }
 
+.menu-item {
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+.menu-item:hover { background: #000080; color: #fff; }
+
+/* ── ADDRESS BAR ── */
+.address-bar {
+  background: #c0c0c0;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #808080;
+}
+
+.addr-label { font-size: 11px; font-weight: bold; }
+
+.addr-input {
+  flex: 1;
+  background: #fff;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  padding: 1px 4px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.addr-go {
+  background: #c0c0c0;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  padding: 1px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background: #c0c0c0;
+  padding: 4px 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border-bottom: 1px solid #808080;
+  flex-wrap: wrap;
+}
+
+.tb-btn {
+  background: #c0c0c0;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+  padding: 3px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+.tb-btn:hover { background: #d4d0c8; }
+.tb-btn.active {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  background: #b8b8b8;
+}
+
+.tb-sep {
+  width: 1px;
+  height: 20px;
+  background: #808080;
+  margin: 0 2px;
+  box-shadow: 1px 0 0 #fff;
+}
+
+.tb-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: #444;
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  background: #fff;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  min-height: 500px;
+  padding: 16px;
+}
+
+/* ── SITE GRID ── */
 .sites-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
 }
 
-/* ── CARD ── */
+/* ── SITE CARD ── */
 .site-card {
   display: block;
   text-decoration: none;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  color: #000;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  background: #d4d0c8;
+  transition: none;
+  cursor: pointer;
+}
+.site-card:hover .card-title-bar {
+  background: linear-gradient(to right, #000080, #1a6ecf);
+}
+.site-card:active {
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.card-title-bar {
+  background: linear-gradient(to right, #808080, #a0a0a0);
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.card-img-wrap {
+  height: 160px;
+  background: #e8e8e8;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #808080;
   overflow: hidden;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-  animation: fadeInUp 0.4s ease both;
-}
-
-.site-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-accent);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.15);
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.card-img {
   position: relative;
-  height: 190px;
-  background: #0d0d1a;
-  overflow: hidden;
 }
-
-.card-img img {
+.card-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
-  transition: transform 0.4s;
+  object-position: top;
   display: block;
 }
-
-.site-card:hover .card-img img {
-  transform: scale(1.04);
-}
-
 .card-img-fallback {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
-}
-
-.fallback-domain {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: -0.5px;
-}
-
-.card-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 100px;
-  backdrop-filter: blur(8px);
-}
-.badge-flagship {
-  background: rgba(0,212,255,0.15);
-  border: 1px solid rgba(0,212,255,0.4);
-  color: var(--accent);
-}
-.badge-here {
-  background: rgba(124,58,237,0.15);
-  border: 1px solid rgba(124,58,237,0.4);
-  color: #a78bfa;
+  background: #d4d0c8;
+  font-size: 12px;
+  color: #808080;
+  font-family: Arial, sans-serif;
 }
 
 .card-body {
-  padding: 20px;
+  padding: 8px 10px;
 }
-
-.card-domain {
-  font-size: 11px;
-  font-family: var(--font-body);
-  color: var(--accent);
-  margin-bottom: 6px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
 .card-name {
-  font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-  letter-spacing: -0.3px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000080;
+  margin-bottom: 3px;
 }
-
+.card-domain {
+  font-size: 10px;
+  color: #000080;
+  text-decoration: underline;
+  margin-bottom: 5px;
+  display: block;
+}
 .card-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  margin-bottom: 14px;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 7px;
 }
-
 .card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 3px;
 }
-
 .tag {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  padding: 3px 10px;
-  border-radius: 100px;
+  font-size: 9px;
+  background: #c0c0c0;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+  padding: 1px 5px;
+  color: #000;
 }
 
-/* ── CTA ── */
-.cta {
-  margin: 0 48px 80px;
-  padding: 64px 48px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, rgba(0,212,255,0.06) 0%, rgba(124,58,237,0.06) 100%);
-  border: 1px solid rgba(0,212,255,0.12);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(0,212,255,0.08) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.cta h2 {
-  font-family: var(--font-heading);
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin-bottom: 12px;
-}
-
-.cta p {
-  color: var(--text-secondary);
-  font-size: 16px;
-  margin-bottom: 32px;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.cta-btn {
-  display: inline-block;
-  padding: 14px 36px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  color: #fff;
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-.cta-btn:hover {
-  opacity: 0.92;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,212,255,0.3);
-}
-
-/* ── FOOTER ── */
-.footer {
-  padding: 24px 48px;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text-muted);
+/* ── STATUS BAR ── */
+.status-bar {
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+  padding: 2px 6px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+.status-seg {
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  padding: 1px 8px;
 }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-  .header { padding: 0 20px; }
-  .hero { padding: 64px 20px 48px; }
-  .filter-bar { padding: 0 20px 24px; }
-  .grid-wrap { padding: 0 20px 60px; }
-  .cta { margin: 0 20px 60px; padding: 48px 24px; }
-  .footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
-  .hero-stats { flex-direction: column; }
-  .stat { border-right: none; border-bottom: 1px solid var(--border); }
-  .stat:last-child { border-bottom: none; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .sites-grid { grid-template-columns: 1fr; }
+  .toolbar { gap: 4px; }
 }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <a href="/" class="back-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Back
-  </a>
-  <div class="header-title">Live Portfolio</div>
-  <div class="header-count"><strong id="count">22</strong> active sites</div>
-</header>
-
-<section class="hero">
-  <div class="hero-label">Built by Abearica</div>
-  <h1>Real Sites.<br><span>Real Results.</span></h1>
-  <p>Every site below is live, AI-maintained, and built on the same infrastructure you'd get as a client.</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num" id="live-count">22</div>
-      <div class="stat-label">Live Sites</div>
+<div class="outer-window">
+  <!-- Title Bar -->
+  <div class="title-bar">
+    <div class="title-bar-left">
+      <span class="title-bar-icon">🌐</span>
+      Our Websites — Abearica Online
     </div>
-    <div class="stat">
-      <div class="stat-num">9</div>
-      <div class="stat-label">AI Agents</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">48hr</div>
-      <div class="stat-label">Delivery</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">23yr</div>
-      <div class="stat-label">Experience</div>
+    <div class="title-bar-btns">
+      <span class="title-bar-btn">_</span>
+      <span class="title-bar-btn">□</span>
+      <a href="/" class="title-bar-btn">✕</a>
     </div>
   </div>
-</section>
 
-<div class="filter-bar">
-  <button class="filter-btn active" onclick="filterSites('all',this)">All</button>
-  <button class="filter-btn" onclick="filterSites('business',this)">Business & AI</button>
-  <button class="filter-btn" onclick="filterSites('culture',this)">Culture & Community</button>
-  <button class="filter-btn" onclick="filterSites('sports',this)">Sports & Entertainment</button>
+  <!-- Menu Bar -->
+  <div class="menu-bar">
+    <span class="menu-item">File</span>
+    <span class="menu-item">Edit</span>
+    <span class="menu-item">View</span>
+    <span class="menu-item">Favorites</span>
+    <span class="menu-item">Help</span>
+  </div>
+
+  <!-- Address Bar -->
+  <div class="address-bar">
+    <span class="addr-label">Address</span>
+    <div class="addr-input">https://abearicaonline.com/portfolio</div>
+    <button class="addr-go">Go</button>
+  </div>
+
+  <!-- Filter Toolbar -->
+  <div class="toolbar">
+    <button class="tb-btn active" onclick="filterSites('all',this)">All Sites</button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" onclick="filterSites('business',this)">Business &amp; AI</button>
+    <button class="tb-btn" onclick="filterSites('culture',this)">Culture &amp; Community</button>
+    <button class="tb-btn" onclick="filterSites('sports',this)">Sports</button>
+    <div class="tb-sep"></div>
+    <span class="tb-count" id="count-label">22 sites</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="sites-grid" id="sites-grid"></div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-seg" id="status-seg">22 object(s)</div>
+    <div class="status-seg">Built &amp; maintained by Abearica + AI</div>
+    <div class="status-seg">48hr delivery · hello@abearicaonline.com</div>
+  </div>
 </div>
-
-<div class="grid-wrap">
-  <div class="sites-grid" id="sites-grid"></div>
-</div>
-
-<div class="cta">
-  <h2>Want one like these?</h2>
-  <p>48-hour delivery. AI-powered. Built by someone who's been doing this for 23 years.</p>
-  <a href="mailto:hello@abearicaonline.com" class="cta-btn">Get Your Site Built</a>
-</div>
-
-<footer class="footer">
-  <span>© 2025 Abearica Online</span>
-  <span>All sites built &amp; maintained by Abearica + AI infrastructure</span>
-</footer>
 
 <script>
 const OG_IMAGES = {
@@ -503,62 +384,54 @@ const OG_IMAGES = {
 };
 
 const SITES = [
-  { domain:'thevoiceofcash.com', name:'The Voice of Cash', desc:'AI marketing agency hub. Full-service campaigns, consulting, and digital strategy.', tags:['Agency','Marketing','AI'], category:'business', badge:'flagship' },
-  { domain:'aiskillsagents.com', name:'AI Skills & Agents', desc:'The resource hub for AI automation tools, skills, and agent infrastructure.', tags:['AI','Automation','Resources'], category:'business' },
+  { domain:'thevoiceofcash.com', name:'The Voice of Cash', desc:'AI marketing agency hub. Full-service campaigns, consulting, and digital strategy.', tags:['Agency','Marketing','AI'], category:'business' },
+  { domain:'aiskillsagents.com', name:'AI Skills & Agents', desc:'The resource hub for AI automation tools, skills, and agent infrastructure.', tags:['AI','Automation'], category:'business' },
   { domain:'aiskillsagent.com', name:'AI Skills Agent', desc:'AI agent skills directory and tools.', tags:['AI','Agents'], category:'business' },
   { domain:'aiskillsgenerator.com', name:'AI Skills Generator', desc:'Generate AI agent skills and workflows on demand.', tags:['AI','Tools'], category:'business' },
   { domain:'anthropicaiskills.com', name:'Anthropic AI Skills', desc:'Claude-powered skills and capabilities showcase.', tags:['AI','Claude'], category:'business' },
   { domain:'claudeaiskills.com', name:'Claude AI Skills', desc:'Skills and tools built on Claude AI.', tags:['AI','Claude'], category:'business' },
-  { domain:'shadyscanner.com', name:'Shady Scanner', desc:'AI-powered background check and research tool.', tags:['SaaS','AI','Research'], category:'business' },
+  { domain:'shadyscanner.com', name:'Shady Scanner', desc:'AI-powered background check and research tool.', tags:['SaaS','AI'], category:'business' },
   { domain:'searchperformancemarketing.com', name:'Search Performance Marketing', desc:'SEO and paid search performance agency.', tags:['SEO','Marketing'], category:'business' },
-  { domain:'abearicaonline.com', name:'Abearica Online', desc:"Personal brand and portfolio. You're here right now.", tags:['Portfolio','Personal Brand'], category:'business', badge:'here' },
-  { domain:'jewsa.com', name:'JewSA', desc:'Jewish American culture, pride, and community. Bold, unapologetic, modern.', tags:['Culture','Community','Media'], category:'culture' },
-  { domain:'webearish.com', name:'WeBearish', desc:'Neurodiversity community and NFT project. Real support, real people.', tags:['Neurodiversity','Community'], category:'culture' },
+  { domain:'abearicaonline.com', name:'Abearica Online', desc:"Personal brand and portfolio. You're looking at it.", tags:['Portfolio','Personal Brand'], category:'business' },
+  { domain:'jewsa.com', name:'JewSA', desc:'Jewish American culture, pride, and community.', tags:['Culture','Community'], category:'culture' },
+  { domain:'webearish.com', name:'WeBearish', desc:'Neurodiversity community and NFT project.', tags:['Neurodiversity','Community'], category:'culture' },
   { domain:'hindusa.com', name:'HindUSA', desc:'Hindu American culture and community platform.', tags:['Culture','Community'], category:'culture' },
   { domain:'autismacceptance.world', name:'Autism Acceptance World', desc:'Autism acceptance, awareness, and community advocacy.', tags:['Neurodiversity','Advocacy'], category:'culture' },
   { domain:'redwhitejesus.com', name:'Red White Jesus', desc:'Faith, culture, and American identity.', tags:['Culture','Faith'], category:'culture' },
   { domain:'allahican.com', name:'Allah I Can', desc:'Islamic American culture and community.', tags:['Culture','Faith'], category:'culture' },
-  { domain:'u-god.com', name:'U-God', desc:'Wisdom, knowledge, and resources. Curated content for the curious mind.', tags:['Knowledge','Resources'], category:'culture' },
-  { domain:'thelvas.com', name:'The LVAs', desc:'Las Vegas Athletics fan hub. The new era of Oakland baseball in Vegas.', tags:['Baseball','Las Vegas'], category:'sports' },
-  { domain:'thelvathletics.com', name:'The LV Athletics', desc:'Deep coverage, stats, and news for Las Vegas Athletics fans.', tags:['Baseball','News'], category:'sports' },
-  { domain:'lvathleticsnation.com', name:'LV Athletics Nation', desc:'The fan community. Game recaps, opinion, and the pulse of the fanbase.', tags:['Baseball','Community'], category:'sports' },
+  { domain:'u-god.com', name:'U-God', desc:'Wisdom, knowledge, and resources. Curated content.', tags:['Knowledge','Resources'], category:'culture' },
+  { domain:'thelvas.com', name:'The LVAs', desc:'Las Vegas Athletics fan hub.', tags:['Baseball','Las Vegas'], category:'sports' },
+  { domain:'thelvathletics.com', name:'The LV Athletics', desc:'Deep coverage, stats, and news for LV Athletics fans.', tags:['Baseball','News'], category:'sports' },
+  { domain:'lvathleticsnation.com', name:'LV Athletics Nation', desc:'The fan community. Game recaps and opinion.', tags:['Baseball','Community'], category:'sports' },
   { domain:'mmadads.com', name:'MMA Dads', desc:'Where MMA fans who are also dads find their community.', tags:['MMA','Community'], category:'sports' },
-  { domain:'mmamoms.com', name:'MMA Moms', desc:'Women in MMA — fans, fighters, and moms who love the sport.', tags:['MMA','Community'], category:'sports' },
-  { domain:'spaghettiburritos.com', name:'Spaghetti Burritos', desc:'Chaos, sports, crypto, and culture. Barstool meets TMZ.', tags:['Entertainment','Sports'], category:'sports' },
+  { domain:'mmamoms.com', name:'MMA Moms', desc:'Women in MMA — fans, fighters, and moms.', tags:['MMA','Community'], category:'sports' },
+  { domain:'spaghettiburritos.com', name:'Spaghetti Burritos', desc:'Chaos, sports, crypto, and culture.', tags:['Entertainment','Sports'], category:'sports' },
 ];
 
 function renderSites(filter) {
-  const grid = document.getElementById('sites-grid');
   const filtered = filter === 'all' ? SITES : SITES.filter(s => s.category === filter);
-  document.getElementById('live-count').textContent = SITES.length;
-  document.getElementById('count').textContent = SITES.length;
+  document.getElementById('count-label').textContent = filtered.length + ' sites';
+  document.getElementById('status-seg').textContent = filtered.length + ' object(s)';
 
-  grid.innerHTML = filtered.map((site, i) => {
+  document.getElementById('sites-grid').innerHTML = filtered.map(site => {
     const img = OG_IMAGES[site.domain];
-    const badgeHtml = site.badge === 'flagship'
-      ? `<div class="card-badge badge-flagship">Flagship</div>`
-      : site.badge === 'here'
-      ? `<div class="card-badge badge-here">You Are Here</div>`
-      : '';
-
-    const imgHtml = img
-      ? `<img src="${img}" alt="${site.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.card-img-fallback').style.display='flex';">`
-      : '';
-
-    const fallbackDisplay = img ? 'none' : 'flex';
-
     return `
-    <a href="https://${site.domain}" target="_blank" rel="noopener" class="site-card" style="animation-delay:${i * 40}ms">
-      <div class="card-img">
-        ${imgHtml}
-        <div class="card-img-fallback" style="display:${fallbackDisplay}">
-          <div class="fallback-domain">${site.domain}</div>
+    <a href="https://${site.domain}" target="_blank" rel="noopener" class="site-card">
+      <div class="card-title-bar">
+        <span>${site.domain}</span>
+        <span>□</span>
+      </div>
+      <div class="card-img-wrap">
+        ${img
+          ? `<img src="${img}" alt="${site.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
+          : ''}
+        <div class="card-img-fallback" style="${img ? 'display:none' : ''}">
+          ${site.domain}
         </div>
-        ${badgeHtml}
       </div>
       <div class="card-body">
-        <div class="card-domain">${site.domain}</div>
         <div class="card-name">${site.name}</div>
+        <span class="card-domain">${site.domain}</span>
         <div class="card-desc">${site.desc}</div>
         <div class="card-tags">${site.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
@@ -567,7 +440,7 @@ function renderSites(filter) {
 }
 
 function filterSites(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderSites(cat);
 }

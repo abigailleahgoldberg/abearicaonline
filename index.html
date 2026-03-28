@@ -109,8 +109,8 @@ body {
   50% { box-shadow: 0 0 20px rgba(255,215,0,0.9), inset 0 0 14px rgba(255,215,0,0.2); }
 }
 @keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 @keyframes glowPulse {
   0%,100% { text-shadow: 0 0 8px rgba(255,215,0,0.6), 0 0 16px rgba(255,215,0,0.3); }
@@ -907,8 +907,11 @@ body {
 .status-marquee-track {
   display: inline-block;
   white-space: nowrap;
-  animation: marqueeScroll 22s linear infinite;
+  animation: marqueeScroll 35s linear infinite;
   padding-left: 8px;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .status-seg {
   display: none; /* replaced by marquee */
@@ -1447,7 +1450,7 @@ body {
     <!-- Status bar -->
     <div class="aol-statusbar">
       <div class="status-marquee-track">
-        🌐 Abearica Online v9.0 &nbsp;·&nbsp; 📍 Klamath Falls, Oregon &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp; 🌐 Abearica Online v9.0 &nbsp;·&nbsp; 📍 Klamath Falls, Oregon &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp;
+        🌐 Abearica Online v9.0 &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp; 💻 AI-Powered Solutions &nbsp;·&nbsp; 🚀 Full-Stack Infrastructure &nbsp;·&nbsp; 🌐 Abearica Online v9.0 &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp; 💻 AI-Powered Solutions &nbsp;·&nbsp; 🚀 Full-Stack Infrastructure &nbsp;·&nbsp;
       </div>
     </div>
 

@@ -1674,20 +1674,7 @@ body {
               </div>
             </div>
 
-            <!-- Leaderboard + community -->
-            <div class="aol-panel">
-              <div class="title-bar" style="font-size:10px;">
-                <span>🏆 Block RAID Leaderboard</span>
-                <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
-              </div>
-              <div class="panel-body" style="padding:8px 10px;">
-                <div id="gaming-leaderboard" style="font-size:11px;min-height:60px;">Loading...</div>
-                <div style="margin-top:8px;padding-top:6px;border-top:1px solid #e8e0d0;text-align:center;">
-                  <div style="font-size:10px;color:#555;margin-bottom:6px;">Think you can top the board?</div>
-                  <div class="ac-play" onclick="launchGame()" style="display:inline-block;padding:4px 16px;cursor:pointer;">Play Block RAID</div>
-                </div>
-              </div>
-            </div>
+
 
           </div>
           <!-- THE NEWS INFORMER -->
@@ -1734,10 +1721,7 @@ body {
 
               </div>
 
-              <!-- Footer ticker -->
-              <div style="background:#000066;padding:4px 10px;border-top:2px solid #FFD700;overflow:hidden;white-space:nowrap;">
-                <div id="ni-ticker" style="display:inline-block;font-family:'Courier New',monospace;font-size:9px;color:#FFD700;letter-spacing:1px;animation:marqueeScroll 40s linear infinite;">Loading gaming headlines...</div>
-              </div>
+
 
             </div>
           </div>
@@ -3829,33 +3813,18 @@ window.loadSection = function(name) {
   // Always refresh sidebar arcade scoreboard
   renderArcadeScoreboard();
 
-  // Gaming section — populate leaderboard, scoreboard, news informer
+  // Gaming section — scoreboard + news informer
   if(name === 'games') {
     loadNewsInformer();
-    fetch(`${SB_URL}/rest/v1/arcade_scores?select=initials,score&game=eq.breakout&order=score.desc&limit=5`, {
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    }).then(r=>r.json()).then(data=>{
-      const medals = ['🥇','🥈','🥉','4.','5.'];
-      const lb = document.getElementById('gaming-leaderboard');
-      if(!data || !data.length) {
-        if(lb) lb.innerHTML = '<div style="color:#555;text-align:center;padding:8px;">No scores yet. Be first!</div>';
-        return;
-      }
-      if(lb) lb.innerHTML = data.map((s,i)=>`
-        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8e0d0;${i===0?'font-weight:bold;':''}">
-          <span>${medals[i]} <span style="font-family:'Courier New';letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>
-          <span style="color:#000080;">${s.score.toLocaleString()}</span>
-        </div>`).join('');
-    }).catch(()=>{});
     fetchArcadeScoreboard();
   }
 };
 
 /* ── THE NEWS INFORMER ── */
 const NI_FEEDS = {
-  stories: 'https://feeds.ign.com/ign/all',
-  esports:  'https://kotaku.com/rss',
-  reviews:  'https://www.pcgamer.com/rss/'
+  stories: 'https://www.polygon.com/rss/index.xml',
+  esports:  'https://www.ign.com/rss/articles-esports.xml',
+  reviews:  'https://www.eurogamer.net/feed'
 };
 const NI_ESPORTS_KEYWORDS = ['esport','tournament','championship','league','competitive','team','match','finals','qualifier','roster','lcs','lck','worlds','major','blast','esl'];
 const NI_REVIEW_KEYWORDS  = ['review','release','launch','dlc','update','patch','expansion','drops','out now','available','trailer','announced'];
@@ -3872,59 +3841,66 @@ function niArticleHTML(item) {
   </div>`;
 }
 
+// Parse RSS XML text into array of {title, link} objects
+function parseRSS(xmlText) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlText, 'application/xml');
+    const items = Array.from(doc.querySelectorAll('item, entry'));
+    return items.map(item => ({
+      title: item.querySelector('title')?.textContent?.trim() || '',
+      link:  item.querySelector('link')?.textContent?.trim() ||
+             item.querySelector('link')?.getAttribute('href') || '#',
+      categories: Array.from(item.querySelectorAll('category')).map(c=>c.textContent).join(' ')
+    })).filter(i => i.title);
+  } catch(e) { return []; }
+}
+
+// Fetch RSS via allorigins CORS proxy
+async function fetchRSS(url) {
+  const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+  const res = await fetch(proxy);
+  const json = await res.json();
+  return parseRSS(json.contents || '');
+}
+
 async function loadNewsInformer() {
-  // Dateline
   const dl = document.getElementById('ni-dateline');
   if(dl) dl.textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase() + ' EDITION';
 
-  const RSS = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  function renderItems(elId, items) {
+    const el = document.getElementById(elId);
+    if(!el) return;
+    if(!items.length) { el.innerHTML = '<div style="color:#999;font-size:10px;font-style:italic;">No articles found.</div>'; return; }
+    el.innerHTML = items.slice(0,5).map(niArticleHTML).join('');
+  }
 
-  // Top Stories — IGN
-  fetch(RSS + encodeURIComponent(NI_FEEDS.stories) + '&count=20')
-    .then(r=>r.json()).then(d=>{
-      const el = document.getElementById('ni-stories');
-      if(!el) return;
-      const items = (d.items||[]).slice(0,5);
-      if(!items.length) { el.innerHTML = '<div style="color:#aaa;font-size:10px;">No stories available.</div>'; return; }
-      el.innerHTML = items.map(niArticleHTML).join('');
-    }).catch(()=>{ const el=document.getElementById('ni-stories'); if(el) el.innerHTML='<div style="color:#aaa;font-size:10px;">Stories unavailable.</div>'; });
+  // Top Stories — Polygon
+  fetchRSS(NI_FEEDS.stories)
+    .then(items => renderItems('ni-stories', items))
+    .catch(() => { const el=document.getElementById('ni-stories'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Stories unavailable.</div>'; });
 
-  // Esports — Kotaku filtered
-  fetch(RSS + encodeURIComponent(NI_FEEDS.esports) + '&count=50')
-    .then(r=>r.json()).then(d=>{
-      const el = document.getElementById('ni-esports');
-      if(!el) return;
-      const all = d.items||[];
-      const esports = all.filter(item => {
-        const text = ((item.title||'')+(item.description||'')+(item.categories||[]).join('')).toLowerCase();
-        return NI_ESPORTS_KEYWORDS.some(k => text.includes(k));
-      }).slice(0,5);
-      const items = esports.length ? esports : all.slice(0,5);
-      if(!items.length) { el.innerHTML = '<div style="color:#aaa;font-size:10px;">No esports news.</div>'; return; }
-      el.innerHTML = items.map(niArticleHTML).join('');
-    }).catch(()=>{ const el=document.getElementById('ni-esports'); if(el) el.innerHTML='<div style="color:#aaa;font-size:10px;">Esports unavailable.</div>'; });
+  // Esports — IGN Esports feed
+  fetchRSS(NI_FEEDS.esports)
+    .then(items => {
+      const filtered = items.filter(i => {
+        const t = (i.title+i.categories).toLowerCase();
+        return NI_ESPORTS_KEYWORDS.some(k=>t.includes(k));
+      });
+      renderItems('ni-esports', filtered.length ? filtered : items);
+    })
+    .catch(() => { const el=document.getElementById('ni-esports'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Esports unavailable.</div>'; });
 
-  // Reviews & Releases — PC Gamer filtered
-  fetch(RSS + encodeURIComponent(NI_FEEDS.reviews) + '&count=50')
-    .then(r=>r.json()).then(d=>{
-      const el = document.getElementById('ni-reviews');
-      if(!el) return;
-      const all = d.items||[];
-      const reviews = all.filter(item => {
-        const text = ((item.title||'')+(item.description||'')+(item.categories||[]).join('')).toLowerCase();
-        return NI_REVIEW_KEYWORDS.some(k => text.includes(k));
-      }).slice(0,5);
-      const items = reviews.length ? reviews : all.slice(0,5);
-      if(!items.length) { el.innerHTML = '<div style="color:#aaa;font-size:10px;">No reviews available.</div>'; return; }
-      el.innerHTML = items.map(niArticleHTML).join('');
-
-      // Ticker — all headlines from all three feeds combined
-      const ticker = document.getElementById('ni-ticker');
-      if(ticker) {
-        const headlines = (d.items||[]).slice(0,15).map(i=>sanitizeText(i.title||'')).filter(Boolean);
-        if(headlines.length) ticker.textContent = headlines.map(h=>' ◆ '+h).join('') + '   ';
-      }
-    }).catch(()=>{ const el=document.getElementById('ni-reviews'); if(el) el.innerHTML='<div style="color:#aaa;font-size:10px;">Reviews unavailable.</div>'; });
+  // Reviews & Releases — Eurogamer
+  fetchRSS(NI_FEEDS.reviews)
+    .then(items => {
+      const filtered = items.filter(i => {
+        const t = (i.title+i.categories).toLowerCase();
+        return NI_REVIEW_KEYWORDS.some(k=>t.includes(k));
+      });
+      renderItems('ni-reviews', filtered.length ? filtered : items);
+    })
+    .catch(() => { const el=document.getElementById('ni-reviews'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Reviews unavailable.</div>'; });
 }
 
 /* ── IN-PAGE SIGN-ON SKIP ── */

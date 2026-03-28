@@ -91,6 +91,7 @@ body {
 }
 .blink { animation: blink 1s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 /* ======================================
    NEW ANIMATIONS
@@ -1175,6 +1176,8 @@ body {
       <div class="toolbar-icon-btn"><span class="ico">📺</span><span class="lbl">Channels</span></div>
       <div class="toolbar-icon-btn"><span class="ico">👥</span><span class="lbl">People</span></div>
       <div class="toolbar-icon-btn" onclick="launchGame()"><span class="ico">🎮</span><span class="lbl">Games</span></div>
+      <div style="width:1px;background:#808080;margin:2px 3px;align-self:stretch;"></div>
+      <div class="toolbar-icon-btn" onclick="refreshPulse()" id="refresh-btn" title="Refresh content (F5)"><span class="ico">🔄</span><span class="lbl">Refresh</span></div>
     </div>
 
     <!-- Keyword bar -->
@@ -1669,6 +1672,15 @@ function initPortal() {
   // Load leaderboard
   fetchLeaderboard();
 
+  // ── REFRESH FUNCTION — F5 within portal, no reconnect needed ──
+  window.refreshPulse = function() {
+    const ico = document.querySelector('#refresh-btn .ico');
+    if(ico) { ico.style.transition='transform 0.6s'; ico.style.transform='rotate(360deg)'; setTimeout(()=>{ico.style.transition='';ico.style.transform='';},650); }
+    fetchLeaderboard();
+    runDailyPulse();
+  };
+
+  function runDailyPulse() {
   // Daily Pulse: Weather — auto-detect by IP, user can override
   (function() {
     const savedLocation = localStorage.getItem('aol_weather_location') || '';
@@ -1829,6 +1841,9 @@ function initPortal() {
         otdEl.textContent = 'No events found for today.';
       }
     }).catch(()=>{ document.getElementById('on-this-day-content').textContent = 'History data unavailable'; });
+  }
+
+  runDailyPulse();
 
   // Tilt popup fires 45 seconds after portal loads — not during game
   setTimeout(() => {
@@ -2222,6 +2237,15 @@ async function sendWriteMail() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeWriteMail();
 });
+
+/* ── F5 IN-PAGE REFRESH ── */
+document.addEventListener('keydown', function(e) {
+  if((e.key === 'F5' || (e.ctrlKey && e.key === 'r')) && document.getElementById('phase-portal').classList.contains('active')) {
+    e.preventDefault();
+    window.refreshPulse();
+  }
+});
+
 </script>
 
 <!-- WRITE MAIL MODAL -->

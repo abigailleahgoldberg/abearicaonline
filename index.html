@@ -1630,8 +1630,7 @@ body { background: #008080; }
         <div class="sidebar-header">AOL® Channels</div>
         <a class="sidebar-ch active-ch" href="#" data-section="welcome" onclick="loadSection('welcome');return false;"><span class="ch-arrow">▸</span>Welcome</a>
         <a class="sidebar-ch" href="#" data-section="services" onclick="loadSection('services');return false;"><span class="ch-arrow">▸</span>Services</a>
-        <a class="sidebar-ch" href="#" data-section="games" onclick="loadSection('games');return false;"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
-        <a class="sidebar-ch" href="#" data-section="games" onclick="loadSection('games');return false;" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
+        <a class="sidebar-ch" href="#" data-section="games" onclick="loadSection('games');return false;"><span class="ch-arrow">▸</span>Gaming 🕹️</a>
         <a class="sidebar-ch" href="#" data-section="contact" onclick="loadSection('contact');return false;"><span class="ch-arrow">▸</span>Contact</a>
         <a class="sidebar-ch" href="#" data-section="computing" onclick="loadSection('computing');return false;"><span class="ch-arrow">▸</span>Computing</a>
         <a class="sidebar-ch" href="#" data-section="workplace" onclick="loadSection('workplace');return false;"><span class="ch-arrow">▸</span>WorkPlace</a>
@@ -1804,19 +1803,40 @@ body { background: #008080; }
 
         <!-- ===== SECTION: GAMES ===== -->
         <div data-section-content="games" style="display:none;">
+
+          <!-- Gaming header panel -->
           <div class="aol-panel">
             <div class="title-bar" style="font-size:10px;">
-              <span>🎮 Abearica Online Arcade</span>
+              <span>🕹️ Abearica Online Gaming — The Arcade</span>
               <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
             </div>
-            <div class="panel-body" style="text-align:center;padding:12px;">
-              <div style="font-size:16px;font-weight:bold;color:#000080;font-family:'Lora',serif;margin-bottom:4px;">Abearica Online Arcade</div>
-              <p style="font-size:11px;margin-bottom:12px;color:#555;">7 classic games — all free, all in-browser. Pick one and play!</p>
+            <div class="panel-body" style="padding:10px 12px 6px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <div>
+                  <div style="font-size:15px;font-weight:bold;color:#000080;font-family:'Lora',serif;">Free Classic Games. No Download. No Login.</div>
+                  <div style="font-size:11px;color:#555;margin-top:2px;">7 games live now. More dropping every week. Compete for the leaderboard.</div>
+                </div>
+                <div style="background:#000080;color:#FFD700;font-family:'Courier New',monospace;font-size:10px;padding:6px 12px;border-radius:3px;text-align:center;">
+                  🏆 Breakout High Score<br>
+                  <span id="gaming-top-score" style="font-size:14px;font-weight:bold;">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arcade grid -->
+          <div class="aol-panel">
+            <div class="title-bar" style="font-size:10px;">
+              <span>🎮 Arcade — Play Now</span>
+              <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+            </div>
+            <div class="panel-body" style="padding:10px;">
               <div class="arcade-grid">
                 <div class="arcade-card" onclick="launchGame()">
                   <div class="ac-icon">🏓</div>
                   <div class="ac-name">Breakout</div>
                   <div class="ac-desc">Smash bricks with a bouncing ball. Beat the leaderboard!</div>
+                  <div class="ac-badge" style="background:#cc0000;color:#fff;font-size:8px;padding:1px 5px;border-radius:2px;display:inline-block;margin-bottom:4px;">LEADERBOARD</div>
                   <div class="ac-play">Play</div>
                 </div>
                 <div class="arcade-card" onclick="launchMinesweeper()">
@@ -1846,7 +1866,7 @@ body { background: #008080; }
                 <div class="arcade-card" onclick="launchAsteroids()">
                   <div class="ac-icon">🚀</div>
                   <div class="ac-name">Asteroids</div>
-                  <div class="ac-desc">Rotate, thrust, and shoot. Split rocks before they split you.</div>
+                  <div class="ac-desc">Rotate, thrust, shoot. Split rocks before they split you.</div>
                   <div class="ac-play">Play</div>
                 </div>
                 <div class="arcade-card" onclick="launchPong()">
@@ -1857,6 +1877,52 @@ body { background: #008080; }
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- Coming soon + community row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+
+            <!-- Coming soon -->
+            <div class="aol-panel">
+              <div class="title-bar" style="font-size:10px;">
+                <span>📅 Coming Soon</span>
+                <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+              </div>
+              <div class="panel-body" style="padding:8px 10px;font-size:11px;">
+                <div style="margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #e8e0d0;display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:18px;">🐍</span>
+                  <div><div style="font-weight:bold;color:#000080;">Snake</div><div style="color:#555;font-size:10px;">Eat, grow, don't bite yourself.</div></div>
+                </div>
+                <div style="margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #e8e0d0;display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:18px;">🃏</span>
+                  <div><div style="font-weight:bold;color:#000080;">Solitaire</div><div style="color:#555;font-size:10px;">Classic Klondike. The original time sink.</div></div>
+                </div>
+                <div style="margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #e8e0d0;display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:18px;">🔵</span>
+                  <div><div style="font-weight:bold;color:#000080;">Connect Four</div><div style="color:#555;font-size:10px;">Drop discs. Get four in a row.</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:18px;">🎯</span>
+                  <div><div style="font-weight:bold;color:#000080;">Oregon Trail</div><div style="color:#555;font-size:10px;">You have died of dysentery.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Leaderboard + community -->
+            <div class="aol-panel">
+              <div class="title-bar" style="font-size:10px;">
+                <span>🏆 Breakout Leaderboard</span>
+                <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+              </div>
+              <div class="panel-body" style="padding:8px 10px;">
+                <div id="gaming-leaderboard" style="font-size:11px;min-height:60px;">Loading...</div>
+                <div style="margin-top:8px;padding-top:6px;border-top:1px solid #e8e0d0;text-align:center;">
+                  <div style="font-size:10px;color:#555;margin-bottom:6px;">Think you can top the board?</div>
+                  <div class="ac-play" onclick="launchGame()" style="display:inline-block;padding:4px 16px;cursor:pointer;">Play Breakout</div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div><!-- end section: games -->
 
@@ -3760,7 +3826,7 @@ document.addEventListener('keydown', function(e) {
 const SECTION_TITLES = {
   welcome:   'Abearica Online — Welcome Screen',
   services:  'Abearica Online — Services',
-  games:     'Abearica Online — Arcade',
+  games:     'Abearica Online — Gaming',
   contact:   'Abearica Online — Contact',
   computing: 'Abearica Online — Computing',
   workplace: 'Abearica Online — WorkPlace',
@@ -3769,7 +3835,7 @@ const SECTION_TITLES = {
 const SECTION_KEYWORDS = {
   welcome:   'abearicaonline.com',
   services:  'Keyword: services',
-  games:     'Keyword: games',
+  games:     'Keyword: gaming',
   contact:   'Keyword: contact',
   computing: 'Keyword: computing',
   workplace: 'Keyword: workplace',
@@ -3796,9 +3862,26 @@ window.loadSection = function(name) {
   // Scroll center to top
   const center = document.querySelector('.aol-center');
   if(center) center.scrollTop = 0;
-  // Special case: games section launches the game overlay
+  // Gaming section — populate leaderboard + top score
   if(name === 'games') {
-    // just show the games landing — user can click Play Now
+    fetch(`${SB_URL}/rest/v1/breakout_scores?select=initials,score&order=score.desc&limit=5`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    }).then(r=>r.json()).then(data=>{
+      const medals = ['🥇','🥈','🥉','4.','5.'];
+      const lb = document.getElementById('gaming-leaderboard');
+      const ts = document.getElementById('gaming-top-score');
+      if(!data || !data.length) {
+        if(lb) lb.innerHTML = '<div style="color:#555;text-align:center;padding:8px;">No scores yet. Be first!</div>';
+        if(ts) ts.textContent = '---';
+        return;
+      }
+      if(ts) ts.textContent = data[0].score.toLocaleString();
+      if(lb) lb.innerHTML = data.map((s,i)=>`
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8e0d0;${i===0?'font-weight:bold;':''}">
+          <span>${medals[i]} <span style="font-family:'Courier New';letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>
+          <span style="color:#000080;">${s.score.toLocaleString()}</span>
+        </div>`).join('');
+    }).catch(()=>{});
   }
 };
 

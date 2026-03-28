@@ -2616,7 +2616,10 @@ function initPortal() {
   window.refreshPulse = function() {
     const ico = document.querySelector('#refresh-btn .ico');
     if(ico) { ico.style.transition='transform 0.6s'; ico.style.transform='rotate(360deg)'; setTimeout(()=>{ ico.style.transition=''; ico.style.transform=''; }, 700); }
+    // Refresh everything — live data, scores, leaderboard
     runDailyPulse();
+    renderArcadeScoreboard();
+    fetchLeaderboard();
   };
 
   function runDailyPulse() {

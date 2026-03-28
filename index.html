@@ -21,6 +21,22 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ======================================
+   CSS VARIABLES
+====================================== */
+:root {
+  --cream:     #F5F0E8;
+  --navy:      #000066;
+  --gold:      #FFD700;
+  --red:       #CC0000;
+  --tan:       #C8B898;
+  --tan-2:     #B8A888;
+  --blue-link: #0000CC;
+  --txt:       #000000;
+  --txt-2:     #333333;
+  --txt-3:     #555555;
+}
+
+/* ======================================
    GLOBAL / WINDOWS 95 BASE
 ====================================== */
 body {
@@ -44,13 +60,62 @@ body {
   border-right: 2px solid #fff;
   border-bottom: 2px solid #fff;
 }
-/* .win-btn, .title-bar, .title-bar-btn — defined in AOL 2026 layer */
+.win-btn {
+  background: #dde4ee;
+  border: 1px solid #99aacc;
+  border-radius: 3px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #000;
+  transition: background 0.12s;
+}
+.win-btn:hover { background: #c8d8ee; border-color: #5577aa; }
+.win-btn:active { background: #b8c8de; padding: 3px 12px; }
+.title-bar {
+  background: linear-gradient(to right, #000055, #1a6ecf 60%, #0044aa);
+  color: #fff;
+  padding: 3px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0,0,150,0.4);
+}
+.title-bar-btn {
+  background: #d0d0d0;
+  color: #000;
+  font-size: 9px;
+  line-height: 1;
+  width: 16px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-left: 2px;
+  font-weight: bold;
+  vertical-align: middle;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background 0.12s;
+}
+.title-bar-btn:hover { background: #e85555; color: #fff; border-color: #cc3333; }
 .blink { animation: blink 1s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 /* ======================================
-   NEW ANIMATIONS
+   ANIMATIONS
 ====================================== */
 @keyframes shimmer {
   0% { background-position: -200% center; }
@@ -60,7 +125,10 @@ body {
   0%,100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.7); }
 }
-
+@keyframes ctaGlow {
+  0%,100% { box-shadow: 0 0 8px rgba(255,215,0,0.4), inset 0 0 8px rgba(255,215,0,0.1); }
+  50% { box-shadow: 0 0 20px rgba(255,215,0,0.9), inset 0 0 14px rgba(255,215,0,0.2); }
+}
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -107,7 +175,6 @@ body {
     inset 0 0 50px rgba(0,0,0,0.4);
   position: relative;
 }
-/* Holographic rainbow iridescence */
 .cd-disc::before {
   content: '';
   position: absolute;
@@ -132,7 +199,6 @@ body {
   mix-blend-mode: screen;
   pointer-events: none;
 }
-/* Reflection sheen layer */
 .cd-disc .cd-sheen {
   position: absolute;
   inset: 0;
@@ -141,7 +207,6 @@ body {
   pointer-events: none;
   z-index: 2;
 }
-/* Center hole */
 .cd-disc::after {
   content: '';
   position: absolute;
@@ -208,7 +273,6 @@ body {
   margin-top: 6px;
   letter-spacing: 1px;
 }
-
 .cd-prompt {
   text-align: center;
   margin-top: 28px;
@@ -235,7 +299,6 @@ body {
   letter-spacing: 3px;
   animation: glowPulse 1.8s ease-in-out infinite;
 }
-/* CSS-only starfield */
 #phase-cd::before {
   content: '';
   position: absolute;
@@ -300,7 +363,56 @@ body {
   width: 420px;
   max-width: 95vw;
 }
-/* connect-header, connect-panels removed — banner image handles this UI */
+.connect-header {
+  background: #c0c0c0;
+  padding: 10px 12px 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #808080;
+}
+.connect-logo-text {
+  line-height: 1.1;
+}
+.connect-logo-aol {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: #000080;
+  text-transform: uppercase;
+}
+.connect-logo-online {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000080;
+}
+.connect-banner-img {
+  width: 100%;
+  display: block;
+  background: #000;
+}
+.connect-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: #c0c0c0;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #808080;
+}
+.connect-panel {
+  background: #1a5fb4;
+  padding: 14px 6px;
+  text-align: center;
+  opacity: 0.35;
+  transition: opacity 0.4s;
+  border-right: 1px solid #808080;
+}
+.connect-panel:last-child { border-right: none; }
+.connect-panel.lit { opacity: 1; }
+.connect-panel-icon { font-size: 30px; }
+.connect-panel-label { color: #fff; font-size: 9px; margin-top: 4px; font-family: Arial; }
 .connect-status-wrap { padding: 6px 12px; }
 .connect-status { font-size: 12px; font-family: Arial; color: #000; }
 .connect-progress-wrap {
@@ -344,29 +456,32 @@ body {
   min-height: calc(100vh - 12px);
 }
 
-/* Exact AOL menu bar */
+/* Menu bar */
 .aol-menubar {
-  background: #c0c0c0;
-  border-bottom: 1px solid #808080;
+  background: #e8e8e8;
+  border-bottom: 1px solid #aaa;
   padding: 1px 2px;
   display: flex;
   gap: 0;
   font-size: 12px;
 }
 .aol-menu-item {
-  padding: 2px 8px;
+  padding: 2px 10px;
   cursor: default;
+  color: #000;
+  border-radius: 2px;
+  transition: background 0.1s;
 }
 .aol-menu-item:hover { background: #000080; color: #fff; }
 
-/* Exact AOL toolbar */
+/* Toolbar */
 .aol-toolbar {
-  background: linear-gradient(to bottom, #5A7A9A, #4A6A8A);
+  background: linear-gradient(to bottom, #6688aa, #4a6a8a);
   padding: 3px 4px;
   display: flex;
   align-items: center;
   gap: 3px;
-  border-bottom: 2px solid #808080;
+  border-bottom: 2px solid #335577;
   flex-wrap: wrap;
 }
 .aol-logo-mark {
@@ -402,32 +517,54 @@ body {
   letter-spacing: 1px;
   font-family: Arial;
 }
-/* .toolbar-icon-btn — defined in AOL 2026 layer */
+.toolbar-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #c8d8e8;
+  border: 1px solid #7799bb;
+  border-radius: 5px;
+  padding: 2px 8px;
+  cursor: pointer;
+  min-width: 44px;
+  transition: background 0.12s, box-shadow 0.12s, transform 0.1s;
+}
+.toolbar-icon-btn:hover {
+  background: #ddeeff;
+  border-color: #4477aa;
+  box-shadow: 0 2px 8px rgba(0,0,150,0.25);
+  transform: translateY(-1px);
+}
+.toolbar-icon-btn:active { transform: translateY(0); box-shadow: none; background: #b8c8d8; }
+.toolbar-icon-btn .ico { font-size: 18px; }
+.toolbar-icon-btn .lbl { font-size: 9px; color: #222; white-space: nowrap; }
 
 /* Keyword bar */
 .aol-keyword-bar {
-  background: #c0c0c0;
+  background: #dde4ee;
   padding: 3px 6px;
   display: flex;
   align-items: center;
   gap: 6px;
-  border-bottom: 1px solid #808080;
+  border-bottom: 1px solid #aabbcc;
   font-size: 11px;
 }
 .keyword-field {
   flex: 1;
-  border-top: 2px solid #404040;
-  border-left: 2px solid #404040;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
+  background: #fff;
+  border: 1px solid #9999bb;
+  border-radius: 3px;
   padding: 2px 4px;
   font-size: 11px;
-  font-family: Arial;
-  background: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #000;
   outline: none;
 }
+.keyword-field:focus { border-color: #0000cc; box-shadow: 0 0 4px rgba(0,0,200,0.2); outline: none; }
+.aol-keyword-bar .win-btn { background: #ccd4e4; border: 1px solid #99aacc; border-radius: 3px; color: #000; }
+.aol-keyword-bar .win-btn:hover { background: #bbccdd; border-color: #6688aa; }
 
-/* Welcome banner - exact AOL gold style */
+/* Welcome banner */
 .aol-welcome-bar {
   background: linear-gradient(90deg, #996600 0%, #ffd700 20%, #ffe566 40%, #ffd700 60%, #ffb300 80%, #996600 100%);
   background-size: 200% auto;
@@ -435,6 +572,7 @@ body {
   border-left: 2px solid #ffe066;
   border-right: 2px solid #996600;
   border-bottom: 2px solid #996600;
+  border-radius: 4px;
   padding: 5px 10px;
   display: flex;
   align-items: center;
@@ -482,24 +620,19 @@ body {
   display: grid;
   grid-template-columns: 160px 1fr 250px;
   min-height: calc(100vh - 130px);
+  background: var(--cream);
 }
+
 /* ======================================
    MOBILE & TABLET RESPONSIVE
 ====================================== */
 @media (max-width: 680px) {
-  /* CD screen */
   .cd-wrap { width: 180px; height: 180px; }
   .cd-disc { width: 180px; height: 180px; }
   .cd-hours { font-size: 32px; }
   .cd-online { font-size: 18px; }
-
-  /* Connecting window */
   .connect-window { width: 95vw; }
-
-  /* Portal layout — stack vertically */
   .aol-body { grid-template-columns: 1fr; }
-
-  /* Hide sidebars on mobile but show a collapsed channel row */
   .aol-sidebar-left { display: block; background: #000066; }
   .aol-sidebar-left .sidebar-ch {
     display: inline-block;
@@ -510,35 +643,19 @@ body {
   }
   .aol-sidebar-left > div:last-child { display: none; }
   .aol-sidebar-right { display: none; }
-
-  /* Toolbar — hide labels, just icons */
   .toolbar-icon-btn .lbl { display: none; }
   .toolbar-icon-btn { padding: 4px 6px; min-width: 32px; }
   .toolbar-icon-btn .ico { font-size: 16px; }
   .aol-logo-mark { display: none; }
-
-  /* Welcome bar */
   .aol-welcome-bar { flex-wrap: wrap; gap: 6px; }
   .welcome-text-block .welcome-tagline { display: none; }
-
-  /* Services grid — single column on phone */
   .services-grid { grid-template-columns: 1fr; }
   .got-row { grid-template-columns: 1fr 1fr; }
-
-  /* Game canvas — scale down */
   #game-canvas { width: 100%; height: auto; }
   #game-win { width: 95vw; }
-
-  /* Tilt popup */
   .tilt-win { width: 92vw; }
-
-  /* Status bar — marquee still runs */
   .status-marquee-track { animation-duration: 18s; }
-
-  /* Daily Pulse — single column */
   .pulse-grid { grid-template-columns: 1fr; }
-
-  /* Right sidebar — full width on mobile */
   .aol-sidebar-right { width: 100%; }
 }
 
@@ -549,92 +666,224 @@ body {
   .aol-keyword-bar { display: none; }
 }
 
-/* Tablet — 2 columns for pulse grid */
 @media (max-width: 900px) {
   .pulse-grid { grid-template-columns: 1fr 1fr; }
 }
 
-/* Mac / large desktop — center and cap width nicely */
 @media (min-width: 1200px) {
   .aol-window { max-width: 1100px; }
   .outer-window { max-width: 1100px; }
 }
 
-/* Left sidebar - dark navy channels */
+/* ======================================
+   LEFT SIDEBAR
+====================================== */
 .aol-sidebar-left {
-  background: #000066;
-  border-right: 2px solid #404040;
+  background: var(--navy);
+  border-right: 2px solid #000044;
 }
 .sidebar-header {
   background: linear-gradient(to bottom, #0000cc, #000080);
   color: #FFD700;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
   padding: 6px 8px;
   text-align: center;
   border-bottom: 1px solid #0000aa;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   font-family: 'Lora', serif;
 }
-/* .sidebar-ch — defined in AOL 2026 layer */
+.sidebar-ch {
+  display: block;
+  color: #ddddff;
+  font-size: 11px;
+  padding: 6px 8px 6px 12px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  font-family: 'Inter', Arial, sans-serif;
+  transition: background 0.12s, color 0.1s, padding-left 0.12s;
+}
+.sidebar-ch:hover { background: #0000cc; color: var(--gold); padding-left: 15px; }
+.sidebar-ch.active-ch {
+  background: #0000aa;
+  color: var(--gold);
+  border-left: 3px solid var(--gold);
+  font-weight: 600;
+}
+.sidebar-ch .ch-arrow { color: #8888ff; margin-right: 4px; }
 
-/* Center content */
+/* ======================================
+   CENTER CONTENT
+====================================== */
 .aol-center {
-  padding: 4px;
+  padding: 5px;
   overflow-y: auto;
-  background: #F5F0E8;
+  background: var(--cream);
+  scrollbar-width: thin;
+  scrollbar-color: #aabbcc #e8e4dc;
 }
 
-/* .aol-panel — defined in AOL 2026 layer */
+/* Content panels */
+.aol-panel {
+  background: #fff;
+  border: 1px solid #c8c0b0;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.aol-panel > .title-bar {
+  background: linear-gradient(to right, #000055, #1a6ecf);
+  font-size: 11px;
+  box-shadow: none;
+}
 .panel-body {
   padding: 8px 10px;
   line-height: 1.6;
   font-size: 12px;
   font-family: 'Inter', Arial, sans-serif;
-  background: #ffffff;
+  background: #fff;
+  color: var(--txt-2);
 }
+.panel-body p { color: var(--txt-2); }
+.panel-body p strong { color: var(--txt); }
 .panel-body h2, .panel-body h3 {
   font-family: 'Lora', serif;
   font-weight: 700;
-  color: #000080;
+  color: var(--navy);
   margin: 8px 0 4px;
 }
+.panel-body a { color: var(--blue-link); }
+.panel-body a:hover { color: var(--red); }
 
-/* .got-row, .got-btn — defined in AOL 2026 layer */
+/* You've Got... buttons */
+.got-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+}
+.got-btn {
+  background: linear-gradient(to bottom, #cc0000, #aa0000);
+  border: 1px solid #880000;
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(150,0,0,0.3);
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.got-btn .got-icon { font-size: 28px; display: block; margin-bottom: 3px; }
+.got-btn .got-label { font-size: 10px; font-weight: bold; letter-spacing: 0.5px; }
+.got-btn .got-count { font-size: 9px; color: #ffaaaa; }
+.got-btn:hover {
+  background: linear-gradient(to bottom, #ee1111, #cc0000);
+  box-shadow: 0 4px 16px rgba(200,0,0,0.45);
+  transform: translateY(-1px);
+  animation: none;
+}
 
-/* .services-grid, .service-tile — defined in AOL 2026 layer */
+/* Services grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+}
+.service-tile {
+  background: #f4f0e8;
+  border: 1px solid #d0c8b8;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+}
+.service-tile:hover {
+  background: #e8eeff;
+  border-color: #6688bb;
+  box-shadow: 0 3px 12px rgba(0,0,150,0.15);
+  transform: translateY(-2px);
+}
+.svc-ico { display: none; }
+.svc-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #000080;
+  margin: 4px 0 3px;
+  font-family: 'Lora', serif;
+}
+.svc-desc { font-size: 10px; color: var(--txt-3); }
+.svc-price {
+  display: inline-block;
+  font-size: 9px;
+  color: #fff;
+  background: #006600;
+  font-weight: bold;
+  margin-top: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
 
-/* .big-cta defined in AOL 2026 layer below */
+/* CTA button */
+.big-cta {
+  display: inline-block;
+  background: #cc0000;
+  color: #ffffff;
+  border: 2px solid #ff4444;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 10px 32px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  animation: none;
+  box-shadow: 0 3px 10px rgba(180,0,0,0.3);
+}
+.big-cta:hover {
+  background: #ee1111;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(200,0,0,0.4);
+}
 
-/* Right sidebar - buddy list — AOL warm tan */
+/* ======================================
+   RIGHT SIDEBAR — BUDDY LIST
+====================================== */
 .aol-sidebar-right {
-  background: #C8B898;
-  border-left: 2px solid #fff;
+  background: var(--tan);
+  border-left: 2px solid #a09070;
   border-top: 2px solid #fff;
   border-right: 2px solid #404040;
   border-bottom: 2px solid #404040;
-  margin: 3px 3px 3px 0;
+  border-radius: 0;
+  margin: 0;
 }
 .buddy-title-bar {
-  background: #8B7355;
+  background: linear-gradient(to right, #5a3a1a, #8b7355);
   color: #fff;
   font-size: 11px;
   font-weight: bold;
-  font-family: 'Lora', serif;
+  font-family: 'Inter', sans-serif;
   padding: 4px 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .buddy-section {
-  background: #B8A888;
+  background: var(--tan-2);
   font-size: 10px;
-  font-weight: bold;
-  font-family: 'Lora', serif;
-  color: #5A3A1A;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: #3a2000;
   padding: 3px 6px;
-  border-bottom: 1px solid #A09070;
-  border-top: 1px solid #D8C8A8;
+  border-bottom: 1px solid #a09070;
+  border-top: 1px solid #a09070;
 }
 .buddy-item {
   display: flex;
@@ -643,25 +892,25 @@ body {
   padding: 3px 6px;
   font-size: 11px;
   font-family: 'Courier New', monospace;
-  color: #1A0A00;
+  color: #1a0a00;
   cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: background 0.1s;
 }
 .buddy-item:hover { background: #000080; color: #fff; }
 .buddy-dot { color: #00aa00; font-size: 8px; display: inline-block; animation: buddyPulse 2s ease-in-out infinite; }
-.buddy-divider { height: 1px; background: #A09070; margin: 4px 0; border-top: 1px solid #D8C8A8; }
+.buddy-divider { height: 1px; background: #a09070; margin: 4px 0; border: none; }
 .buddy-footer {
   display: flex;
   justify-content: space-around;
   padding: 4px;
-  border-top: 1px solid #A09070;
+  border-top: 1px solid #a09070;
   gap: 2px;
 }
 .buddy-foot-btn {
   background: #C0B090;
-  border-top: 2px solid #E0D0B0;
-  border-left: 2px solid #E0D0B0;
-  border-right: 2px solid #806040;
-  border-bottom: 2px solid #806040;
+  border: 1px solid #a09070;
+  border-radius: 3px;
   padding: 2px 4px;
   font-size: 9px;
   cursor: pointer;
@@ -669,22 +918,43 @@ body {
   flex: 1;
   font-family: Arial, sans-serif;
   color: #000;
+  transition: background 0.12s;
 }
+.buddy-foot-btn:hover { background: #000080; color: #fff; border-color: #0000cc; }
 
-/* .news-box — defined in AOL 2026 layer */
+/* ======================================
+   NEWS / SIDEBAR BOXES
+====================================== */
+.news-box { background: #faf6ee; border: 1px solid #c8b898; border-radius: 4px; margin: 4px 5px; }
+.news-box-title {
+  background: linear-gradient(to right, #000055, #336699);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'Lora', serif;
+  padding: 3px 6px;
+  border-radius: 3px 3px 0 0;
+}
+.news-box-body { padding: 5px 7px; font-size: 10px; line-height: 1.6; color: #000; background: #faf6ee; }
+.news-link { color: #0000cc; text-decoration: underline; cursor: pointer; }
+.news-link:hover { color: #cc0000; }
+.news-box-body a { color: #0000cc; }
+.news-box-body a:hover { color: #cc0000; }
 
-/* Status bar */
+/* ======================================
+   STATUS BAR
+====================================== */
 .aol-statusbar {
-  background: #c0c0c0;
-  border-top: 2px solid #808080;
+  background: #d8d0c0;
+  border-top: 1px solid #b0a890;
   padding: 2px 0;
   font-size: 10px;
   font-family: 'Courier New', monospace;
   overflow: hidden;
   white-space: nowrap;
-  border-top: 2px solid #fff;
   border-bottom: 2px solid #404040;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  color: #444;
 }
 .status-marquee-track {
   display: inline-block;
@@ -696,7 +966,7 @@ body {
   -webkit-backface-visibility: hidden;
 }
 .status-seg {
-  display: none; /* replaced by marquee */
+  display: none;
 }
 
 /* ======================================
@@ -705,17 +975,39 @@ body {
 .pulse-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
+  gap: 5px;
   padding: 6px;
 }
-/* .pulse-tile — defined in AOL 2026 layer */
+.pulse-tile {
+  background: #fafaf5;
+  border: 1px solid #d0c8b8;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 11px;
+  cursor: default;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.pulse-tile:hover { border-color: #0000cc; box-shadow: 0 2px 10px rgba(0,0,150,0.12); }
+.pulse-tile .tile-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #000080;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.pulse-tile .tile-value {
+  font-size: 12px;
+  color: var(--txt);
+  line-height: 1.4;
+}
+.pulse-tile a { color: var(--blue-link); }
+.pulse-tile a:hover { color: var(--red); }
 .trivia-option {
   display: block;
-  background: #c8c8c8;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
-  border-right: 2px solid #404040;
-  border-bottom: 2px solid #404040;
+  background: #f0ede8;
+  border: 1px solid #c8c0b0;
+  border-radius: 3px;
   padding: 3px 8px;
   font-size: 10px;
   margin: 2px 0;
@@ -723,8 +1015,10 @@ body {
   text-align: left;
   width: 100%;
   font-family: Arial, sans-serif;
+  color: #000;
+  transition: background 0.12s;
 }
-.trivia-option:hover { background: #d8d8e8; }
+.trivia-option:hover { background: #dde8ff; border-color: #0000cc; color: #000; }
 .trivia-option.correct { background: #ccffcc; border-color: #006600; color: #006600; font-weight: bold; }
 .trivia-option.wrong { background: #ffcccc; border-color: #cc0000; color: #cc0000; }
 .trivia-score { font-size: 10px; color: #000080; font-weight: bold; margin-top: 4px; }
@@ -767,10 +1061,8 @@ body {
 #tilt-popup.active { display: flex; }
 .tilt-win {
   background: #c0c0c0;
-  border-top: 3px solid #fff;
-  border-left: 3px solid #fff;
-  border-right: 3px solid #404040;
-  border-bottom: 3px solid #404040;
+  border: 2px solid #fff;
+  box-shadow: 4px 4px 0 #000, 0 0 30px rgba(0,0,150,0.2);
   min-width: 300px;
   max-width: 92vw;
   animation: popIn 0.3s ease;
@@ -798,25 +1090,23 @@ body {
 }
 .tilt-title { font-size: 17px; font-weight: 900; color: #000080; font-family: Arial Black; margin-bottom: 2px; }
 .tilt-sub { font-size: 11px; font-weight: bold; color: #cc0000; margin-bottom: 10px; letter-spacing: 1px; }
-.tilt-body p { font-size: 11px; margin-bottom: 5px; line-height: 1.5; }
+.tilt-body p { font-size: 11px; margin-bottom: 5px; line-height: 1.5; color: #333; }
 .tilt-cta {
   display: inline-block;
   background: #000080;
-  color: #FFD700;
+  color: var(--gold);
   font-size: 12px;
   font-weight: bold;
   padding: 7px 20px;
   text-decoration: none;
-  border-top: 2px solid #4444cc;
-  border-left: 2px solid #4444cc;
-  border-right: 2px solid #000033;
-  border-bottom: 2px solid #000033;
+  border: 2px solid #4444cc;
+  border-radius: 3px;
   letter-spacing: 1px;
   margin-top: 10px;
 }
 .tilt-cta:hover { background: #0000aa; }
 
-/* scanline glitch */
+/* Scanline glitch */
 @keyframes glitch {
   0%{transform:translateX(-5px);opacity:1}
   25%{transform:translateX(5px)}
@@ -834,280 +1124,8 @@ body {
 }
 
 /* ======================================
-   AOL 2026 — VISUAL REDESIGN LAYER
-   "America Online meets 2026"
-   Warm cream · Navy + gold · Modern depth
-   Structure stays. Skin is refined.
+   SECTION TEXT
 ====================================== */
-:root {
-  --cream:     #F5F0E8;
-  --cream-2:   #EDE8DF;
-  --navy:      #000066;
-  --navy-2:    #000099;
-  --navy-lt:   #1a6ecf;
-  --gold:      #FFD700;
-  --gold-dk:   #CC9900;
-  --red:       #CC0000;
-  --tan:       #C8B898;
-  --tan-2:     #B8A888;
-  --blue-link: #0000CC;
-  --txt:       #000000;
-  --txt-2:     #333333;
-  --txt-3:     #555555;
-}
-
-/* ── BODY & BACKGROUND ── */
-body { background: #008080; }
-
-/* ── TITLE BARS — sharper, modern gradient keeping AOL navy ── */
-.title-bar {
-  background: linear-gradient(to right, #000055, #1a6ecf 60%, #0044aa);
-  box-shadow: 0 2px 8px rgba(0,0,150,0.4);
-}
-.title-bar-btn {
-  background: #d0d0d0;
-  border-radius: 2px;
-  transition: background 0.12s;
-}
-.title-bar-btn:hover { background: #e85555; color: #fff; border-color: #cc3333; }
-
-/* ── MENU BAR ── */
-.aol-menubar { background: #e8e8e8; border-bottom: 1px solid #aaa; }
-.aol-menu-item { color: #000; padding: 2px 10px; border-radius: 2px; transition: background 0.1s; }
-.aol-menu-item:hover { background: #000080; color: #fff; }
-
-/* ── TOOLBAR ── */
-.aol-toolbar {
-  background: linear-gradient(to bottom, #6688aa, #4a6a8a);
-  border-bottom: 2px solid #335577;
-}
-.toolbar-icon-btn {
-  background: #c8d8e8;
-  border: 1px solid #7799bb;
-  border-radius: 5px;
-  transition: background 0.12s, box-shadow 0.12s, transform 0.1s;
-}
-.toolbar-icon-btn:hover {
-  background: #ddeeff;
-  border-color: #4477aa;
-  box-shadow: 0 2px 8px rgba(0,0,150,0.25);
-  transform: translateY(-1px);
-}
-.toolbar-icon-btn:active { transform: translateY(0); box-shadow: none; background: #b8c8d8; }
-.toolbar-icon-btn .lbl { color: #222; }
-
-/* ── KEYWORD BAR ── */
-.aol-keyword-bar { background: #dde4ee; border-bottom: 1px solid #aabbcc; }
-.keyword-field {
-  background: #fff;
-  border: 1px solid #9999bb;
-  border-radius: 3px;
-  color: #000;
-  font-family: 'Inter', Arial, sans-serif;
-}
-.keyword-field:focus { border-color: #0000cc; box-shadow: 0 0 4px rgba(0,0,200,0.2); outline: none; }
-.aol-keyword-bar .win-btn { background: #ccd4e4; border: 1px solid #99aacc; border-radius: 3px; color: #000; }
-.aol-keyword-bar .win-btn:hover { background: #bbccdd; border-color: #6688aa; }
-
-/* ── WELCOME BAR — keep gold shimmer ── */
-.aol-welcome-bar { border-radius: 4px; }
-
-/* ── MAIN BODY ── */
-.aol-body { background: var(--cream); }
-
-/* ── LEFT SIDEBAR ── */
-.aol-sidebar-left { background: var(--navy); border-right: 2px solid #000044; }
-.sidebar-header {
-  background: linear-gradient(to bottom, #0000cc, #000080);
-  letter-spacing: 2px;
-  font-size: 10px;
-}
-.sidebar-ch {
-  color: #ddddff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 11px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  transition: background 0.12s, color 0.1s, padding-left 0.12s;
-}
-.sidebar-ch:hover { background: #0000cc; color: var(--gold); padding-left: 15px; }
-.sidebar-ch .ch-arrow { color: #8888ff; }
-.sidebar-ch.active-ch {
-  background: #0000aa;
-  color: var(--gold);
-  border-left: 3px solid var(--gold);
-  font-weight: 600;
-}
-
-/* ── CENTER ── */
-.aol-center {
-  background: var(--cream);
-  padding: 5px;
-  scrollbar-width: thin;
-  scrollbar-color: #aabbcc #e8e4dc;
-}
-
-/* ── CONTENT PANELS — keep cream but add subtle drop shadow ── */
-.aol-panel {
-  background: #fff;
-  border: 1px solid #c8c0b0;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  margin-bottom: 6px;
-  overflow: hidden;
-}
-.aol-panel > .title-bar {
-  background: linear-gradient(to right, #000055, #1a6ecf);
-  font-size: 11px;
-  box-shadow: none;
-}
-.panel-body { background: #fff; color: var(--txt-2); }
-.panel-body p { color: var(--txt-2); }
-.panel-body p strong { color: var(--txt); }
-.panel-body h2, .panel-body h3 { color: var(--navy); }
-.panel-body a { color: var(--blue-link); }
-.panel-body a:hover { color: var(--red); }
-
-/* ── DAILY PULSE TILES ── */
-.pulse-grid { gap: 5px; padding: 6px; }
-.pulse-tile {
-  background: #fafaf5;
-  border: 1px solid #d0c8b8;
-  border-radius: 4px;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.pulse-tile:hover { border-color: #0000cc; box-shadow: 0 2px 10px rgba(0,0,150,0.12); }
-.pulse-tile .tile-label { color: #000080; font-weight: 700; }
-.pulse-tile .tile-value { color: var(--txt); }
-.pulse-tile a { color: var(--blue-link) !important; }
-.pulse-tile a:hover { color: var(--red) !important; }
-
-/* ── YOU'VE GOT BUTTONS ── */
-.got-btn {
-  background: linear-gradient(to bottom, #cc0000, #aa0000);
-  border: 1px solid #880000;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px rgba(150,0,0,0.3);
-  transition: box-shadow 0.15s, transform 0.1s;
-}
-.got-btn:hover {
-  background: linear-gradient(to bottom, #ee1111, #cc0000);
-  box-shadow: 0 4px 16px rgba(200,0,0,0.45);
-  transform: translateY(-1px);
-  animation: none;
-}
-
-/* ── SERVICE TILES ── */
-.service-tile {
-  background: #f4f0e8;
-  border: 1px solid #d0c8b8;
-  border-radius: 5px;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-}
-.service-tile:hover {
-  background: #e8eeff;
-  border-color: #6688bb;
-  box-shadow: 0 3px 12px rgba(0,0,150,0.15);
-  transform: translateY(-2px);
-}
-.svc-name { color: #000080; font-family: 'Lora', serif; font-weight: 700; }
-.svc-desc { color: var(--txt-3); }
-.svc-price { background: #006600; color: #fff; border-radius: 3px; }
-
-/* ── CTA BUTTON ── */
-.big-cta {
-  display: inline-block;
-  background: #cc0000;
-  color: #ffffff;
-  border: 2px solid #ff4444;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  font-size: 13px;
-  letter-spacing: 2px;
-  padding: 10px 32px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.15s;
-  animation: none;
-  box-shadow: 0 3px 10px rgba(180,0,0,0.3);
-}
-.big-cta:hover {
-  background: #ee1111;
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(200,0,0,0.4);
-}
-
-/* ── RIGHT SIDEBAR ── */
-.aol-sidebar-right {
-  background: var(--tan);
-  border-left: 2px solid #a09070;
-  border-radius: 0;
-  margin: 0;
-}
-.buddy-title-bar {
-  background: linear-gradient(to right, #5a3a1a, #8b7355);
-  font-family: 'Inter', sans-serif;
-}
-.buddy-section {
-  background: var(--tan-2);
-  color: #3a2000;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  border-color: #a09070;
-}
-.buddy-item { color: #1a0a00; border-bottom: 1px solid rgba(0,0,0,0.06); transition: background 0.1s; }
-.buddy-item:hover { background: #000080; color: #fff; }
-.buddy-divider { background: #a09070; height: 1px; border: none; }
-.buddy-footer { border-top: 1px solid #a09070; }
-.buddy-foot-btn {
-  background: #C0B090;
-  border: 1px solid #a09070;
-  border-radius: 3px;
-  color: #000;
-  transition: background 0.12s;
-}
-.buddy-foot-btn:hover { background: #000080; color: #fff; border-color: #0000cc; }
-
-/* ── NEWS / SIDEBAR BOXES ── */
-.news-box { background: #faf6ee; border: 1px solid #c8b898; border-radius: 4px; margin: 4px 5px; }
-.news-box-title { background: linear-gradient(to right, #000055, #336699); border-radius: 3px 3px 0 0; }
-.news-box-body { background: #faf6ee; color: #000; }
-.news-link { color: #0000cc; }
-.news-link:hover { color: #cc0000; }
-.news-box-body a { color: #0000cc; }
-.news-box-body a:hover { color: #cc0000; }
-
-/* ── STATUS BAR ── */
-.aol-statusbar { background: #d8d0c0; border-top: 1px solid #b0a890; color: #444; }
-
-/* ── WIN BUTTONS ── */
-.win-btn {
-  background: #dde4ee;
-  border: 1px solid #99aacc;
-  border-radius: 3px;
-  color: #000;
-  transition: background 0.12s;
-}
-.win-btn:hover { background: #c8d8ee; border-color: #5577aa; }
-.win-btn:active { background: #b8c8de; padding: 3px 12px; }
-
-/* ── TRIVIA ── */
-.trivia-option { background: #f0ede8; border: 1px solid #c8c0b0; border-radius: 3px; color: #000; transition: background 0.12s; }
-.trivia-option:hover { background: #dde8ff; border-color: #0000cc; color: #000; }
-.trivia-option.correct { background: #ccffcc; border-color: #006600; color: #006600; }
-.trivia-option.wrong   { background: #ffcccc; border-color: #cc0000; color: #cc0000; }
-.trivia-score { color: #000080; }
-
-/* ── TILT POPUP ── */
-.tilt-win { background: #c0c0c0; border: 2px solid #fff; box-shadow: 4px 4px 0 #000, 0 0 30px rgba(0,0,150,0.2); }
-.tilt-title { color: #000080; }
-.tilt-sub   { color: #cc0000; }
-.tilt-body p { color: #333; }
-.tilt-cta { background: #000080; color: var(--gold); border: 2px solid #4444cc; border-radius: 3px; }
-.tilt-cta:hover { background: #0000aa; }
-
-/* ── SECTION TEXT ── */
 [data-section-content] p { color: var(--txt-2); }
 [data-section-content] p strong { color: var(--txt); }
 [data-section-content] li { color: var(--txt-2); }
@@ -1163,18 +1181,9 @@ body { background: #008080; }
   border: 1px solid #4444cc;
 }
 .arcade-card:hover .ac-play { background: #000099; }
-.ac-badge {
-  display: inline-block;
-  background: #cc0000;
-  color: #fff;
-  font-size: 8px;
-  padding: 1px 5px;
-  border-radius: 2px;
-  margin-bottom: 4px;
-}
 
 /* ======================================
-   GENERIC GAME OVERLAY (new games)
+   GENERIC GAME OVERLAY
 ====================================== */
 .game-overlay-generic {
   display: none;
@@ -1207,7 +1216,7 @@ body { background: #008080; }
   border-top: 1px solid #808080;
 }
 
-/* Minesweeper specific */
+/* Minesweeper */
 .ms-grid { display: inline-grid; gap: 1px; background: #808080; border: 2px inset #808080; }
 .ms-cell {
   width: 24px; height: 24px;
@@ -1228,7 +1237,9 @@ body { background: #008080; }
 .ms-c3 { color: #ff0000; } .ms-c4 { color: #000080; }
 .ms-c5 { color: #800000; } .ms-c6 { color: #008080; }
 
-/* ── ARCADE SCOREBOARD ── */
+/* ======================================
+   ARCADE SCOREBOARD
+====================================== */
 .sb-game-row {
   padding: 4px 8px 3px;
   border-bottom: 1px solid #1a1500;
@@ -1255,7 +1266,6 @@ body { background: #008080; }
 .sb-initials { color: #ffaa00; font-weight: bold; letter-spacing: 1px; min-width: 22px; }
 .sb-score { color: #ffe066; }
 .sb-empty { color: #332200; }
-/* END AOL 2026 */
 </style>
 </head>
 <body>

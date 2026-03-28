@@ -2064,8 +2064,7 @@ window.submitArcadeScore = async function(gameName, initials, score) {
       },
       body: JSON.stringify({ game: gameName, initials: initials.substring(0,3).toUpperCase(), score })
     });
-    fetchLeaderboard();
-    fetchArcadeScoreboard();
+    renderArcadeScoreboard();
   } catch(e) {}
 };
 
@@ -2121,18 +2120,7 @@ window.showScoreEntry = function(gameName, finalScore, onDismiss) {
 };
 
 /* --- Sidebar Breakout leaderboard (top 5 from arcade_scores) --- */
-async function fetchLeaderboard() {
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/arcade_scores?select=initials,score,created_at&game=eq.breakout&order=score.desc&limit=5`, {
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    });
-    const data = await res.json();
-    renderLeaderboard(data);
-  } catch(e) {
-    const el = document.getElementById('leaderboard-body');
-    if(el) el.innerHTML = '<div style="padding:4px 6px;font-size:10px;color:#888;">No scores yet. Play first!</div>';
-  }
-}
+// fetchLeaderboard removed — replaced by renderArcadeScoreboard()
 
 /* ── ARCADE SCOREBOARD (sidebar, always visible) ── */
 const GAME_META = [
@@ -2212,21 +2200,7 @@ async function renderArcadeScoreboard() {
   }
 }
 
-function renderLeaderboard(scores) {
-  const el = document.getElementById('leaderboard-body');
-  if(!el) return;
-  if(!scores || scores.length === 0) {
-    el.innerHTML = '<div style="padding:6px;font-size:10px;color:#555;text-align:center;">No scores yet!<br>Be the first. 🎮</div>';
-    return;
-  }
-  const medals = ['🥇','🥈','🥉','4.','5.'];
-  el.innerHTML = scores.map((s,i) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;font-size:11px;${i===0?'background:#fffbe6;font-weight:bold;':''}border-bottom:1px solid #d0d0d0;">
-      <span>${medals[i]} <span style="font-family:Courier New;letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>
-      <span style="color:#000080;font-weight:bold;">${s.score.toLocaleString()}</span>
-    </div>
-  `).join('');
-}
+// renderLeaderboard removed — replaced by renderArcadeScoreboard()
 
 /* --- Arcade Scoreboard (all games, top 3 each) --- */
 // fetchArcadeScoreboard — alias for renderArcadeScoreboard, one code path
@@ -2350,29 +2324,21 @@ function initPortal() {
     now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) +
     ' — Today on Abearica Online';
 
-  // Clock
-  function tick() {
-    const el = document.getElementById('clock-seg');
-    if(el) el.textContent = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
-  }
-  tick(); setInterval(tick, 1000);
+  // Clock element removed from UI — interval disabled
 
   // Sidebar weather — updated by wttr.in fetch below
   const wtEl = document.getElementById('weather-temp');
   if(wtEl) wtEl.textContent = 'Checking...';
 
   // Load leaderboard (legacy Breakout sidebar - now replaced by arcade scoreboard)
-  // fetchLeaderboard(); // disabled - replaced by renderArcadeScoreboard()
-  renderArcadeScoreboard();
+    renderArcadeScoreboard();
 
   // ── REFRESH FUNCTION — F5 within portal, no reconnect needed ──
   window.refreshPulse = function() {
     const ico = document.querySelector('#refresh-btn .ico');
     if(ico) { ico.style.transition='transform 0.6s'; ico.style.transform='rotate(360deg)'; setTimeout(()=>{ ico.style.transition=''; ico.style.transform=''; }, 700); }
-    // Refresh everything — live data, scores, leaderboard
     runDailyPulse();
     renderArcadeScoreboard();
-    fetchLeaderboard();
   };
 
   // Sanitize external text before inserting into DOM
@@ -2529,7 +2495,7 @@ function initPortal() {
     .then(r=>r.json()).then(d=>{
       const hEl = document.getElementById('pulse-horoscope').querySelector('.tile-value');
       document.getElementById('pulse-horoscope').querySelector('.tile-label').textContent = todaySignEmoji+' '+todaySign.charAt(0).toUpperCase()+todaySign.slice(1);
-      hEl.innerHTML = '<div style="font-size:10px;line-height:1.5;">'+(d.horoscope||'No reading today')+'</div>';
+      hEl.innerHTML = '<div style="font-size:10px;line-height:1.5;">'+sanitizeText(d.horoscope||'No reading today')+'</div>';
     }).catch(()=>{ document.getElementById('pulse-horoscope').querySelector('.tile-value').textContent = 'Horoscope unavailable'; });
 
   // ── ON THIS DAY IN TECH ──
@@ -2543,7 +2509,7 @@ function initPortal() {
       const otdEl = document.getElementById('on-this-day-content');
       if(showEvents.length) {
         otdEl.innerHTML = showEvents.map(e=>
-          '<div style="margin-bottom:8px;"><span style="color:#000080;font-weight:bold;">'+e.year+'</span> — '+e.text+(e.links&&e.links[0]?' <a href="'+e.links[0].link+'" target="_blank" rel="noopener noreferrer" style="color:#0000cc;font-size:10px;">[more]</a>':'')+'</div>'
+          '<div style="margin-bottom:8px;"><span style="color:#000080;font-weight:bold;">'+sanitizeText(String(e.year))+'</span> — '+sanitizeText(e.text)+(e.links&&e.links[0]&&e.links[0].link.startsWith('http')?' <a href="'+e.links[0].link+'" target="_blank" rel="noopener noreferrer" style="color:#0000cc;font-size:10px;">[more]</a>':'')+'</div>'
         ).join('');
       } else {
         otdEl.textContent = 'No events found for today.';
@@ -3824,13 +3790,10 @@ window.loadSection = function(name) {
     }).then(r=>r.json()).then(data=>{
       const medals = ['🥇','🥈','🥉','4.','5.'];
       const lb = document.getElementById('gaming-leaderboard');
-      const ts = document.getElementById('gaming-top-score');
       if(!data || !data.length) {
         if(lb) lb.innerHTML = '<div style="color:#555;text-align:center;padding:8px;">No scores yet. Be first!</div>';
-        if(ts) ts.textContent = '---';
         return;
       }
-      if(ts) ts.textContent = data[0].score.toLocaleString();
       if(lb) lb.innerHTML = data.map((s,i)=>`
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8e0d0;${i===0?'font-weight:bold;':''}">
           <span>${medals[i]} <span style="font-family:'Courier New';letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>

@@ -20,10 +20,8 @@
 ====================================== */
 body {
   background: #008080;
-  background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
-  background-size: 20px 20px;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   min-height: 100vh;
   overflow-x: hidden;
   cursor: default;
@@ -60,7 +58,7 @@ body {
   padding: 4px 11px 2px 13px;
 }
 .title-bar {
-  background: linear-gradient(to right, #00006a, #1a6ecf);
+  background: linear-gradient(to right, #000080, #1084d0);
   color: #fff;
   padding: 3px 5px;
   display: flex;
@@ -69,10 +67,9 @@ body {
   font-size: 11px;
   font-weight: bold;
   user-select: none;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .title-bar-btn {
-  background: #c8c8c8;
+  background: #c0c0c0;
   color: #000;
   font-size: 9px;
   width: 16px;
@@ -90,34 +87,6 @@ body {
 }
 .blink { animation: blink 1s step-end infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* ======================================
-   NEW ANIMATIONS
-====================================== */
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-@keyframes buddyPulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.7); }
-}
-@keyframes ctaGlow {
-  0%,100% { box-shadow: 0 0 8px rgba(255,215,0,0.4), inset 0 0 8px rgba(255,215,0,0.1); }
-  50% { box-shadow: 0 0 20px rgba(255,215,0,0.9), inset 0 0 14px rgba(255,215,0,0.2); }
-}
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-@keyframes glowPulse {
-  0%,100% { text-shadow: 0 0 8px rgba(255,215,0,0.6), 0 0 16px rgba(255,215,0,0.3); }
-  50% { text-shadow: 0 0 20px rgba(255,215,0,1), 0 0 40px rgba(255,215,0,0.6), 0 0 60px rgba(255,200,0,0.3); }
-}
-@keyframes starfieldTwinkle {
-  0%,100% { opacity: 0.8; }
-  50% { opacity: 0.3; }
-}
 
 /* ======================================
    PHASE 1: CD DISC LANDING
@@ -143,48 +112,32 @@ body {
   height: 240px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, transparent 55%),
-    radial-gradient(circle at 35% 30%, #5577dd, #0033bb 40%, #001199 75%, #000d77 100%);
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%),
+    radial-gradient(circle at 35% 30%, #4466cc, #0033bb 40%, #001199 75%, #000d77 100%);
   animation: spin 4s linear infinite;
   box-shadow:
-    0 0 80px rgba(80,130,255,0.7),
-    0 0 160px rgba(50,100,255,0.3),
-    inset 0 0 50px rgba(0,0,0,0.4);
+    0 0 60px rgba(50,100,255,0.6),
+    0 0 120px rgba(50,100,255,0.2),
+    inset 0 0 40px rgba(0,0,0,0.4);
   position: relative;
 }
-/* Holographic rainbow iridescence */
+/* Holographic shimmer */
 .cd-disc::before {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 6px;
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    rgba(255,0,80,0.25) 0deg,
-    rgba(255,140,0,0.3) 30deg,
-    rgba(255,215,0,0.35) 60deg,
-    rgba(0,220,100,0.2) 90deg,
-    rgba(0,180,255,0.3) 120deg,
-    rgba(120,0,255,0.25) 150deg,
-    rgba(255,0,180,0.2) 180deg,
-    rgba(255,80,0,0.28) 210deg,
-    rgba(255,215,0,0.32) 240deg,
-    rgba(0,255,200,0.2) 270deg,
-    rgba(80,160,255,0.28) 300deg,
-    rgba(200,0,255,0.22) 330deg,
-    rgba(255,0,80,0.25) 360deg
+    transparent 0deg, rgba(255,255,255,0.08) 30deg,
+    transparent 60deg, rgba(255,215,0,0.12) 90deg,
+    transparent 120deg, rgba(100,200,255,0.08) 150deg,
+    transparent 180deg, rgba(255,255,255,0.08) 210deg,
+    transparent 240deg, rgba(255,180,0,0.1) 270deg,
+    transparent 300deg, rgba(150,220,255,0.06) 330deg,
+    transparent 360deg
   );
-  mix-blend-mode: screen;
   pointer-events: none;
-}
-/* Reflection sheen layer */
-.cd-disc .cd-sheen {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%, rgba(255,255,255,0.08) 100%);
-  pointer-events: none;
-  z-index: 2;
 }
 /* Center hole */
 .cd-disc::after {
@@ -231,10 +184,10 @@ body {
 }
 .cd-hours {
   font-family: Impact, Arial Black, sans-serif;
-  font-size: 52px;
+  font-size: 42px;
   font-weight: 900;
   color: #FFD700;
-  text-shadow: 2px 2px 0 #000, 3px 3px 0 rgba(0,0,0,0.5), 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4);
+  text-shadow: 2px 2px 0 #000, 3px 3px 0 rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.4);
   line-height: 1;
   margin-top: 8px;
 }
@@ -275,52 +228,10 @@ body {
 }
 .cd-click {
   color: #FFD700;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 20px;
   font-family: 'Courier New', monospace;
   letter-spacing: 3px;
-  animation: glowPulse 1.8s ease-in-out infinite;
-}
-/* CSS-only starfield */
-#phase-cd::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 0;
-  pointer-events: none;
-  background: transparent;
-  box-shadow:
-    12px 34px 0 0 rgba(255,255,255,0.7),
-    89px 154px 0 0 rgba(255,255,255,0.5),
-    200px 67px 0 0 rgba(255,255,255,0.8),
-    310px 189px 0 0 rgba(255,255,255,0.4),
-    450px 45px 0 0 rgba(255,255,255,0.6),
-    512px 220px 0 0 rgba(255,255,255,0.7),
-    678px 89px 0 0 rgba(255,255,255,0.5),
-    720px 301px 0 0 rgba(255,255,255,0.6),
-    134px 390px 0 0 rgba(255,255,255,0.4),
-    256px 450px 0 0 rgba(255,255,255,0.5),
-    400px 410px 0 0 rgba(255,255,255,0.3),
-    580px 500px 0 0 rgba(255,255,255,0.6),
-    770px 430px 0 0 rgba(255,255,255,0.4),
-    900px 120px 0 0 rgba(255,255,255,0.7),
-    980px 350px 0 0 rgba(255,255,255,0.5),
-    60px 580px 0 0 rgba(255,255,255,0.4),
-    340px 560px 0 0 rgba(255,255,255,0.3),
-    640px 600px 0 0 rgba(255,255,255,0.5),
-    820px 580px 0 0 rgba(255,255,255,0.4),
-    1050px 200px 0 0 rgba(255,255,255,0.6),
-    1100px 450px 0 0 rgba(255,255,255,0.3),
-    1200px 80px 0 0 rgba(255,255,255,0.5),
-    1280px 320px 0 0 rgba(255,255,255,0.4),
-    44px 700px 0 0 rgba(255,255,255,0.3),
-    180px 730px 0 0 rgba(255,255,255,0.5),
-    500px 760px 0 0 rgba(255,255,255,0.4),
-    750px 740px 0 0 rgba(255,255,255,0.3),
-    1000px 700px 0 0 rgba(255,255,255,0.5);
-  width: 2px;
-  height: 2px;
-  animation: starfieldTwinkle 3s ease-in-out infinite;
 }
 
 /* ======================================
@@ -544,8 +455,7 @@ body {
 
 /* Welcome banner - exact AOL gold style */
 .aol-welcome-bar {
-  background: linear-gradient(90deg, #996600 0%, #ffd700 20%, #ffe566 40%, #ffd700 60%, #ffb300 80%, #996600 100%);
-  background-size: 200% auto;
+  background: linear-gradient(to bottom, #ffd700, #ffb300);
   border-top: 2px solid #ffe066;
   border-left: 2px solid #ffe066;
   border-right: 2px solid #996600;
@@ -555,7 +465,6 @@ body {
   align-items: center;
   gap: 10px;
   margin: 3px;
-  animation: shimmer 3s linear infinite;
 }
 .welcome-aol-logo {
   display: flex;
@@ -594,7 +503,7 @@ body {
 /* Main layout */
 .aol-body {
   display: grid;
-  grid-template-columns: 160px 1fr 250px;
+  grid-template-columns: 150px 1fr 158px;
   min-height: calc(100vh - 130px);
 }
 /* ======================================
@@ -646,14 +555,8 @@ body {
   /* Tilt popup */
   .tilt-win { width: 92vw; }
 
-  /* Status bar — marquee still runs */
-  .status-marquee-track { animation-duration: 18s; }
-
-  /* Daily Pulse — single column */
-  .pulse-grid { grid-template-columns: 1fr; }
-
-  /* Right sidebar — full width on mobile */
-  .aol-sidebar-right { width: 100%; }
+  /* Status bar — truncate */
+  .status-seg:nth-child(3) { display: none; }
 }
 
 @media (max-width: 400px) {
@@ -693,7 +596,7 @@ body {
   border-bottom: 1px solid #0000aa;
   cursor: pointer;
 }
-.sidebar-ch:hover { background: #0000cc; color: #FFD700; border-left: 3px solid #FFD700; }
+.sidebar-ch:hover { background: #0000cc; color: #FFD700; }
 .sidebar-ch .ch-arrow { color: #aaaaff; margin-right: 3px; }
 
 /* Center content */
@@ -705,15 +608,14 @@ body {
 
 /* Content panels */
 .aol-panel {
-  background: #c8c8c8;
+  background: #c0c0c0;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
   border-right: 2px solid #404040;
   border-bottom: 2px solid #404040;
   margin-bottom: 5px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
 }
-.panel-body { padding: 8px 10px; line-height: 1.6; font-size: 12px; }
+.panel-body { padding: 8px 10px; line-height: 1.6; }
 
 /* You've Got... buttons - exact AOL style */
 .got-row {
@@ -733,14 +635,10 @@ body {
   cursor: pointer;
   color: #fff;
 }
-.got-btn .got-icon { font-size: 28px; display: block; margin-bottom: 3px; }
+.got-btn .got-icon { font-size: 22px; display: block; margin-bottom: 3px; }
 .got-btn .got-label { font-size: 10px; font-weight: bold; letter-spacing: 0.5px; }
 .got-btn .got-count { font-size: 9px; color: #ffaaaa; }
-.got-btn:hover {
-  background: linear-gradient(90deg, #cc0000 0%, #ff4444 40%, #ff6666 50%, #ff4444 60%, #aa0000 100%);
-  background-size: 200% auto;
-  animation: shimmer 1.5s linear infinite;
-}
+.got-btn:hover { background: linear-gradient(to bottom, #dd0000, #bb0000); }
 
 /* Services grid */
 .services-grid {
@@ -750,34 +648,19 @@ body {
   padding: 4px;
 }
 .service-tile {
-  background: #c8c8c8;
+  background: #c0c0c0;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
   border-right: 2px solid #404040;
   border-bottom: 2px solid #404040;
   padding: 8px;
   cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
-  transition: background 0.15s;
 }
-.service-tile:hover {
-  background: #e8e8ff;
-  border-top-color: #4444cc;
-  border-left-color: #4444cc;
-}
+.service-tile:hover { background: #d8d8d8; }
 .svc-ico { font-size: 18px; }
 .svc-name { font-size: 11px; font-weight: bold; color: #000080; margin: 3px 0 2px; }
 .svc-desc { font-size: 10px; color: #444; }
-.svc-price {
-  display: inline-block;
-  font-size: 9px;
-  color: #fff;
-  background: #006600;
-  font-weight: bold;
-  margin-top: 4px;
-  padding: 1px 5px;
-  border-radius: 2px;
-}
+.svc-price { font-size: 10px; color: #006600; font-weight: bold; margin-top: 3px; }
 
 .big-cta {
   display: block;
@@ -797,7 +680,6 @@ body {
   text-align: center;
   width: fit-content;
   letter-spacing: 1px;
-  animation: ctaGlow 2s ease-in-out infinite;
 }
 .big-cta:hover { background: #0000aa; }
 .big-cta:active {
@@ -817,14 +699,13 @@ body {
   margin: 3px 3px 3px 0;
 }
 .buddy-title-bar {
-  background: linear-gradient(to right, #00006a, #1a6ecf);
+  background: linear-gradient(to right, #000080, #1084d0);
   color: #fff;
   font-size: 10px;
   font-weight: bold;
   padding: 3px 5px;
   display: flex;
   justify-content: space-between;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .buddy-section {
   background: #c0c0c0;
@@ -843,7 +724,7 @@ body {
   cursor: pointer;
 }
 .buddy-item:hover { background: #000080; color: #fff; }
-.buddy-dot { color: #00cc00; font-size: 8px; display: inline-block; animation: buddyPulse 2s ease-in-out infinite; }
+.buddy-dot { color: #00cc00; font-size: 8px; }
 .buddy-divider { height: 1px; background: #808080; margin: 4px 0; border-top: 1px solid #fff; }
 .buddy-footer {
   display: flex;
@@ -888,56 +769,19 @@ body {
 .aol-statusbar {
   background: #c0c0c0;
   border-top: 2px solid #808080;
-  padding: 2px 0;
+  padding: 2px 6px;
   font-size: 10px;
   font-family: 'Courier New', monospace;
-  overflow: hidden;
-  white-space: nowrap;
-  border-top: 2px solid #fff;
-  border-bottom: 2px solid #404040;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.status-marquee-track {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marqueeScroll 22s linear infinite;
-  padding-left: 8px;
+  display: flex;
+  gap: 0;
 }
 .status-seg {
-  display: none; /* replaced by marquee */
-}
-
-/* ======================================
-   DAILY PULSE SECTION
-====================================== */
-.pulse-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  padding: 6px;
-}
-.pulse-tile {
-  background: #fffff0;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
   border-top: 2px solid #fff;
   border-left: 2px solid #fff;
-  border-right: 2px solid #808080;
-  border-bottom: 2px solid #808080;
-  padding: 8px 10px;
-  font-size: 11px;
-  cursor: default;
-}
-.pulse-tile .tile-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #000080;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.pulse-tile .tile-value {
-  font-size: 12px;
-  color: #000;
-  line-height: 1.4;
+  padding: 1px 8px;
+  margin-right: 4px;
 }
 
 /* ======================================
@@ -1051,7 +895,6 @@ body {
 <div id="phase-cd" onclick="startConnect()">
   <div class="cd-wrap">
     <div class="cd-disc">
-      <div class="cd-sheen"></div>
       <div class="cd-text-wrap">
         <div class="cd-brand">Abearica</div>
         <div class="cd-online">Online</div>
@@ -1185,8 +1028,7 @@ body {
         <div class="sidebar-header">AOL® Channels</div>
         <a class="sidebar-ch" href="#about"><span class="ch-arrow">▸</span>Welcome</a>
         <a class="sidebar-ch" href="#services"><span class="ch-arrow">▸</span>Services</a>
-        <a class="sidebar-ch" onclick="launchGame()"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
-        <a class="sidebar-ch" href="#" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
+        <a class="sidebar-ch" onclick="launchGame()"><span class="ch-arrow">▸</span>Games</a>
         <a class="sidebar-ch" href="#" onclick="openWriteMail();return false;"><span class="ch-arrow">▸</span>Contact</a>
         
         <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>Computing</a>
@@ -1220,32 +1062,6 @@ body {
               <span class="got-icon">🎮</span>
               <span class="got-label">Play Breakout</span>
               <span class="got-count">New high score?</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Daily Pulse panel -->
-        <div class="aol-panel">
-          <div class="title-bar" style="font-size:10px;">
-            <span>📡 Daily Pulse — What's Happening Today</span>
-            <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
-          </div>
-          <div class="pulse-grid">
-            <div class="pulse-tile" id="pulse-weather">
-              <div class="tile-label">🌤 Weather</div>
-              <div class="tile-value">Loading...</div>
-            </div>
-            <div class="pulse-tile" id="pulse-news">
-              <div class="tile-label">📰 Top Story</div>
-              <div class="tile-value">Loading...</div>
-            </div>
-            <div class="pulse-tile" id="pulse-crypto">
-              <div class="tile-label">₿ Crypto</div>
-              <div class="tile-value">Loading...</div>
-            </div>
-            <div class="pulse-tile" id="pulse-trivia">
-              <div class="tile-label">🎲 Daily Trivia</div>
-              <div class="tile-value">Loading...</div>
             </div>
           </div>
         </div>
@@ -1399,9 +1215,10 @@ body {
 
     <!-- Status bar -->
     <div class="aol-statusbar">
-      <div class="status-marquee-track">
-        🌐 Abearica Online v9.0 &nbsp;·&nbsp; 📍 Klamath Falls, Oregon &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp; 🌐 Abearica Online v9.0 &nbsp;·&nbsp; 📍 Klamath Falls, Oregon &nbsp;·&nbsp; ⚡ 23 Years IT Experience &nbsp;·&nbsp; 🤖 9 AI Agents Online &nbsp;·&nbsp; ⏱ 48hr Website Delivery &nbsp;·&nbsp; 🎮 Play Arcade Games &nbsp;·&nbsp; 📧 hello@abearicaonline.com &nbsp;·&nbsp;
-      </div>
+      <span class="status-seg">🌐 Abearica Online</span>
+      <span class="status-seg">📍 Oregon</span>
+      <span class="status-seg">⚡ 23yr/experience</span>
+      <span class="status-seg" id="clock-seg">--:--</span>
     </div>
 
   </div><!-- end aol-window -->
@@ -1545,13 +1362,6 @@ function startConnect() {
   modem.volume = 0.85;
   modem.play().catch(() => playModemSynth()); // fallback if autoplay blocked
 
-  setTimeout(() => {
-    const fadeInterval = setInterval(() => {
-      if (modem.volume > 0.05) { modem.volume -= 0.05; }
-      else { modem.volume = 0; modem.pause(); clearInterval(fadeInterval); }
-    }, 200);
-  }, 15000); // start fading at 15s, audio is ~19s total
-
   const steps = [
     {delay:400,   pct:6,  txt:'Initializing modem...', panel:1},
     {delay:1400,  pct:12, txt:'Dialing 1-800-AOL-ONLINE...', panel:1},
@@ -1600,58 +1410,11 @@ function initPortal() {
   }
   tick(); setInterval(tick, 1000);
 
-  // Fake weather (sidebar)
+  // Fake weather
   document.getElementById('weather-temp').textContent = '🌤 Cool & Partly Cloudy';
 
   // Load leaderboard
   fetchLeaderboard();
-
-  // Daily Pulse: Weather
-  fetch('https://wttr.in/Klamath+Falls,Oregon?format=3')
-    .then(r=>r.text()).then(t=>{
-      document.getElementById('pulse-weather').querySelector('.tile-value').textContent = t.trim() || 'Oregon weather unavailable';
-    })
-    .catch(()=>{ document.getElementById('pulse-weather').querySelector('.tile-value').textContent = '🌤 Check weather.com'; });
-
-  // Daily Pulse: Crypto
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')
-    .then(r=>r.json()).then(d=>{
-      const btc = d.bitcoin?.usd ? '$'+d.bitcoin.usd.toLocaleString() : '—';
-      const eth = d.ethereum?.usd ? '$'+d.ethereum.usd.toLocaleString() : '—';
-      document.getElementById('pulse-crypto').querySelector('.tile-value').innerHTML = '₿ BTC: <b>'+btc+'</b><br>Ξ ETH: <b>'+eth+'</b>';
-    }).catch(()=>{ document.getElementById('pulse-crypto').querySelector('.tile-value').textContent = 'Price data unavailable'; });
-
-  // Daily Pulse: News
-  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml&count=1')
-    .then(r=>r.json()).then(d=>{
-      const item = d.items?.[0];
-      if(item) {
-        const el = document.getElementById('pulse-news').querySelector('.tile-value');
-        el.innerHTML = '<a href="'+item.link+'" target="_blank" style="color:#0000cc;text-decoration:underline;">'+item.title+'</a>';
-      }
-    }).catch(()=>{ document.getElementById('pulse-news').querySelector('.tile-value').textContent = 'News unavailable'; });
-
-  // Daily Pulse: Trivia
-  const trivia = [
-    {q:'What does "WWW" stand for?', a:'World Wide Web'},
-    {q:'In what year was AOL founded?', a:'1985'},
-    {q:'What was the first domain ever registered?', a:'Symbolics.com (1985)'},
-    {q:'How many hours free did AOL offer on their CDs?', a:'1,000 hours'},
-    {q:'What does "HTML" stand for?', a:'HyperText Markup Language'},
-    {q:'What company made the first commercial web browser?', a:'Netscape (1994)'},
-    {q:'What was the original name of Google?', a:'BackRub'},
-    {q:'What does "ISP" stand for?', a:'Internet Service Provider'},
-    {q:'What year did the first iPhone launch?', a:'2007'},
-    {q:'What does "URL" stand for?', a:'Uniform Resource Locator'},
-    {q:'What was the top internet speed of a 56k modem?', a:'53.3 Kbps (theoretical max)'},
-    {q:'What does "CPU" stand for?', a:'Central Processing Unit'},
-    {q:'Who invented the World Wide Web?', a:'Tim Berners-Lee (1989)'},
-    {q:'What year did Facebook launch to the public?', a:'2006'},
-  ];
-  const todayTrivia = trivia[new Date().getDate() % trivia.length];
-  const triviaEl = document.getElementById('pulse-trivia');
-  const triviaVal = triviaEl.querySelector('.tile-value');
-  triviaVal.innerHTML = '<span id="trivia-q">'+todayTrivia.q+'</span><br><span id="trivia-a" style="display:none;color:#006600;font-weight:bold;">'+todayTrivia.a+'</span><br><span style="font-size:10px;color:#0000cc;cursor:pointer;" onclick="document.getElementById(\'trivia-a\').style.display=\'inline\';this.style.display=\'none\';">▶ Reveal Answer</span>';
 
   // Tilt popup fires 45 seconds after portal loads — not during game
   setTimeout(() => {

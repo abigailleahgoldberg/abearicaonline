@@ -1,6 +1,5 @@
 // /api/rss?url=<encoded_feed_url>
-// Server-side RSS proxy — fetches RSS feed from Vercel servers, returns raw XML
-// No CORS issues since the request originates server-side
+// Server-side RSS proxy — fetches RSS feed from Vercel servers, bypasses browser CORS
 
 export default async function handler(req, res) {
   const { url } = req.query;
@@ -37,6 +36,23 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Domain not allowed' });
   }
 
+  // Allow requests from any abearicaonline subdomain + localhost for dev
+  const origin = req.headers.origin || '';
+  const allowedOrigins = [
+    'https://abearicaonline.com',
+    'https://www.abearicaonline.com',
+    'https://abearicaonline.vercel.app'
+  ];
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : 'https://abearicaonline.com';
+
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Vary', 'Origin');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const response = await fetch(url, {
       headers: {
@@ -52,9 +68,8 @@ export default async function handler(req, res) {
 
     const xml = await response.text();
 
-    res.setHeader('Content-Type', 'application/xml');
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600'); // cache 5 min
-    res.setHeader('Access-Control-Allow-Origin', 'https://abearicaonline.com');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     return res.status(200).send(xml);
 
   } catch (err) {

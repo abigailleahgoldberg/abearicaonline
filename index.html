@@ -3853,8 +3853,11 @@ function parseRSS(xmlText) {
 // Fetch RSS via our own Vercel API proxy (no CORS issues)
 async function fetchRSS(url) {
   const res = await fetch('/api/rss?url=' + encodeURIComponent(url));
+  if (!res.ok) throw new Error('RSS proxy returned ' + res.status);
   const xml = await res.text();
-  return parseRSS(xml);
+  const items = parseRSS(xml);
+  if (!items.length) throw new Error('No items parsed from feed');
+  return items;
 }
 
 async function loadNewsInformer() {
@@ -3868,32 +3871,30 @@ async function loadNewsInformer() {
     el.innerHTML = items.slice(0,5).map(niArticleHTML).join('');
   }
 
-  // Top Stories — Polygon
-  fetchRSS(NI_FEEDS.stories)
-    .then(items => renderItems('ni-stories', items))
-    .catch(() => { const el=document.getElementById('ni-stories'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Stories unavailable.</div>'; });
+  // All three columns pull from same Eurogamer feed, filtered by keyword
+  fetchRSS(NI_FEEDS.stories).then(allItems => {
 
-  // Esports — IGN Esports feed
-  fetchRSS(NI_FEEDS.esports)
-    .then(items => {
-      const filtered = items.filter(i => {
-        const t = (i.title+i.categories).toLowerCase();
-        return NI_ESPORTS_KEYWORDS.some(k=>t.includes(k));
-      });
-      renderItems('ni-esports', filtered.length ? filtered : items);
-    })
-    .catch(() => { const el=document.getElementById('ni-esports'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Esports unavailable.</div>'; });
+    // Top Stories — general gaming news (everything not esports/review filtered)
+    const esportsItems = allItems.filter(i => {
+      const t = (i.title+i.categories).toLowerCase();
+      return NI_ESPORTS_KEYWORDS.some(k=>t.includes(k));
+    });
+    const reviewItems = allItems.filter(i => {
+      const t = (i.title+i.categories).toLowerCase();
+      return NI_REVIEW_KEYWORDS.some(k=>t.includes(k));
+    });
+    // Top Stories = items not in either filtered set, fallback to all
+    const topItems = allItems.filter(i => !esportsItems.includes(i) && !reviewItems.includes(i));
+    renderItems('ni-stories', topItems.length ? topItems : allItems);
+    renderItems('ni-esports', esportsItems.length ? esportsItems : allItems.slice(5,10));
+    renderItems('ni-reviews', reviewItems.length ? reviewItems : allItems.slice(10,15));
 
-  // Reviews & Releases — Eurogamer
-  fetchRSS(NI_FEEDS.reviews)
-    .then(items => {
-      const filtered = items.filter(i => {
-        const t = (i.title+i.categories).toLowerCase();
-        return NI_REVIEW_KEYWORDS.some(k=>t.includes(k));
-      });
-      renderItems('ni-reviews', filtered.length ? filtered : items);
-    })
-    .catch(() => { const el=document.getElementById('ni-reviews'); if(el) el.innerHTML='<div style="color:#999;font-size:10px;font-style:italic;">Reviews unavailable.</div>'; });
+  }).catch(err => {
+    ['ni-stories','ni-esports','ni-reviews'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = '<div style="color:#999;font-size:10px;font-style:italic;">Loading failed — check back soon.</div>';
+    });
+  });
 }
 
 /* ── IN-PAGE SIGN-ON SKIP ── */

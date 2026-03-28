@@ -2038,33 +2038,25 @@ async function sendWriteMail() {
   status.textContent = '';
 
   try {
-    // Send via Formspree — delivers directly to hello@abearicaonline.com
-    const res = await fetch('https://formspree.io/f/abearicaonline', {
+    const res = await fetch('/api/contact', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: from, subject: subject, message: message })
     });
     const data = await res.json();
-    if (res.ok) {
+    if (res.ok && data.ok) {
       status.style.color = '#006600';
       status.textContent = '✉️ Mail Sent!';
       btn.textContent = 'Sent ✓';
       setTimeout(closeWriteMail, 2000);
     } else {
-      // Formspree not set up yet — fall back to mailto
-      window.location.href = `mailto:hello@abearicaonline.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: '+from+'\n\n'+message)}`;
-      status.style.color = '#006600';
-      status.textContent = '✉️ Opening your email client...';
-      btn.textContent = 'Sent ✓';
-      setTimeout(closeWriteMail, 2000);
+      throw new Error('Send failed');
     }
   } catch (e) {
-    // Network error — fall back to mailto so message never gets lost
-    window.location.href = `mailto:hello@abearicaonline.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: '+from+'\n\n'+message)}`;
-    status.style.color = '#006600';
-    status.textContent = '✉️ Opening your email client...';
-    btn.textContent = 'Sent ✓';
-    setTimeout(closeWriteMail, 2000);
+    btn.disabled = false;
+    btn.textContent = 'Send';
+    status.style.color = '#cc0000';
+    status.textContent = 'Send failed. Please try again.';
   }
 }
 document.addEventListener('keydown', function(e) {

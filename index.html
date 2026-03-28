@@ -662,6 +662,11 @@ body {
   .aol-keyword-bar { display: none; }
 }
 
+/* Tablet — 2 columns for pulse grid */
+@media (max-width: 900px) {
+  .pulse-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* Mac / large desktop — center and cap width nicely */
 @media (min-width: 1200px) {
   .aol-window { max-width: 1100px; }
@@ -911,7 +916,7 @@ body {
 ====================================== */
 .pulse-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 4px;
   padding: 6px;
 }
@@ -938,6 +943,25 @@ body {
   color: #000;
   line-height: 1.4;
 }
+.trivia-option {
+  display: block;
+  background: #c8c8c8;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  padding: 3px 8px;
+  font-size: 10px;
+  margin: 2px 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+.trivia-option:hover { background: #d8d8e8; }
+.trivia-option.correct { background: #ccffcc; border-color: #006600; color: #006600; font-weight: bold; }
+.trivia-option.wrong { background: #ffcccc; border-color: #cc0000; color: #cc0000; }
+.trivia-score { font-size: 10px; color: #000080; font-weight: bold; margin-top: 4px; }
 
 /* ======================================
    GAME OVERLAY
@@ -1242,10 +1266,29 @@ body {
               <div class="tile-label">₿ Crypto</div>
               <div class="tile-value">Loading...</div>
             </div>
-            <div class="pulse-tile" id="pulse-trivia">
-              <div class="tile-label">🎲 Daily Trivia</div>
+            <div class="pulse-tile" id="pulse-sports">
+              <div class="tile-label">🏆 Sports</div>
               <div class="tile-value">Loading...</div>
             </div>
+            <div class="pulse-tile" id="pulse-horoscope">
+              <div class="tile-label">♈ Horoscope</div>
+              <div class="tile-value">Loading...</div>
+            </div>
+            <div class="pulse-tile" id="pulse-trivia" style="cursor:default;">
+              <div class="tile-label">🎲 Daily Trivia</div>
+              <div class="tile-value" id="trivia-content">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- On This Day in Tech panel -->
+        <div class="aol-panel" id="today-in-tech">
+          <div class="title-bar" style="font-size:10px;">
+            <span>📅 On This Day in Tech</span>
+            <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
+          </div>
+          <div class="panel-body" style="font-size:11px;">
+            <div id="on-this-day-content" style="line-height:1.7;color:#000;">Loading...</div>
           </div>
         </div>
 
@@ -1648,27 +1691,104 @@ function initPortal() {
       }
     }).catch(()=>{ document.getElementById('pulse-news').querySelector('.tile-value').textContent = 'News unavailable'; });
 
-  // Daily Pulse: Trivia
-  const trivia = [
-    {q:'What does "WWW" stand for?', a:'World Wide Web'},
-    {q:'In what year was AOL founded?', a:'1985'},
-    {q:'What was the first domain ever registered?', a:'Symbolics.com (1985)'},
-    {q:'How many hours free did AOL offer on their CDs?', a:'1,000 hours'},
-    {q:'What does "HTML" stand for?', a:'HyperText Markup Language'},
-    {q:'What company made the first commercial web browser?', a:'Netscape (1994)'},
-    {q:'What was the original name of Google?', a:'BackRub'},
-    {q:'What does "ISP" stand for?', a:'Internet Service Provider'},
-    {q:'What year did the first iPhone launch?', a:'2007'},
-    {q:'What does "URL" stand for?', a:'Uniform Resource Locator'},
-    {q:'What was the top internet speed of a 56k modem?', a:'53.3 Kbps (theoretical max)'},
-    {q:'What does "CPU" stand for?', a:'Central Processing Unit'},
-    {q:'Who invented the World Wide Web?', a:'Tim Berners-Lee (1989)'},
-    {q:'What year did Facebook launch to the public?', a:'2006'},
+  // ── UPGRADED TRIVIA GAME ──
+  const triviaBank = [
+    {q:'What does "WWW" stand for?', opts:['World Wide Web','Wide World Web','Wireless Web World','Web World Wide'], a:0},
+    {q:'What year was AOL founded?', opts:['1983','1985','1991','1988'], a:1},
+    {q:'What was the first domain ever registered?', opts:['google.com','mit.edu','symbolics.com','ibm.com'], a:2},
+    {q:'How many free hours did AOL CDs advertise?', opts:['500','750','1000','2000'], a:2},
+    {q:'What does "HTML" stand for?', opts:['HyperText Markup Language','High Transfer Markup Link','HyperText Main Logic','Hyperlink Text Markup Language'], a:0},
+    {q:'Who made the first commercial web browser?', opts:['Microsoft','Apple','Netscape','IBM'], a:2},
+    {q:'What was Google originally called?', opts:['PageSearch','BackRub','WebCrawler','SearchRank'], a:1},
+    {q:'What does "ISP" stand for?', opts:['Internet Speed Provider','Internal System Protocol','Internet Service Provider','Integrated Signal Processor'], a:2},
+    {q:'What year did the first iPhone launch?', opts:['2005','2006','2007','2008'], a:2},
+    {q:'What does "URL" stand for?', opts:['Universal Resource Link','Uniform Resource Locator','Unified Remote Line','User Reference Library'], a:1},
+    {q:'What was the max speed of a 56k modem?', opts:['33.6 Kbps','53.3 Kbps','64 Kbps','128 Kbps'], a:1},
+    {q:'Who invented the World Wide Web?', opts:['Bill Gates','Steve Jobs','Tim Berners-Lee','Vint Cerf'], a:2},
+    {q:'What year did Facebook open to the public?', opts:['2004','2005','2006','2007'], a:2},
+    {q:'What company made Windows 95?', opts:['IBM','Apple','Microsoft','Intel'], a:2},
   ];
-  const todayTrivia = trivia[new Date().getDate() % trivia.length];
-  const triviaEl = document.getElementById('pulse-trivia');
-  const triviaVal = triviaEl.querySelector('.tile-value');
-  triviaVal.innerHTML = '<span id="trivia-q">'+todayTrivia.q+'</span><br><span id="trivia-a" style="display:none;color:#006600;font-weight:bold;">'+todayTrivia.a+'</span><br><span style="font-size:10px;color:#0000cc;cursor:pointer;" onclick="document.getElementById(\'trivia-a\').style.display=\'inline\';this.style.display=\'none\';">▶ Reveal Answer</span>';
+  const todayQ = triviaBank[new Date().getDate() % triviaBank.length];
+  let triviaAnswered = false;
+  const triviaContent = document.getElementById('trivia-content');
+  function renderTrivia() {
+    let html = '<div style="font-size:11px;font-weight:bold;margin-bottom:5px;color:#000080;">'+todayQ.q+'</div>';
+    todayQ.opts.forEach((opt, i) => {
+      html += '<button class="trivia-option" id="topt-'+i+'" onclick="checkTrivia('+i+')">'+(String.fromCharCode(65+i))+'. '+opt+'</button>';
+    });
+    triviaContent.innerHTML = html;
+  }
+  window.checkTrivia = function(idx) {
+    if(triviaAnswered) return;
+    triviaAnswered = true;
+    const correct = todayQ.a;
+    document.getElementById('topt-'+correct).classList.add('correct');
+    if(idx !== correct) document.getElementById('topt-'+idx).classList.add('wrong');
+    triviaContent.insertAdjacentHTML('beforeend', '<div class="trivia-score">'+(idx===correct?'✅ Correct!':'❌ Wrong — correct answer: '+String.fromCharCode(65+correct))+'</div>');
+  };
+  renderTrivia();
+
+  // ── SPORTS ──
+  // Use TheSportsDB free API for recent NFL/NBA events
+  const today = new Date();
+  const month = String(today.getMonth()+1).padStart(2,'0');
+  const day2 = String(today.getDate()).padStart(2,'0');
+  const dateStr = today.getFullYear()+'-'+month+'-'+day2;
+  fetch('https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d='+dateStr+'&s=Basketball')
+    .then(r=>r.json()).then(d=>{
+      const events = (d.events||[]).slice(0,3);
+      const sEl = document.getElementById('pulse-sports').querySelector('.tile-value');
+      if(events.length) {
+        sEl.innerHTML = events.map(e=>{
+          const score = (e.intHomeScore!=null && e.intAwayScore!=null) ? ' <b>'+e.intHomeScore+'-'+e.intAwayScore+'</b>' : '';
+          return '<div style="margin-bottom:3px;font-size:10px;">'+e.strHomeTeam+' vs '+e.strAwayTeam+score+'</div>';
+        }).join('');
+      } else {
+        // Try football if no basketball
+        fetch('https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d='+dateStr+'&s=American+Football')
+          .then(r=>r.json()).then(d2=>{
+            const ev2 = (d2.events||[]).slice(0,3);
+            if(ev2.length) {
+              sEl.innerHTML = ev2.map(e=>{
+                const score = (e.intHomeScore!=null && e.intAwayScore!=null) ? ' <b>'+e.intHomeScore+'-'+e.intAwayScore+'</b>' : '';
+                return '<div style="margin-bottom:3px;font-size:10px;">'+e.strHomeTeam+' vs '+e.strAwayTeam+score+'</div>';
+              }).join('');
+            } else {
+              sEl.textContent = 'No games today — check back tonight';
+            }
+          }).catch(()=>{ sEl.textContent = 'No games scheduled today'; });
+      }
+    }).catch(()=>{ document.getElementById('pulse-sports').querySelector('.tile-value').textContent = 'Scores unavailable'; });
+
+  // ── HOROSCOPE ──
+  const signs = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
+  const signEmojis = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  const todaySign = signs[today.getDate() % 12];
+  const todaySignEmoji = signEmojis[today.getDate() % 12];
+  fetch('https://aztro.sameerkumar.website/?sign='+todaySign+'&day=today', {method:'POST'})
+    .then(r=>r.json()).then(d=>{
+      const hEl = document.getElementById('pulse-horoscope').querySelector('.tile-value');
+      document.getElementById('pulse-horoscope').querySelector('.tile-label').textContent = todaySignEmoji+' '+todaySign.charAt(0).toUpperCase()+todaySign.slice(1);
+      hEl.innerHTML = '<div style="font-size:10px;line-height:1.5;">'+d.description+'</div>'+'<div style="font-size:9px;color:#555;margin-top:3px;">Lucky #: '+d.lucky_number+' · Color: '+d.color+'</div>';
+    }).catch(()=>{ document.getElementById('pulse-horoscope').querySelector('.tile-value').textContent = 'Horoscope unavailable'; });
+
+  // ── ON THIS DAY IN TECH ──
+  fetch('https://history.muffinlabs.com/date')
+    .then(r=>r.json()).then(d=>{
+      const events = d.data && d.data.Events ? d.data.Events : [];
+      // Filter for tech-relevant keywords
+      const techKeywords = ['computer','internet','software','Apple','Microsoft','Google','IBM','NASA','space','moon','robot','telephone','radio','television','electric','nuclear','patent','invention','discovered','launched','first'];
+      const techEvents = events.filter(e => techKeywords.some(kw => e.text.toLowerCase().includes(kw.toLowerCase()))).slice(0,4);
+      const showEvents = techEvents.length ? techEvents : events.slice(0,4);
+      const otdEl = document.getElementById('on-this-day-content');
+      if(showEvents.length) {
+        otdEl.innerHTML = showEvents.map(e=>
+          '<div style="margin-bottom:8px;"><span style="color:#000080;font-weight:bold;">'+e.year+'</span> — '+e.text+(e.links&&e.links[0]?' <a href="'+e.links[0].link+'" target="_blank" style="color:#0000cc;font-size:10px;">[more]</a>':'')+'</div>'
+        ).join('');
+      } else {
+        otdEl.textContent = 'No events found for today.';
+      }
+    }).catch(()=>{ document.getElementById('on-this-day-content').textContent = 'History data unavailable'; });
 
   // Tilt popup fires 45 seconds after portal loads — not during game
   setTimeout(() => {

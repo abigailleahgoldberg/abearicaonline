@@ -1916,7 +1916,7 @@ body { background: #008080; }
               <div><span class="title-bar-btn">_</span><span class="title-bar-btn">□</span><span class="title-bar-btn">✕</span></div>
             </div>
             <div class="panel-body" style="padding:10px;">
-              <div id="arcade-scoreboard-body" style="min-height:60px;">Loading scores...</div>
+              <div id="arcade-scoreboard-body-main" style="min-height:60px;">Loading scores...</div>
             </div>
           </div>
 
@@ -2415,30 +2415,68 @@ const GAME_META = [
 const MEDALS = ['🥇','🥈','🥉'];
 
 async function renderArcadeScoreboard() {
-  const el = document.getElementById('arcade-scoreboard-body');
-  if(!el) return;
+  const sidebar = document.getElementById('arcade-scoreboard-body');
+  const main    = document.getElementById('arcade-scoreboard-body-main');
+  if(!sidebar && !main) return;
   try {
     const res = await fetch(`${SB_URL}/rest/v1/arcade_scores?select=game,initials,score&order=score.desc&limit=200`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
     });
     const all = await res.json();
-    // Group by game, top 3 each
+    // Group by game, top 3 each (minesweeper: lowest time wins)
     const byGame = {};
     (all || []).forEach(r => {
       if(!byGame[r.game]) byGame[r.game] = [];
-      if(byGame[r.game].length < 3) byGame[r.game].push(r);
+      byGame[r.game].push(r);
     });
-    el.innerHTML = GAME_META.map(g => {
-      const scores = byGame[g.key] || [];
+    if(byGame['minesweeper']) byGame['minesweeper'].sort((a,b)=>a.score-b.score);
+
+    // Sidebar: compact version
+    const sidebarHTML = GAME_META.map(g => {
+      const scores = (byGame[g.key] || []).slice(0,3);
       const rows = [0,1,2].map(i => {
         const s = scores[i];
         if(s) return `<div class="sb-score-row"><span class="sb-medal">${MEDALS[i]}</span><span class="sb-initials">${s.initials.toUpperCase()}</span><span class="sb-score">${s.score.toLocaleString()}</span></div>`;
-        return `<div class="sb-score-row"><span class="sb-medal sb-empty">···</span><span class="sb-initials sb-empty">---</span><span class="sb-score sb-empty">---</span></div>`;
+        return `<div class="sb-score-row"><span class="sb-medal sb-empty">·</span><span class="sb-initials sb-empty">---</span><span class="sb-score sb-empty">---</span></div>`;
       }).join('');
       return `<div class="sb-game-row"><div class="sb-game-name">${g.icon} ${g.name}</div>${rows}</div>`;
     }).join('');
+    if(sidebar) sidebar.innerHTML = sidebarHTML;
+
+    // Main (gaming section): full-width table style
+    if(main) {
+      const medals2 = ['🥇','🥈','🥉'];
+      main.innerHTML = `<table style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:11px;">
+        <thead>
+          <tr style="background:#000066;color:#FFD700;">
+            <th style="padding:5px 8px;text-align:left;font-weight:bold;letter-spacing:1px;">GAME</th>
+            <th style="padding:5px 8px;text-align:center;">🥇 1ST</th>
+            <th style="padding:5px 8px;text-align:center;">🥈 2ND</th>
+            <th style="padding:5px 8px;text-align:center;">🥉 3RD</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${GAME_META.map((g,gi) => {
+            const scores = (byGame[g.key] || []).slice(0,3);
+            const cell = (i) => {
+              const s = scores[i];
+              if(s) return `<div style="font-weight:bold;color:#000080;">${s.initials.toUpperCase()}</div><div style="color:#333;font-size:10px;">${s.score.toLocaleString()}</div>`;
+              return `<div style="color:#ccc;">---</div>`;
+            };
+            return `<tr style="background:${gi%2===0?'#fafaf5':'#f0ece0'};border-bottom:1px solid #ddd;">
+              <td style="padding:6px 8px;font-weight:bold;color:#000080;">${g.icon} ${g.name}</td>
+              <td style="padding:6px 8px;text-align:center;">${cell(0)}</td>
+              <td style="padding:6px 8px;text-align:center;">${cell(1)}</td>
+              <td style="padding:6px 8px;text-align:center;">${cell(2)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+    }
   } catch(e) {
-    el.innerHTML = '<div style="padding:6px;font-family:Courier New;font-size:9px;color:#443300;text-align:center;">SCORES UNAVAILABLE</div>';
+    const msg = '<div style="padding:6px;font-family:Courier New;font-size:9px;color:#443300;text-align:center;">SCORES UNAVAILABLE</div>';
+    if(sidebar) sidebar.innerHTML = msg;
+    if(main) main.innerHTML = msg;
   }
 }
 

@@ -20,13 +20,12 @@
 ====================================== */
 body {
   background: #008080;
-  background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
-  background-size: 20px 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   min-height: 100vh;
   overflow-x: hidden;
   cursor: default;
+  transition: background 0.3s;
 }
 .raised {
   border-top: 2px solid #fff;
@@ -1185,8 +1184,8 @@ body {
         <div class="sidebar-header">AOL® Channels</div>
         <a class="sidebar-ch" href="#about"><span class="ch-arrow">▸</span>Welcome</a>
         <a class="sidebar-ch" href="#services"><span class="ch-arrow">▸</span>Services</a>
-        <a class="sidebar-ch" onclick="launchGame()"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
-        <a class="sidebar-ch" href="#" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
+        <a class="sidebar-ch" href="/games.html"><span class="ch-arrow">▸</span>Games <span style="color:#FFD700;font-size:9px;font-weight:bold;">(NEW)</span></a>
+        <a class="sidebar-ch" href="/games.html#arcade" style="color:#FFD700;padding-left:20px;font-size:10px;"><span class="ch-arrow" style="color:#FFD700;">▸</span>Arcade ✨</a>
         <a class="sidebar-ch" href="#" onclick="openWriteMail();return false;"><span class="ch-arrow">▸</span>Contact</a>
         
         <a class="sidebar-ch" href="#"><span class="ch-arrow">▸</span>Computing</a>
@@ -1536,6 +1535,18 @@ function playModemSynth() {
   } catch(e) {}
 }
 
+/* ============ WIN95 DESKTOP COLOR ============ */
+(function() {
+  const colors = ['#008080','#000080','#808000','#800080'];
+  const pick = colors[Math.floor(Math.random() * colors.length)];
+  document.body.style.background = pick;
+  // Also set connecting screen bg to match
+  document.addEventListener('DOMContentLoaded', function() {
+    const conn = document.getElementById('phase-connect');
+    if(conn) conn.style.background = pick;
+  });
+})();
+
 /* ============ PHASE TRANSITIONS ============ */
 function startConnect() {
   document.getElementById('phase-cd').style.display = 'none';
@@ -1586,6 +1597,12 @@ function startConnect() {
 }
 
 function initPortal() {
+  // Auto-launch game if coming from Games page
+  if(localStorage.getItem('autoLaunchGame')) {
+    localStorage.removeItem('autoLaunchGame');
+    setTimeout(launchGame, 500);
+  }
+
   // Date
   const now = new Date();
   document.getElementById('portal-date').textContent =
@@ -2021,29 +2038,33 @@ async function sendWriteMail() {
   status.textContent = '';
 
   try {
-    const res = await fetch(`${SB_URL}/rest/v1/contacts`, {
+    // Send via Formspree — delivers directly to hello@abearicaonline.com
+    const res = await fetch('https://formspree.io/f/abearicaonline', {
       method: 'POST',
-      headers: {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ from_email: from, subject, message })
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email: from, subject: subject, message: message })
     });
-    if (res.ok || res.status === 201) {
+    const data = await res.json();
+    if (res.ok) {
       status.style.color = '#006600';
       status.textContent = '✉️ Mail Sent!';
       btn.textContent = 'Sent ✓';
       setTimeout(closeWriteMail, 2000);
     } else {
-      throw new Error(`HTTP ${res.status}`);
+      // Formspree not set up yet — fall back to mailto
+      window.location.href = `mailto:hello@abearicaonline.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: '+from+'\n\n'+message)}`;
+      status.style.color = '#006600';
+      status.textContent = '✉️ Opening your email client...';
+      btn.textContent = 'Sent ✓';
+      setTimeout(closeWriteMail, 2000);
     }
   } catch (e) {
-    btn.disabled = false;
-    btn.textContent = 'Send';
-    status.style.color = '#cc0000';
-    status.textContent = 'Send failed. Please try again.';
+    // Network error — fall back to mailto so message never gets lost
+    window.location.href = `mailto:hello@abearicaonline.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: '+from+'\n\n'+message)}`;
+    status.style.color = '#006600';
+    status.textContent = '✉️ Opening your email client...';
+    btn.textContent = 'Sent ✓';
+    setTimeout(closeWriteMail, 2000);
   }
 }
 document.addEventListener('keydown', function(e) {

@@ -2133,6 +2133,17 @@ window.showScoreEntry = function(gameName, finalScore, onDismiss) {
 /* --- Sidebar Breakout leaderboard (top 5 from arcade_scores) --- */
 // fetchLeaderboard removed — replaced by renderArcadeScoreboard()
 
+// Sanitize external text before inserting into DOM — global scope
+function sanitizeText(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 /* ── ARCADE SCOREBOARD (sidebar, always visible) ── */
 const GAME_META = [
   { key: 'breakout',       icon: '🏓', name: 'BLOCK RAID'  },
@@ -2352,17 +2363,6 @@ function initPortal() {
     renderArcadeScoreboard();
     loadNewsInformer();
   };
-
-  // Sanitize external text before inserting into DOM
-  function sanitizeText(str) {
-    if (typeof str !== 'string') return '';
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;');
-  }
 
   function runDailyPulse() {
   // Daily Pulse: Weather — auto-detect by IP, user can override

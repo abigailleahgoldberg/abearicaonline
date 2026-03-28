@@ -1485,6 +1485,33 @@ body { background: #008080; }
 .ms-c3 { color: #ff0000; } .ms-c4 { color: #000080; }
 .ms-c5 { color: #800000; } .ms-c6 { color: #008080; }
 
+/* ── ARCADE SCOREBOARD ── */
+.sb-game-row {
+  padding: 4px 8px 3px;
+  border-bottom: 1px solid #1a1500;
+}
+.sb-game-row:last-child { border-bottom: none; }
+.sb-game-name {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: bold;
+  color: #FFD700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.sb-score-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.sb-medal { font-size: 8px; width: 12px; }
+.sb-initials { color: #ffaa00; font-weight: bold; letter-spacing: 1px; min-width: 22px; }
+.sb-score { color: #ffe066; }
+.sb-empty { color: #332200; }
 /* END AOL 2026 */
 </style>
 </head>
@@ -1816,10 +1843,7 @@ body { background: #008080; }
                   <div style="font-size:15px;font-weight:bold;color:#000080;font-family:'Lora',serif;">Free Classic Games. No Download. No Login.</div>
                   <div style="font-size:11px;color:#555;margin-top:2px;">7 games live now. More dropping every week. Compete for the leaderboard.</div>
                 </div>
-                <div style="background:#000080;color:#FFD700;font-family:'Courier New',monospace;font-size:10px;padding:6px 12px;border-radius:3px;text-align:center;">
-                  🏆 Breakout High Score<br>
-                  <span id="gaming-top-score" style="font-size:14px;font-weight:bold;">Loading...</span>
-                </div>
+
               </div>
             </div>
           </div>
@@ -2092,14 +2116,17 @@ body { background: #008080; }
           <div class="buddy-foot-btn">Chat</div>
         </div>
 
-        <!-- Leaderboard box -->
-        <div class="news-box" style="margin-top:6px;">
-          <div class="news-box-title">🏆 Breakout Top 5</div>
-          <div id="leaderboard-body" style="min-height:40px;">
-            <div style="padding:6px;font-size:10px;color:#555;text-align:center;">Loading...</div>
+        <!-- Arcade Scoreboard — always visible in sidebar -->
+        <div id="arcade-scoreboard-box" style="margin:6px 5px;background:#0a0a0a;border:2px solid #333;border-radius:4px;overflow:hidden;">
+          <div style="background:linear-gradient(to right,#1a0a00,#3a1a00);padding:5px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #3a2a00;">
+            <span style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;color:#FFD700;letter-spacing:2px;">🏆 ARCADE SCORES</span>
+            <span style="font-family:'Courier New',monospace;font-size:8px;color:#aa7700;letter-spacing:1px;">TOP 3</span>
           </div>
-          <div style="padding:3px 6px;border-top:1px solid #d0d0d0;">
-            <button class="win-btn" style="width:100%;font-size:9px;" onclick="launchGame()">Play Now</button>
+          <div id="arcade-scoreboard-body" style="padding:4px 0;">
+            <div style="padding:8px;font-family:'Courier New',monospace;font-size:9px;color:#554400;text-align:center;">LOADING...</div>
+          </div>
+          <div style="padding:4px 6px;border-top:1px solid #1a1a00;text-align:center;">
+            <button onclick="loadSection('games')" style="background:transparent;border:1px solid #3a2a00;color:#aa7700;font-family:'Courier New',monospace;font-size:8px;padding:2px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;" onmouseover="this.style.borderColor='#FFD700';this.style.color='#FFD700'" onmouseout="this.style.borderColor='#3a2a00';this.style.color='#aa7700'">PLAY NOW →</button>
           </div>
         </div>
 
@@ -2375,6 +2402,46 @@ async function fetchLeaderboard() {
   }
 }
 
+/* ── ARCADE SCOREBOARD (sidebar, always visible) ── */
+const GAME_META = [
+  { key: 'breakout',       icon: '🏓', name: 'BREAKOUT'   },
+  { key: 'minesweeper',    icon: '💣', name: 'MINESWPR'   },
+  { key: 'tetris',         icon: '🧱', name: 'TETRIS'     },
+  { key: 'word-muncher',   icon: '📖', name: 'WORD MUNCH' },
+  { key: 'number-muncher', icon: '🔢', name: 'NUM MUNCH'  },
+  { key: 'asteroids',      icon: '🚀', name: 'ASTEROIDS'  },
+  { key: 'pong',           icon: '🏸', name: 'PONG'       },
+];
+const MEDALS = ['🥇','🥈','🥉'];
+
+async function renderArcadeScoreboard() {
+  const el = document.getElementById('arcade-scoreboard-body');
+  if(!el) return;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/arcade_scores?select=game,initials,score&order=score.desc&limit=200`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const all = await res.json();
+    // Group by game, top 3 each
+    const byGame = {};
+    (all || []).forEach(r => {
+      if(!byGame[r.game]) byGame[r.game] = [];
+      if(byGame[r.game].length < 3) byGame[r.game].push(r);
+    });
+    el.innerHTML = GAME_META.map(g => {
+      const scores = byGame[g.key] || [];
+      const rows = [0,1,2].map(i => {
+        const s = scores[i];
+        if(s) return `<div class="sb-score-row"><span class="sb-medal">${MEDALS[i]}</span><span class="sb-initials">${s.initials.toUpperCase()}</span><span class="sb-score">${s.score.toLocaleString()}</span></div>`;
+        return `<div class="sb-score-row"><span class="sb-medal sb-empty">···</span><span class="sb-initials sb-empty">---</span><span class="sb-score sb-empty">---</span></div>`;
+      }).join('');
+      return `<div class="sb-game-row"><div class="sb-game-name">${g.icon} ${g.name}</div>${rows}</div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="padding:6px;font-family:Courier New;font-size:9px;color:#443300;text-align:center;">SCORES UNAVAILABLE</div>';
+  }
+}
+
 function renderLeaderboard(scores) {
   const el = document.getElementById('leaderboard-body');
   if(!el) return;
@@ -2568,8 +2635,9 @@ function initPortal() {
   const wtEl = document.getElementById('weather-temp');
   if(wtEl) wtEl.textContent = 'Checking...';
 
-  // Load leaderboard
-  fetchLeaderboard();
+  // Load leaderboard (legacy Breakout sidebar - now replaced by arcade scoreboard)
+  // fetchLeaderboard(); // disabled - replaced by renderArcadeScoreboard()
+  renderArcadeScoreboard();
 
   // ── REFRESH FUNCTION — F5 within portal, no reconnect needed ──
   window.refreshPulse = function() {
@@ -3951,6 +4019,9 @@ window.loadSection = function(name) {
   // Scroll center to top
   const center = document.querySelector('.aol-center');
   if(center) center.scrollTop = 0;
+  // Always refresh sidebar arcade scoreboard
+  renderArcadeScoreboard();
+
   // Gaming section — populate leaderboard + top score + arcade scoreboard
   if(name === 'games') {
     fetch(`${SB_URL}/rest/v1/arcade_scores?select=initials,score&game=eq.breakout&order=score.desc&limit=5`, {

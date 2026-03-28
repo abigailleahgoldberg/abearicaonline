@@ -1105,6 +1105,407 @@ body {
   z-index: 9999;
   animation: glitch 0.5s ease-out forwards;
 }
+
+/* ======================================
+   AOL 2026 — VISUAL REDESIGN LAYER
+   "America Online meets 2026"
+   Dark glass · Neon blue + gold · Modern depth
+   Structure stays. Skin is new.
+====================================== */
+:root {
+  --deep:        #05091a;
+  --win-bg:      #080d20;
+  --toolbar-bg:  #0a1230;
+  --sidebar-bg:  #070b1a;
+  --panel-bg:    rgba(255,255,255,0.04);
+  --aol-blue:    #1a6ef0;
+  --aol-blue-lt: #4d94ff;
+  --aol-glow:    rgba(26,110,240,0.35);
+  --aol-gold:    #ffd700;
+  --aol-gold-glow: rgba(255,215,0,0.3);
+  --aol-red:     #ff3344;
+  --aol-teal:    #00c8ff;
+  --glass:       rgba(100,150,255,0.10);
+  --glass-hover: rgba(100,150,255,0.30);
+  --txt:         #e8f0ff;
+  --txt-2:       #8099cc;
+  --txt-3:       #4a5a88;
+}
+
+/* ── BODY & BACKGROUND ── */
+body {
+  background: radial-gradient(ellipse at 50% 0%, #0d1533 0%, var(--deep) 65%) fixed;
+}
+
+/* ── OUTER WINDOW ── */
+#phase-portal .aol-window {
+  background: var(--win-bg);
+  border: 1px solid var(--glass);
+  border-top: none;
+  box-shadow: 0 0 80px rgba(10,20,60,0.8), 0 0 0 1px rgba(100,150,255,0.04);
+}
+
+/* ── TITLE BARS ── */
+.title-bar {
+  background: linear-gradient(135deg, #0b1a55 0%, #1640a8 50%, #0d2870 100%);
+  box-shadow: 0 2px 14px var(--aol-glow), inset 0 1px 0 rgba(255,255,255,0.10);
+  border-bottom: 1px solid rgba(26,110,240,0.4);
+}
+.title-bar-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 3px;
+  color: rgba(255,255,255,0.85);
+  transition: background 0.15s;
+}
+.title-bar-btn:hover { background: rgba(220,50,50,0.65); border-color: rgba(255,80,80,0.4); }
+
+/* ── MENU BAR ── */
+.aol-menubar {
+  background: rgba(6,10,28,0.97);
+  border-bottom: 1px solid var(--glass);
+}
+.aol-menu-item { color: var(--txt-2); transition: background 0.12s, color 0.12s; }
+.aol-menu-item:hover { background: rgba(26,110,240,0.18); color: var(--txt); }
+
+/* ── TOOLBAR ── */
+.aol-toolbar {
+  background: linear-gradient(180deg, #0b1430 0%, var(--toolbar-bg) 100%);
+  border-bottom: 1px solid var(--glass);
+  padding: 4px 6px;
+}
+.aol-logo-mark { border-right-color: var(--glass); }
+.aol-logo-triangle { border-bottom-color: var(--aol-blue); }
+.aol-logo-label { color: var(--aol-gold); font-size: 7px; }
+.toolbar-icon-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass);
+  border-radius: 6px;
+  padding: 3px 8px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.toolbar-icon-btn:hover {
+  background: rgba(26,110,240,0.14);
+  border-color: var(--glass-hover);
+  box-shadow: 0 0 14px var(--aol-glow);
+}
+.toolbar-icon-btn:active {
+  background: rgba(26,110,240,0.25);
+  border-top: 1px solid rgba(26,110,240,0.5);
+  border-left: 1px solid rgba(26,110,240,0.5);
+  border-right: 1px solid rgba(26,110,240,0.5);
+  border-bottom: 1px solid rgba(26,110,240,0.5);
+}
+.toolbar-icon-btn .lbl { color: var(--txt-2); }
+.toolbar-icon-btn:hover .lbl { color: var(--txt); }
+
+/* ── KEYWORD BAR ── */
+.aol-keyword-bar {
+  background: rgba(5,9,26,0.95);
+  border-bottom: 1px solid var(--glass);
+}
+.aol-keyword-bar span { color: var(--txt-3); }
+.keyword-field {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass);
+  border-radius: 4px;
+  color: var(--txt);
+  font-family: 'Inter', sans-serif;
+}
+.keyword-field:focus { border-color: var(--aol-blue); box-shadow: 0 0 8px var(--aol-glow); outline: none; }
+.aol-keyword-bar .win-btn {
+  background: rgba(26,110,240,0.12);
+  border: 1px solid var(--glass);
+  border-radius: 4px;
+  color: var(--txt);
+}
+.aol-keyword-bar .win-btn:hover { background: rgba(26,110,240,0.28); border-color: var(--aol-blue); }
+
+/* ── WELCOME BAR ── */
+.aol-welcome-bar {
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 6px;
+  box-shadow: 0 0 24px rgba(255,215,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.welcome-triangle { border-bottom-color: var(--aol-blue); }
+.welcome-america { color: #001a60; }
+.welcome-online  { color: #001a60; }
+
+/* ── MAIN BODY BG ── */
+.aol-body { background: var(--deep); }
+
+/* ── LEFT SIDEBAR ── */
+.aol-sidebar-left {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--glass);
+}
+.sidebar-header {
+  background: linear-gradient(135deg, #0b1a55, #1640a8);
+  color: var(--aol-gold);
+  border-bottom: 1px solid var(--glass);
+  font-size: 10px;
+  letter-spacing: 2px;
+  box-shadow: 0 2px 10px var(--aol-glow);
+}
+.sidebar-ch {
+  color: var(--txt-2);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(100,150,255,0.04);
+  transition: background 0.15s, color 0.12s, padding-left 0.12s;
+}
+.sidebar-ch:hover { background: rgba(26,110,240,0.10); color: var(--aol-gold); padding-left: 15px; }
+.sidebar-ch .ch-arrow { color: var(--aol-blue-lt); }
+.sidebar-ch.active-ch {
+  background: rgba(26,110,240,0.16);
+  color: var(--aol-gold);
+  border-left: 3px solid var(--aol-gold);
+  box-shadow: inset 0 0 16px rgba(255,215,0,0.07);
+}
+
+/* Sidebar credentials block */
+.aol-sidebar-left > div[style] { color: var(--txt-3) !important; }
+
+/* ── CENTER ── */
+.aol-center {
+  background: var(--deep);
+  padding: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100,150,255,0.2) transparent;
+}
+.aol-center::-webkit-scrollbar { width: 5px; }
+.aol-center::-webkit-scrollbar-track { background: transparent; }
+.aol-center::-webkit-scrollbar-thumb { background: rgba(100,150,255,0.2); border-radius: 3px; }
+.aol-center::-webkit-scrollbar-thumb:hover { background: rgba(100,150,255,0.4); }
+
+/* ── CONTENT PANELS ── */
+.aol-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--glass);
+  border-radius: 10px;
+  box-shadow: 0 4px 28px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.aol-panel > .title-bar {
+  background: linear-gradient(135deg, #0b1a55, #1535a0);
+  font-size: 11px;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(26,110,240,0.2);
+  box-shadow: none;
+}
+.panel-body {
+  background: transparent;
+  color: var(--txt-2);
+}
+.panel-body p { color: var(--txt-2); }
+.panel-body p strong { color: var(--txt); }
+.panel-body h2, .panel-body h3 { color: var(--aol-gold); }
+.panel-body a { color: var(--aol-teal); text-decoration: none; }
+.panel-body a:hover { color: var(--aol-gold); }
+
+/* Terminal block */
+.panel-body div[style*="Courier New"] {
+  background: rgba(0,0,0,0.45) !important;
+  border-color: var(--glass) !important;
+  color: #00ff88 !important;
+}
+
+/* ── DAILY PULSE TILES ── */
+.pulse-grid { gap: 6px; padding: 8px; }
+.pulse-tile {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass);
+  border-radius: 7px;
+  color: var(--txt);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pulse-tile:hover { border-color: var(--glass-hover); box-shadow: 0 0 14px var(--aol-glow); }
+.pulse-tile .tile-label { color: var(--aol-gold); font-weight: 600; }
+.pulse-tile .tile-value { color: var(--txt); }
+.pulse-tile a { color: var(--aol-teal) !important; }
+
+/* ── YOU'VE GOT BUTTONS ── */
+.got-btn {
+  background: linear-gradient(135deg, #780000, #bb1010, #980000);
+  border: 1px solid rgba(255,80,80,0.25);
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(180,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+.got-btn:hover {
+  background: linear-gradient(135deg, #991010, #dd2020, #bb0000);
+  box-shadow: 0 0 28px rgba(255,60,60,0.5), 0 4px 20px rgba(200,0,0,0.4);
+  transform: translateY(-2px);
+  animation: none;
+}
+.got-btn .got-count { color: rgba(255,180,180,0.75); }
+
+/* ── SERVICE TILES ── */
+.service-tile {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass);
+  border-radius: 8px;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.15s;
+}
+.service-tile:hover {
+  background: rgba(26,110,240,0.08);
+  border-color: var(--glass-hover);
+  box-shadow: 0 0 18px var(--aol-glow);
+  transform: translateY(-2px);
+}
+.svc-name { color: var(--txt); font-family: 'Inter', sans-serif; font-weight: 600; }
+.svc-desc { color: var(--txt-2); }
+.svc-price {
+  background: rgba(0,200,255,0.1);
+  color: var(--aol-teal);
+  border: 1px solid rgba(0,200,255,0.2);
+  border-radius: 3px;
+}
+
+/* ── CTA BUTTON ── */
+.big-cta {
+  background: linear-gradient(135deg, #1535a0, #1a6ef0, #0d3acc);
+  border: 1px solid rgba(100,150,255,0.3);
+  border-radius: 50px;
+  box-shadow: 0 0 26px var(--aol-glow), 0 4px 20px rgba(26,110,240,0.25);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  animation: none;
+}
+.big-cta:hover {
+  box-shadow: 0 0 44px rgba(26,110,240,0.7), 0 4px 24px rgba(26,110,240,0.4);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1a45b8, #2278ff, #1248e0);
+}
+
+/* ── RIGHT SIDEBAR ── */
+.aol-sidebar-right {
+  background: var(--sidebar-bg);
+  border: none;
+  border-left: 1px solid var(--glass);
+  margin: 0;
+  border-radius: 0;
+}
+.buddy-title-bar {
+  background: linear-gradient(135deg, #0b1a55, #1535a0);
+  color: var(--txt);
+  font-family: 'Inter', sans-serif;
+  border-bottom: 1px solid var(--glass);
+  box-shadow: 0 2px 10px var(--aol-glow);
+}
+.buddy-section {
+  background: rgba(26,110,240,0.07);
+  color: var(--aol-gold);
+  font-family: 'Inter', sans-serif;
+  border-top: 1px solid var(--glass);
+  border-bottom: 1px solid var(--glass);
+}
+.buddy-item {
+  color: var(--txt-2);
+  font-size: 11px;
+  border-bottom: 1px solid rgba(100,150,255,0.04);
+  transition: background 0.1s, color 0.1s;
+}
+.buddy-item:hover { background: rgba(26,110,240,0.10); color: var(--aol-gold); }
+.buddy-divider { background: var(--glass); border: none; height: 1px; margin: 4px 0; }
+.buddy-footer { border-top: 1px solid var(--glass); }
+.buddy-foot-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass);
+  border-radius: 4px;
+  color: var(--txt-2);
+  transition: background 0.14s, color 0.14s, border-color 0.14s;
+}
+.buddy-foot-btn:hover { background: rgba(26,110,240,0.14); color: var(--txt); border-color: var(--aol-blue); }
+
+/* ── NEWS / SIDEBAR BOXES ── */
+.news-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass);
+  border-radius: 6px;
+  margin: 4px 6px;
+}
+.news-box-title {
+  background: linear-gradient(135deg, #0b1a55, #1535a0);
+  color: var(--txt);
+  font-family: 'Inter', sans-serif;
+  border-radius: 5px 5px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+.news-box-body { background: transparent; color: var(--txt-2); }
+.news-link { color: var(--aol-teal); cursor: pointer; text-decoration: none; }
+.news-link:hover { color: var(--aol-gold); }
+.news-box-body a { color: var(--aol-teal); }
+.news-box-body a:hover { color: var(--aol-gold); }
+
+/* ── STATUS BAR ── */
+.aol-statusbar {
+  background: rgba(4,8,24,0.97);
+  border-top: 1px solid var(--glass);
+  color: var(--txt-3);
+}
+
+/* ── WIN BUTTONS ── */
+.win-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass);
+  border-radius: 4px;
+  color: var(--txt);
+  transition: background 0.14s, border-color 0.14s;
+}
+.win-btn:hover { background: rgba(26,110,240,0.14); border-color: var(--aol-blue); }
+.win-btn:active {
+  background: rgba(26,110,240,0.24);
+  border-top: 1px solid rgba(26,110,240,0.5);
+  border-left: 1px solid rgba(26,110,240,0.5);
+  border-right: 1px solid rgba(26,110,240,0.5);
+  border-bottom: 1px solid rgba(26,110,240,0.5);
+  padding: 3px 12px;
+}
+
+/* ── TRIVIA ── */
+.trivia-option {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass);
+  border-radius: 4px;
+  color: var(--txt);
+  transition: background 0.14s, border-color 0.14s;
+}
+.trivia-option:hover { background: rgba(26,110,240,0.12); border-color: var(--aol-blue); color: var(--txt); }
+.trivia-option.correct { background: rgba(0,180,80,0.14); border-color: #00b850; color: #00e870; }
+.trivia-option.wrong   { background: rgba(255,50,50,0.12); border-color: #ff3333; color: #ff7070; }
+.trivia-score { color: var(--aol-teal); }
+
+/* ── TILT POPUP ── */
+.tilt-win {
+  background: var(--win-bg);
+  border: 1px solid var(--glass);
+  box-shadow: 0 0 60px var(--aol-glow);
+}
+.tilt-title { color: var(--aol-gold); }
+.tilt-sub   { color: var(--aol-red); }
+.tilt-body p { color: var(--txt-2); }
+.tilt-cta {
+  background: var(--aol-blue);
+  color: #fff;
+  border: 1px solid var(--aol-blue-lt);
+  border-radius: 4px;
+  box-shadow: 0 0 16px var(--aol-glow);
+}
+.tilt-cta:hover { background: var(--aol-blue-lt); box-shadow: 0 0 28px var(--aol-glow); }
+
+/* ── SECTION CONTENT TEXT ── */
+[data-section-content] p { color: var(--txt-2); }
+[data-section-content] p strong { color: var(--txt); }
+[data-section-content] li { color: var(--txt-2); }
+
+/* END AOL 2026 */
 </style>
 </head>
 <body>

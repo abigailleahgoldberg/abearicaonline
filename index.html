@@ -1728,48 +1728,57 @@ function initPortal() {
   };
   renderTrivia();
 
-  // ── SPORTS ──
-  // Use TheSportsDB free API for recent NFL/NBA events
+  // ── SPORTS — ESPN API ──
   const today = new Date();
-  const month = String(today.getMonth()+1).padStart(2,'0');
-  const day2 = String(today.getDate()).padStart(2,'0');
-  const dateStr = today.getFullYear()+'-'+month+'-'+day2;
-  fetch('https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d='+dateStr+'&s=Basketball')
+  const sEl = document.getElementById('pulse-sports').querySelector('.tile-value');
+  fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
     .then(r=>r.json()).then(d=>{
-      const events = (d.events||[]).slice(0,3);
-      const sEl = document.getElementById('pulse-sports').querySelector('.tile-value');
+      const events = (d.events||[]).slice(0,4);
       if(events.length) {
         sEl.innerHTML = events.map(e=>{
-          const score = (e.intHomeScore!=null && e.intAwayScore!=null) ? ' <b>'+e.intHomeScore+'-'+e.intAwayScore+'</b>' : '';
-          return '<div style="margin-bottom:3px;font-size:10px;">'+e.strHomeTeam+' vs '+e.strAwayTeam+score+'</div>';
-        }).join('');
+          const comp = e.competitions&&e.competitions[0];
+          const teams = comp&&comp.competitors||[];
+          if(teams.length<2) return '';
+          const h=teams[0], a=teams[1];
+          const hn=h.team&&h.team.abbreviation||'?';
+          const an=a.team&&a.team.abbreviation||'?';
+          const hs=h.score||'', as=a.score||'';
+          const status=e.status&&e.status.type&&e.status.type.shortDetail||'';
+          const score = hs&&as ? ' <b>'+hs+'-'+as+'</b>' : '';
+          return '<div style="margin-bottom:3px;font-size:10px;">'+hn+' vs '+an+score+' <span style="color:#555;font-size:9px;">'+status+'</span></div>';
+        }).filter(Boolean).join('') || 'No NBA games today';
       } else {
-        // Try football if no basketball
-        fetch('https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d='+dateStr+'&s=American+Football')
+        // Try MLB
+        fetch('https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard')
           .then(r=>r.json()).then(d2=>{
-            const ev2 = (d2.events||[]).slice(0,3);
-            if(ev2.length) {
+            const ev2=(d2.events||[]).slice(0,4);
+            if(ev2.length){
               sEl.innerHTML = ev2.map(e=>{
-                const score = (e.intHomeScore!=null && e.intAwayScore!=null) ? ' <b>'+e.intHomeScore+'-'+e.intAwayScore+'</b>' : '';
-                return '<div style="margin-bottom:3px;font-size:10px;">'+e.strHomeTeam+' vs '+e.strAwayTeam+score+'</div>';
-              }).join('');
-            } else {
-              sEl.textContent = 'No games today — check back tonight';
-            }
-          }).catch(()=>{ sEl.textContent = 'No games scheduled today'; });
+                const comp=e.competitions&&e.competitions[0];
+                const teams=comp&&comp.competitors||[];
+                if(teams.length<2) return '';
+                const h=teams[0],a=teams[1];
+                const hs=h.score||'',as=a.score||'';
+                const hn=h.team&&h.team.abbreviation||'?';
+                const an=a.team&&a.team.abbreviation||'?';
+                const score=hs&&as?' <b>'+hs+'-'+as+'</b>':'';
+                return '<div style="margin-bottom:3px;font-size:10px;">'+hn+' vs '+an+score+'</div>';
+              }).filter(Boolean).join('');
+            } else { sEl.textContent = 'No games today'; }
+          }).catch(()=>{ sEl.textContent = 'No games today'; });
       }
-    }).catch(()=>{ document.getElementById('pulse-sports').querySelector('.tile-value').textContent = 'Scores unavailable'; });
+    }).catch(()=>{ sEl.textContent = 'Scores unavailable'; });
 
-  // ── HOROSCOPE ──
+  // ── HOROSCOPE — ohmanda API ──
   const signs = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
   const signEmojis = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
   const todaySign = signs[today.getDate() % 12];
   const todaySignEmoji = signEmojis[today.getDate() % 12];
-  fetch('https://aztro.sameerkumar.website/?sign='+todaySign+'&day=today', {method:'POST'})
+  fetch('https://ohmanda.com/api/horoscope/'+todaySign+'/')
     .then(r=>r.json()).then(d=>{
       const hEl = document.getElementById('pulse-horoscope').querySelector('.tile-value');
       document.getElementById('pulse-horoscope').querySelector('.tile-label').textContent = todaySignEmoji+' '+todaySign.charAt(0).toUpperCase()+todaySign.slice(1);
-      hEl.innerHTML = '<div style="font-size:10px;line-height:1.5;">'+d.description+'</div>'+'<div style="font-size:9px;color:#555;margin-top:3px;">Lucky #: '+d.lucky_number+' · Color: '+d.color+'</div>';
+      hEl.innerHTML = '<div style="font-size:10px;line-height:1.5;">'+(d.horoscope||'No reading today')+'</div>';
     }).catch(()=>{ document.getElementById('pulse-horoscope').querySelector('.tile-value').textContent = 'Horoscope unavailable'; });
 
   // ── ON THIS DAY IN TECH ──

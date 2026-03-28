@@ -2497,50 +2497,8 @@ function renderLeaderboard(scores) {
 }
 
 /* --- Arcade Scoreboard (all games, top 3 each) --- */
-async function fetchArcadeScoreboard() {
-  const el = document.getElementById('arcade-scoreboard-body');
-  if(!el) return;
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/arcade_scores?select=game,initials,score&order=score.desc&limit=200`, {
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    });
-    const all = await res.json();
-    if(!all || !all.length) { el.innerHTML = '<div style="padding:12px;text-align:center;color:#555;font-size:11px;">No scores yet. Play a game!</div>'; return; }
-    // Group by game, top 3 each (minesweeper: lowest is best)
-    const byGame = {};
-    all.forEach(s => { if(!byGame[s.game]) byGame[s.game]=[]; byGame[s.game].push(s); });
-    // Minesweeper: sort ascending (lowest time wins)
-    if(byGame['minesweeper']) byGame['minesweeper'].sort((a,b)=>a.score-b.score);
-    const gameOrder = ['breakout','minesweeper','tetris','word-muncher','number-muncher','asteroids','pong'];
-    const medals = ['🥇','🥈','🥉'];
-    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;">';
-    gameOrder.forEach(g => {
-      const scores = (byGame[g]||[]).slice(0,3);
-      const icon = ARCADE_GAME_ICONS[g]||'🎮';
-      const name = ARCADE_GAME_NAMES[g]||g;
-      const isMine = g==='minesweeper';
-      html += `<div style="background:#fff;border:1px solid #c8c0b0;border-radius:3px;overflow:hidden;">
-        <div style="background:linear-gradient(to right,#000055,#000080);color:#FFD700;padding:4px 8px;font-size:11px;font-weight:bold;font-family:'Lora',serif;display:flex;align-items:center;gap:5px;">
-          <span style="font-size:15px;">${icon}</span> ${name}
-        </div>
-        <div style="padding:6px 8px;">`;
-      if(scores.length===0) {
-        html += '<div style="font-size:10px;color:#999;text-align:center;padding:4px 0;">No scores yet</div>';
-      } else {
-        scores.forEach((s,i) => {
-          const val = isMine ? s.score+'s' : s.score.toLocaleString();
-          html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;font-size:11px;${i===0?'font-weight:bold;':''}${i<2?'border-bottom:1px solid #f0ece4;':''}">
-            <span>${medals[i]} <span style="font-family:'Courier New',monospace;letter-spacing:2px;">${s.initials.toUpperCase()}</span></span>
-            <span style="color:#000080;font-weight:bold;">${val}</span>
-          </div>`;
-        });
-      }
-      html += '</div></div>';
-    });
-    html += '</div>';
-    el.innerHTML = html;
-  } catch(e) { el.innerHTML = '<div style="padding:8px;text-align:center;color:#555;font-size:11px;">Could not load scores.</div>'; }
-}
+// fetchArcadeScoreboard — alias for renderArcadeScoreboard, one code path
+function fetchArcadeScoreboard() { renderArcadeScoreboard(); }
 
 /* ============ MODEM SOUND ============ */
 function playModemSound(audioFiles) {

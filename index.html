@@ -3713,9 +3713,42 @@ const SB_AUTH_URL = SB_URL + '/auth/v1';
 window._aolUser = null;
 window._aolProfile = null;
 
-// Restore session on load
+// Restore session on load — also handles Supabase email confirmation redirect (#access_token=...)
 (async function restoreSession() {
   try {
+    // Check for access_token in URL hash (Supabase email confirmation redirect)
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token=')) {
+      const params = new URLSearchParams(hash.replace('#', ''));
+      const access_token = params.get('access_token');
+      const refresh_token = params.get('refresh_token') || '';
+      if (access_token) {
+        // Fetch user from token
+        const res = await fetch(`${SB_AUTH_URL}/user`, {
+          headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${access_token}` }
+        });
+        if (res.ok) {
+          window._aolUser = await res.json();
+          localStorage.setItem('aol_session', JSON.stringify({ access_token, refresh_token }));
+          // Create profile if it doesn't exist yet (first confirmation)
+          await loadProfile(access_token);
+          if (!window._aolProfile) {
+            // Profile not yet created — prompt for screen name
+            updateAuthUI();
+            // Clean the URL hash
+            history.replaceState(null, '', window.location.pathname);
+            showAuthToast('Email confirmed! Please sign in to set your screen name. 🐻');
+            return;
+          }
+          updateAuthUI();
+          history.replaceState(null, '', window.location.pathname);
+          showAuthToast(`Welcome to Abearica Online, ${window._aolProfile?.screen_name || window._aolUser.email.split('@')[0]}! 🐻`);
+          return;
+        }
+      }
+    }
+
+    // Normal session restore from localStorage
     const stored = localStorage.getItem('aol_session');
     if (!stored) return;
     const { access_token, refresh_token } = JSON.parse(stored);

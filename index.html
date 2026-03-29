@@ -1425,10 +1425,10 @@ body {
               <span class="got-label">You've Got Projects!</span>
               <span class="got-count">Start a conversation →</span>
             </div>
-            <div class="got-btn" onclick="openScreenNameModal()" style="cursor:pointer;background:linear-gradient(to bottom,#000080,#000055);border-color:#4444cc;">
+            <div id="auth-signin-btn" class="got-btn" onclick="openScreenNameModal()" style="cursor:pointer;background:linear-gradient(to bottom,#000080,#000055);border-color:#4444cc;">
               <span class="got-icon">🪪</span>
-              <span class="got-label">Get a Screen Name</span>
-              <span class="got-count">Create your account →</span>
+              <span class="got-label">Sign In / Join</span>
+              <span class="got-count">Free — takes 30 seconds →</span>
             </div>
           </div>
         </div>
@@ -3706,48 +3706,205 @@ function closeInbox() {
 }
 
 /* ── SCREEN NAME MODAL ── */
+/* ============ SUPABASE AUTH ============ */
+const SB_AUTH_URL = SB_URL + '/auth/v1';
+
+// Current session state
+window._aolUser = null;
+window._aolProfile = null;
+
+// Restore session on load
+(async function restoreSession() {
+  try {
+    const stored = localStorage.getItem('aol_session');
+    if (!stored) return;
+    const { access_token, refresh_token } = JSON.parse(stored);
+    const res = await fetch(`${SB_AUTH_URL}/user`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${access_token}` }
+    });
+    if (res.ok) {
+      window._aolUser = await res.json();
+      await loadProfile(access_token);
+      updateAuthUI();
+    } else {
+      localStorage.removeItem('aol_session');
+    }
+  } catch(e) {}
+})();
+
+async function loadProfile(token) {
+  if (!window._aolUser) return;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/profiles?id=eq.${window._aolUser.id}&select=*`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      window._aolProfile = data[0] || null;
+    }
+  } catch(e) {}
+}
+
+function updateAuthUI() {
+  const screenName = window._aolProfile?.screen_name || window._aolUser?.email?.split('@')[0] || null;
+  const signInBtn = document.getElementById('auth-signin-btn');
+  if (signInBtn) {
+    if (window._aolUser) {
+      signInBtn.textContent = `👤 ${screenName}`;
+      signInBtn.onclick = openProfileModal;
+    } else {
+      signInBtn.textContent = '🪪 Sign In';
+      signInBtn.onclick = openScreenNameModal;
+    }
+  }
+}
+
 function openScreenNameModal() {
   document.getElementById('screenname-overlay').style.display = 'flex';
-  document.getElementById('sn-status').textContent = '';
-  document.getElementById('sn-email').value = '';
+  switchAuthTab('signin');
 }
+
 function closeScreenNameModal() {
   document.getElementById('screenname-overlay').style.display = 'none';
+  document.getElementById('si-status').textContent = '';
+  document.getElementById('su-status').textContent = '';
 }
-async function submitScreenNameInterest() {
-  const email = document.getElementById('sn-email').value.trim();
-  const status = document.getElementById('sn-status');
-  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    status.style.color = '#cc0000';
-    status.textContent = 'Please enter a valid email address.';
-    return;
-  }
+
+function switchAuthTab(tab) {
+  const isSignin = tab === 'signin';
+  document.getElementById('auth-signin-form').style.display = isSignin ? 'block' : 'none';
+  document.getElementById('auth-signup-form').style.display = isSignin ? 'none' : 'block';
+  document.getElementById('auth-modal-title').textContent = isSignin ? 'Abearica Online — Sign In' : 'Abearica Online — Create Account';
+  document.getElementById('tab-signin').style.background = isSignin ? '#fff' : '#c0c0c0';
+  document.getElementById('tab-signin').style.color = isSignin ? '#000080' : '#444';
+  document.getElementById('tab-signup').style.background = isSignin ? '#c0c0c0' : '#fff';
+  document.getElementById('tab-signup').style.color = isSignin ? '#444' : '#000080';
+}
+
+async function doSignIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const password = document.getElementById('si-password').value;
+  const status = document.getElementById('si-status');
+  if (!email || !password) { status.textContent = 'Please enter your email and password.'; return; }
   status.style.color = '#000080';
-  status.textContent = 'Saving...';
+  status.textContent = 'Signing in...';
   try {
-    // Store in Supabase contacts table
-    const res = await fetch(`${SB_URL}/rest/v1/aol_waitlist`, {
+    const res = await fetch(`${SB_AUTH_URL}/token?grant_type=password`, {
       method: 'POST',
-      headers: {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ email, signed_up_at: new Date().toISOString() })
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
     });
-    if(res.ok || res.status === 201) {
-      status.style.color = '#006600';
-      status.textContent = '✅ You\'re on the list! We\'ll notify you at launch.';
-      document.getElementById('sn-email').value = '';
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || data.msg || 'Sign in failed');
+    localStorage.setItem('aol_session', JSON.stringify({ access_token: data.access_token, refresh_token: data.refresh_token }));
+    window._aolUser = data.user;
+    await loadProfile(data.access_token);
+    updateAuthUI();
+    closeScreenNameModal();
+    showAuthToast(`Welcome back, ${window._aolProfile?.screen_name || email.split('@')[0]}! 👋`);
+  } catch(e) {
+    status.style.color = '#cc0000';
+    status.textContent = e.message || 'Sign in failed. Check your email and password.';
+  }
+}
+
+async function doSignUp() {
+  const screenName = document.getElementById('su-screenname').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const password = document.getElementById('su-password').value;
+  const status = document.getElementById('su-status');
+
+  if (!screenName || !email || !password) { status.textContent = 'All fields are required.'; return; }
+  if (!/^[a-zA-Z0-9_]{3,20}$/.test(screenName)) { status.textContent = 'Screen name: 3-20 chars, letters/numbers/underscores only.'; return; }
+  if (password.length < 6) { status.textContent = 'Password must be at least 6 characters.'; return; }
+
+  status.style.color = '#000080';
+  status.textContent = 'Creating your account...';
+
+  try {
+    // 1. Create auth user
+    const res = await fetch(`${SB_AUTH_URL}/signup`, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || data.msg || 'Signup failed');
+
+    // 2. If we have an access token, create profile immediately
+    if (data.access_token) {
+      await fetch(`${SB_URL}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': `Bearer ${data.access_token}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ id: data.user.id, screen_name: screenName })
+      });
+      localStorage.setItem('aol_session', JSON.stringify({ access_token: data.access_token, refresh_token: data.refresh_token }));
+      window._aolUser = data.user;
+      await loadProfile(data.access_token);
+      updateAuthUI();
+      closeScreenNameModal();
+      showAuthToast(`Welcome to Abearica Online, ${screenName}! 🐻`);
     } else {
-      throw new Error();
+      // Email confirmation required
+      status.style.color = '#006600';
+      status.textContent = '✅ Account created! Check your email to confirm, then sign in.';
+      document.getElementById('su-screenname').dataset.pendingScreenName = screenName;
+      document.getElementById('su-email').dataset.pendingEmail = email;
     }
   } catch(e) {
-    // Fallback — just show success (they can always contact via Write Mail)
-    status.style.color = '#006600';
-    status.textContent = '✅ Got it! We\'ll be in touch.';
+    status.style.color = '#cc0000';
+    status.textContent = e.message || 'Signup failed. Try a different email or screen name.';
   }
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('si-email').value.trim();
+  const status = document.getElementById('si-status');
+  if (!email) { status.textContent = 'Enter your email above first.'; return; }
+  status.style.color = '#000080';
+  status.textContent = 'Sending reset email...';
+  try {
+    await fetch(`${SB_AUTH_URL}/recover`, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    status.style.color = '#006600';
+    status.textContent = '✅ Reset email sent! Check your inbox.';
+  } catch(e) {
+    status.style.color = '#cc0000';
+    status.textContent = 'Could not send reset email.';
+  }
+}
+
+function doSignOut() {
+  localStorage.removeItem('aol_session');
+  window._aolUser = null;
+  window._aolProfile = null;
+  updateAuthUI();
+  showAuthToast('You have signed off. Goodbye! 👋');
+}
+
+function showAuthToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#000080;color:#FFD700;padding:8px 20px;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;z-index:99999;border:2px solid #FFD700;white-space:nowrap;';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function openProfileModal() {
+  // Phase 2 — placeholder for now
+  showAuthToast(`Signed in as ${window._aolProfile?.screen_name || window._aolUser?.email} · Sign out coming soon`);
+}
+
+// Legacy stub — no longer used
+function submitScreenNameInterest() {
 }
 
 /* ── F5 IN-PAGE REFRESH ── */
@@ -3959,46 +4116,72 @@ try { sessionStorage.removeItem('aol_signed_in'); } catch(e) {}
   </div>
 </div>
 
-<!-- ========== SCREEN NAME MODAL ========== -->
+<!-- ========== AUTH MODAL (Sign Up / Sign In) ========== -->
 <div id="screenname-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,128,0.75);z-index:9998;align-items:center;justify-content:center;">
-  <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;width:420px;max-width:96vw;font-family:Arial,sans-serif;">
+  <div style="background:#c0c0c0;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;width:380px;max-width:96vw;font-family:Arial,sans-serif;">
     <!-- Title bar -->
     <div style="background:linear-gradient(to right,#000055,#1a6ecf);color:#fff;padding:3px 6px;display:flex;align-items:center;justify-content:space-between;">
       <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:13px;">🪪</span>
-        <span style="font-size:11px;font-weight:bold;">Abearica Online — Create a Screen Name</span>
+        <span style="font-size:13px;">🐻</span>
+        <span id="auth-modal-title" style="font-size:11px;font-weight:bold;">Abearica Online — Sign In</span>
       </div>
       <span onclick="closeScreenNameModal()" class="title-bar-btn" style="cursor:pointer;">✕</span>
     </div>
     <!-- Body -->
-    <div style="padding:20px 20px 12px;">
-      <!-- AOL-style logo -->
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:32px;">🐻</div>
-        <div style="font-family:'Lora',serif;font-size:16px;font-weight:bold;color:#000080;">Abearica Online</div>
-        <div style="font-size:10px;color:#666;margin-top:2px;font-style:italic;">Version 9.0 · Members get more</div>
+    <div style="padding:16px 18px 12px;">
+      <div style="text-align:center;margin-bottom:14px;">
+        <div style="font-size:28px;">🐻</div>
+        <div style="font-family:'Lora',serif;font-size:15px;font-weight:bold;color:#000080;">Abearica Online</div>
+        <div style="font-size:10px;color:#666;margin-top:1px;font-style:italic;">Version 9.0 · Members get more</div>
       </div>
-      <div style="background:#fffff0;border:1px solid #cccc99;padding:10px 12px;font-size:11px;line-height:1.7;margin-bottom:14px;">
-        <strong>🚀 Coming Soon — Member Accounts</strong><br>
-        Create your Abearica Online screen name and get:<br>
-        <span style="color:#000080;">📬</span> A real inbox for project updates<br>
-        <span style="color:#000080;">🏆</span> Persistent arcade high scores tied to your name<br>
-        <span style="color:#000080;">🎭</span> A customizable buddy list<br>
-        <span style="color:#000080;">📋</span> Your own project dashboard<br>
+
+      <!-- Tab switcher -->
+      <div style="display:flex;margin-bottom:12px;border-bottom:2px solid #808080;">
+        <button id="tab-signin" onclick="switchAuthTab('signin')" style="flex:1;background:#fff;border:none;border-top:2px solid #808080;border-left:2px solid #808080;border-right:1px solid #808080;padding:4px;font-size:11px;font-weight:bold;color:#000080;cursor:pointer;">Sign In</button>
+        <button id="tab-signup" onclick="switchAuthTab('signup')" style="flex:1;background:#c0c0c0;border:none;border-top:2px solid #808080;border-left:1px solid #808080;border-right:2px solid #808080;padding:4px;font-size:11px;color:#444;cursor:pointer;">Create Account</button>
       </div>
-      <!-- Email capture -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:11px;font-weight:bold;margin-bottom:4px;">Get notified when accounts launch:</div>
-        <div style="display:flex;gap:4px;">
-          <input id="sn-email" type="email" placeholder="your@email.com" style="flex:1;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;">
-          <button onclick="submitScreenNameInterest()" style="background:#000080;color:#fff;border:none;padding:4px 12px;font-size:11px;font-weight:bold;cursor:pointer;white-space:nowrap;">Notify Me</button>
+
+      <!-- Sign In form -->
+      <div id="auth-signin-form">
+        <div style="margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:bold;margin-bottom:2px;">Screen Name (Email):</div>
+          <input id="si-email" type="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;">
         </div>
-        <div id="sn-status" style="font-size:10px;min-height:14px;margin-top:4px;"></div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:bold;margin-bottom:2px;">Password:</div>
+          <input id="si-password" type="password" placeholder="••••••••" style="width:100%;box-sizing:border-box;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;" onkeydown="if(event.key==='Enter')doSignIn()">
+        </div>
+        <div id="si-status" style="font-size:10px;min-height:14px;margin-bottom:8px;color:#cc0000;"></div>
+        <button onclick="doSignIn()" style="width:100%;background:linear-gradient(to bottom,#000080,#000055);color:#FFD700;border:none;padding:6px;font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;">SIGN IN</button>
+        <div style="text-align:center;margin-top:8px;">
+          <span style="font-size:10px;color:#444;">Forgot password? </span>
+          <span onclick="doForgotPassword()" style="font-size:10px;color:#000080;cursor:pointer;text-decoration:underline;">Reset it</span>
+        </div>
+      </div>
+
+      <!-- Sign Up form -->
+      <div id="auth-signup-form" style="display:none;">
+        <div style="margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:bold;margin-bottom:2px;">Screen Name:</div>
+          <input id="su-screenname" type="text" maxlength="20" placeholder="CoolBear99" style="width:100%;box-sizing:border-box;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;">
+          <div style="font-size:9px;color:#666;margin-top:2px;">3–20 chars, letters/numbers/underscores only</div>
+        </div>
+        <div style="margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:bold;margin-bottom:2px;">Email:</div>
+          <input id="su-email" type="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:bold;margin-bottom:2px;">Password:</div>
+          <input id="su-password" type="password" placeholder="Min 6 characters" style="width:100%;box-sizing:border-box;border-top:2px solid #404040;border-left:2px solid #404040;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:4px 6px;font-size:11px;font-family:Arial;outline:none;" onkeydown="if(event.key==='Enter')doSignUp()">
+        </div>
+        <div id="su-status" style="font-size:10px;min-height:14px;margin-bottom:8px;color:#cc0000;"></div>
+        <button onclick="doSignUp()" style="width:100%;background:linear-gradient(to bottom,#000080,#000055);color:#FFD700;border:none;padding:6px;font-size:12px;font-weight:bold;cursor:pointer;letter-spacing:1px;">CREATE ACCOUNT</button>
+        <div style="font-size:9px;color:#666;text-align:center;margin-top:8px;">You'll receive a confirmation email. Check your inbox.</div>
       </div>
     </div>
     <!-- Footer -->
-    <div style="background:#d4d0c8;padding:6px 10px;display:flex;justify-content:flex-end;border-top:1px solid #fff;">
-      <button onclick="closeScreenNameModal()" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:3px 16px;font-size:11px;cursor:pointer;">Close</button>
+    <div style="background:#d4d0c8;padding:5px 10px;display:flex;justify-content:flex-end;border-top:1px solid #fff;">
+      <button onclick="closeScreenNameModal()" style="background:#c0c0c0;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:3px 16px;font-size:11px;cursor:pointer;">Cancel</button>
     </div>
   </div>
 </div>
